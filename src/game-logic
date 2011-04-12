@@ -26,10 +26,10 @@
         ((eq? 'r dir)(+(get-field x-pos proc) (get-field dxdy proc)))))
     
     (define (move? proc)
-      (or (map  (lambda (object-to-check)
-              (send object-to-check collition? xpos ypos h w))
-            objects-to-track))
-      );; inte klar!!!!!!!!!!!!!!!!!!!
+      ;(or (map  (lambda (object-to-check)
+       ;       (send object-to-check collition? xpos ypos h w))
+        ;    objects-to-track))
+      #t);; inte klar!!!!!!!!!!!!!!!!!!!
     (define/public (move-dir dir proc)
       (if (move? proc)
       (cond
