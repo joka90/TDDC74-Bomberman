@@ -5,7 +5,7 @@
   (class object%
     (super-new)
     (init-field x-pos y-pos)
-    (field (height 30) (width 30))
+    (field (height 30) (width 30) (type 'stone))
     
     (define/public (set-x! x)
       (set! x-pos x))
