@@ -23,12 +23,14 @@
     
     ;x-pos < x < x-pos+width
     ;y-pos < y < y-pos+height
+    ;x-pos < x+w < x-pos+width
+    ;y-pos < y+h < y-pos+height
     (define/public (collition? xpos ypos h w)
       (and
-       (and (<= x-pos xpos) (<= xpos (+ width x-pos))
-            (<= y-pos ypos) (<= ypos (+ height y-pos)))
-       (and (<= x-pos (+ xpos w)) (<= xpos (+ width (+ x-pos w)))
-            (<= y-pos (+ ypos h)) (<= ypos (+ height (+ y-pos h))))))
+       (and (<= x-pos xpos) (<= xpos (+  x-pos width))
+            (<= y-pos ypos) (<= ypos (+  y-pos height)))
+       (and (<= x-pos (+ xpos w)) (<= (+ xpos w) (+ x-pos width)))
+            (<= y-pos (+ ypos h)) (<= (+ ypos h) (+ y-pos height))))
     
     
     ;; bild kod ----------------------------

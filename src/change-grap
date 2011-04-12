@@ -8,6 +8,9 @@
       (map  (lambda (proc)
               (send draw-class draw-bitmap-2 (send proc get-bitmap) (get-field x-pos proc) (get-field y-pos proc)))
             players-to-track)
+      (map  (lambda (proc)
+              (send draw-class draw-bitmap-2 (send proc get-bitmap) (get-field x-pos proc) (get-field y-pos proc)))
+            objects-to-track)
       )
       
     ))
