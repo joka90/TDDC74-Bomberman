@@ -1,17 +1,7 @@
 ;; ---------------------------------------------------------------------
-;; class make-paint-tools%
+;; class game-logic%
 ;; ---------------------------------------------------------------------
-(define test-player
-  (new player%
-       [x-pos 30]
-       [y-pos 30]
-       [dxdy 5]
-       [name "kalle"]))
 
-(define stone
-  (new stone%
-       [x-pos 100]
-       [y-pos 100]))
 
 (define game-logic%
   (class object%
@@ -52,8 +42,3 @@
       
     ))
 
-(define test-logic
-  (new game-logic%
-       [height 500]
-       [width 500]
-       [objects-to-track (list stone)]))

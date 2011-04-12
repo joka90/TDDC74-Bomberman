@@ -1,19 +1,6 @@
-;(load "paint-tools")
-;(load "draw-class")
-
-(define *draw*
-  (new make-draw%
-       [width 500]
-       [height 500]))
-;(define *paint-tools*
- ; (new make-paint-tools%))
-
-
 ;; ---------------------------------------------------------------------
 ;; GUI
 ;; ---------------------------------------------------------------------
-
-
 (define make-gui%
   (class object%
     (super-new)
@@ -68,13 +55,5 @@
         (min-width width)
         (stretchable-width #f) 
         (stretchable-height #f)))))
-
-(define *gui*
-  (new make-gui%
-       [window-name "New gui!"]
-       [width 500]
-       [height 500]
-       [image-buffer *draw*]
-       ))
 
 

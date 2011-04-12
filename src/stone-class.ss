@@ -1,5 +1,5 @@
 ;; ---------------------------------------------------------------------
-;; class make-paint-tools%
+;; class make stone, just a testclass, the stone wont be a own class in the final proj.
 ;; ---------------------------------------------------------------------
 (define stone%
   (class object%

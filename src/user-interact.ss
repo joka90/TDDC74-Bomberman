@@ -20,16 +20,3 @@
     
     (super-instantiate ()))) 
 
-
-
-
-
-;; Handle keys pressd
-;; Skickar vidare till gamelogic som det är nu, ska flyttas till bättre ställe?
-(define (handle-key-event key)
-    (cond
-      ((eq? #\w key)(send test-logic move-dir 'u test-player))
-      ((eq? #\a key)(send test-logic move-dir 'l test-player))
-      ((eq? #\s key)(send test-logic move-dir 'd test-player))
-      ((eq? #\d key)(send test-logic move-dir 'r test-player))
-     ))
