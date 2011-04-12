@@ -1,0 +1,30 @@
+;; ---------------------------------------------------------------------
+;; class make-paint-tools%
+;; ---------------------------------------------------------------------
+(define test-player
+  (new player%
+       [x-pos 30]
+       [y-pos 30]
+       [dxdy 10]
+       [name "kalle"]))
+
+(define game-logic%
+  (class object%
+    (super-new)
+    (init-field height width)
+    
+    (define/public (move-dir dir proc)
+      (cond
+        ((eq? 'u dir)(send proc set-y! (-(get-field y-pos proc) (get-field dxdy proc))))
+        ((eq? 'd dir)(send proc set-y! (+(get-field y-pos proc) (get-field dxdy proc))))
+        ((eq? 'l dir)(send proc set-x! (-(get-field x-pos proc) (get-field dxdy proc))))
+        ((eq? 'r dir)(send proc set-x! (+(get-field x-pos proc) (get-field dxdy proc)))))
+      (send proc set-dir! dir))
+    
+      
+    ))
+
+(define test-logic
+  (new game-logic%
+       [height 500]
+       [width 500]))
