@@ -5,7 +5,7 @@
   (new player%
        [x-pos 30]
        [y-pos 30]
-       [dxdy 10]
+       [dxdy 5]
        [name "kalle"]))
 
 (define stone

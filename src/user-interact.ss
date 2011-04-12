@@ -24,7 +24,8 @@
 
 
 
-;; Handle keys pressd; space, +, -
+;; Handle keys pressd
+;; Skickar vidare till gamelogic som det är nu, ska flyttas till bättre ställe?
 (define (handle-key-event key)
     (cond
       ((eq? #\w key)(send test-logic move-dir 'u test-player))

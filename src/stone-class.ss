@@ -27,10 +27,11 @@
     ;y-pos < y+h < y-pos+height
     (define/public (collition? xpos ypos h w)
       (and
-       (and (<= x-pos xpos) (<= xpos (+  x-pos width))
-            (<= y-pos ypos) (<= ypos (+  y-pos height)))
-       (and (<= x-pos (+ xpos w)) (<= (+ xpos w) (+ x-pos width)))
-            (<= y-pos (+ ypos h)) (<= (+ ypos h) (+ y-pos height))))
+       (or (and (<= x-pos xpos) (<= xpos (+  x-pos width)))
+           (and (<= x-pos (+ xpos w)) (<= (+ xpos w) (+ x-pos width))))
+       (or (and (<= y-pos ypos) (<= ypos (+  y-pos height)))
+           (and (<= y-pos (+ ypos h)) (<= (+ ypos h) (+ y-pos height))))))
+
     
     
     ;; bild kod ----------------------------
