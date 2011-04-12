@@ -1,15 +1,26 @@
-(define my-canvas% 
+(define user-interact-canvas% 
   (class canvas%
     (override on-char)
-    (init-field (key-callback #f))
-    (define (on-char event)
-      (when key-callback
-        (key-callback event)))
+    
+    (define keysdown '());;Lista med alla nedtrycka knappar
+    (define (on-char key-event)
+      (let ((release (send key-event get-key-release-code))
+            (key (send key-event get-key-code)));; http://docs.racket-lang.org/gui/key-event_.html
+
+        ;;Kollar så att det inte är ett relese event och att den inte redan är nedtryckt.
+        ;; Annars tas den bort från keysdown listan
+        (if(and (not (member key keysdown)) (eq? release 'press))
+           (set! keysdown (cons key keysdown))
+           (set! keysdown (remv release keysdown)))
+        
+        ;; Skickar vidare alla nedtryckta knappar till handle-key-event funktionen.
+        (map(lambda (key)
+              (handle-key-event key))
+            keysdown)));; end on-char
+    
     (super-instantiate ()))) 
 
-(define (key-fn key-event)
-  (let ((key (send key-event get-key-code)))
-    (handle-key-event key)))
+
 
 
 

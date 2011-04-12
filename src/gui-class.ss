@@ -17,7 +17,7 @@
 (define make-gui%
   (class object%
     (super-new)
-    (init-field window-name width height image-buffer (key-callback2 #f))
+    (init-field window-name width height image-buffer)
     (define gui-frame (make-object frame% window-name))
     
     ;; show gui
@@ -61,10 +61,9 @@
     
 
     (define gui-canvas
-      (instantiate my-canvas% ()
+      (instantiate user-interact-canvas% ()
         (parent gui-frame)
         (paint-callback draw-canvas)
-        (key-callback key-callback2)
         (min-height height)
         (min-width width)
         (stretchable-width #f) 
@@ -76,6 +75,6 @@
        [width 500]
        [height 500]
        [image-buffer *draw*]
-       [key-callback2 key-fn]))
+       ))
 
 

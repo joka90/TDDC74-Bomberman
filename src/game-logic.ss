@@ -34,6 +34,8 @@
             objects-to-track)
       (not collition)
       ));; inte klar!!!!!!!!!!!!!!!!!!!
+    
+    ;; fixa en collitonfunktion som klarar av att hitta ett objekt och berätta vilket håll som den stött i
     (define/public (move-dir dir proc)
       (if (move? proc)
       (cond
