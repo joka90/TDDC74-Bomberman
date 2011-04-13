@@ -1,3 +1,4 @@
+;#lang scheme
 ;(load "paint-tools.ss")
 (load "draw-class.ss")
 (load "player-class.ss")
@@ -57,6 +58,7 @@
 
 ;; global lists to track objects
 (define objects (list stone stone2 stone3 stone4))
+(define bombs '())
 (define players (list test-player))
 
 ;; ---------------------------------------------------------------------
@@ -72,13 +74,15 @@
 
 ;; Handle keys pressd
 ;; Skickar vidare till gamelogic som det är nu, ska flyttas till bättre ställe?
+(define keys '((#\w . u)
+               (#\a . l)
+               (#\s . d)
+               (#\d . r)))
+;(cadr (assq key keys))
 (define (handle-key-event key)
-    (cond
-      ((eq? #\w key)(send test-logic move-dir 'u test-player))
-      ((eq? #\a key)(send test-logic move-dir 'l test-player))
-      ((eq? #\s key)(send test-logic move-dir 'd test-player))
-      ((eq? #\d key)(send test-logic move-dir 'r test-player))
-     ))
+  (let((action (assq key keys)))
+    (if action
+        (send test-logic move-dir (cdr action) test-player))))
 
 ;;grapical update
 (define update
