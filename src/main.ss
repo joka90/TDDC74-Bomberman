@@ -1,10 +1,11 @@
+;#lang scheme
 ;(load "paint-tools.ss")
 (load "draw-class.ss")
 (load "player-class.ss")
 (load "stone-class.ss")
 (load "user-interact.ss")
 (load "game-logic.ss")
-(load "update-graphic.ss")
+;(load "update-graphic.ss")
 (load "gui-class.ss")
 (load "main-loop.ss")
 
@@ -57,6 +58,7 @@
 
 ;; global lists to track objects
 (define objects (list stone stone2 stone3 stone4))
+
 (define players (list test-player))
 
 ;; ---------------------------------------------------------------------
@@ -67,29 +69,27 @@
   (new game-logic%
        [height 500]
        [width 500]
+       [players-to-track players]
        [objects-to-track objects]))
 
 
 ;; Handle keys pressd
 ;; Skickar vidare till gamelogic som det är nu, ska flyttas till bättre ställe?
+(define keys '((#\w . u)
+               (#\a . l)
+               (#\s . d)
+               (#\d . r)))
+;(cadr (assq key keys))
 (define (handle-key-event key)
-    (cond
-      ((eq? #\w key)(send test-logic move-dir 'u test-player))
-      ((eq? #\a key)(send test-logic move-dir 'l test-player))
-      ((eq? #\s key)(send test-logic move-dir 'd test-player))
-      ((eq? #\d key)(send test-logic move-dir 'r test-player))
-     ))
+  (let((action (assq key keys)))
+    (if action
+        (send test-logic move-dir (cdr action) test-player))))
 
-;;grapical update
-(define update
-  (new change-grap%
-       [players-to-track players]
-       [objects-to-track objects]))
 
 ;; The procedures that redraws the scene form the main-thread.
 (define (draw)
   (send *draw* clear)
-  (send update update-scene *draw*)
+  (send test-logic update-scene *draw*)
   ;(send *draw* background)
   (send *gui* redraw))
 
