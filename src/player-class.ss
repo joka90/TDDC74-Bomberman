@@ -4,8 +4,8 @@
 (define player%
   (class object%
     (super-new)
-    (init-field x-pos y-pos dxdy name)
-    (field (height 30) (width 30))
+    (init-field x-pos y-pos dxdy name lives)
+    (field (height 30) (width 30) (points 0))
     
     (define direction 'r)
     (define direction-angle 0)

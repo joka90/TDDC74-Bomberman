@@ -21,5 +21,5 @@
               (handle-key-event key))
             keysdown)));; end on-char
     
-    (super-instantiate ()))) 
+    (super-instantiate ())))
 

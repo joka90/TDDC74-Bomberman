@@ -6,10 +6,39 @@
 (define game-logic%
   (class object%
     (super-new)
-    (init-field height width players-to-track objects-to-track)
+    (init-field height width 
+                ;players-to-track 
+                objects-to-track)
     
     (define spelplan '())
     (define bombs '())
+    (define players '())
+    (define keyboard-players '())
+    
+    (define/public (handle-key-event key)
+      (map  (lambda (proc)
+              (let((action (assq key (cdr proc))))
+                (if action
+                    (move-dir (cdr action) (car proc)))))
+            keyboard-players))
+     
+    
+    (define/public (add-key-board-player new-name x y dxy number-of-lives keybord-bindings)
+      (let((temp-player 
+            (new player%
+                 [x-pos x]
+                 [y-pos y]
+                 [dxdy dxy]
+                 [name new-name]
+                 [lives number-of-lives])))
+        (set! players 
+              (cons 
+               temp-player
+               players))
+        (set! keyboard-players 
+              (cons 
+               (cons temp-player keybord-bindings)
+               keyboard-players))))
     
     (define (move? proc dir)
       (let((collition #f)
@@ -49,7 +78,7 @@
     (define/public (update-scene draw-class)
       (map  (lambda (proc)
               (send draw-class draw-bitmap-2 (send proc get-bitmap) (get-field x-pos proc) (get-field y-pos proc)))
-            players-to-track)
+            players)
       (map  (lambda (proc)
               (send draw-class draw-bitmap-2 (send proc get-bitmap) (get-field x-pos proc) (get-field y-pos proc)))
             objects-to-track))

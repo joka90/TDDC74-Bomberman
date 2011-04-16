@@ -28,12 +28,12 @@
 ;; ---------------------------------------------------------------------
 ;; global objects
 ;; ---------------------------------------------------------------------
-(define test-player
-  (new player%
-       [x-pos 30]
-       [y-pos 30]
-       [dxdy 3]
-       [name "kalle"]))
+;(define test-player
+;  (new player%
+;       [x-pos 30]
+;       [y-pos 30]
+;       [dxdy 3]
+;       [name "kalle"]))
 
 (define stone
   (new stone%
@@ -59,7 +59,7 @@
 ;; global lists to track objects
 (define objects (list stone stone2 stone3 stone4))
 
-(define players (list test-player))
+;(define players (list test-player))
 
 ;; ---------------------------------------------------------------------
 ;; game logic
@@ -69,7 +69,7 @@
   (new game-logic%
        [height 500]
        [width 500]
-       [players-to-track players]
+ ;      [players-to-track players]
        [objects-to-track objects]))
 
 
@@ -78,13 +78,19 @@
 (define keys '((#\w . u)
                (#\a . l)
                (#\s . d)
-               (#\d . r)))
+               (#\d . r)
+               (#\space . drop)))
 ;(cadr (assq key keys))
 (define (handle-key-event key)
-  (let((action (assq key keys)))
-    (if action
-        (send test-logic move-dir (cdr action) test-player))))
-
+  ;(let((action (assq key keys)))
+   ; (if action
+        (send test-logic handle-key-event key))
+;))
+  (send test-logic add-key-board-player "test-jocke" 2 2 3 5 '((#\w . u)
+                                          (#\a . l)
+                                          (#\s . d)
+                                          (#\d . r)
+                                          (#\space . drop)))
 
 ;; The procedures that redraws the scene form the main-thread.
 (define (draw)
