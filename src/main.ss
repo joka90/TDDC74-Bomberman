@@ -1,4 +1,3 @@
-;#lang scheme
 ;(load "paint-tools.ss")
 (require scheme/date)
 (load "draw-class.ss")

@@ -21,17 +21,16 @@
     (define/public (set-dir! dir)
       (if(not (eq? dir direction))
          (begin
-           ;(cond
-            ; ((eq? dir 'r)(set! direction-angle-diff 0)
-             ;             (set! direction-angle (+ 0 (- direction-angle direction-angle-diff)))
-             ;((eq? dir 'l)(set! direction-angle-diff pi)
-             ;             (set! direction-angle (+ pi (- direction-angle direction-angle-diff))))
-             ;((eq? dir 'u)(set! direction-angle-diff (* pi (/ 2 3)))
-             ;             (set! direction-angle (+ (* pi (/ 2 3)) (- direction-angle direction-angle-diff))))
-             ;((eq? dir 'd)(set! direction-angle-diff (* pi (/ 1 2)))
-              ;            (set! direction-angle (+ (* pi (/ 1 2)) (- direction-angle direction-angle-diff))))))
-           (set! direction dir)
-           )))
+;           (cond
+;            ((eq? dir 'r)(set! direction-angle-diff 0)
+;                          (set! direction-angle (+ 0 (- direction-angle direction-angle-diff)))
+;             ((eq? dir 'l)(set! direction-angle-diff pi)
+;                          (set! direction-angle (+ pi (- direction-angle direction-angle-diff))))
+;             ((eq? dir 'u)(set! direction-angle-diff (* pi (/ 2 3)))
+;                          (set! direction-angle (+ (* pi (/ 2 3)) (- direction-angle direction-angle-diff))))
+;             ((eq? dir 'd)(set! direction-angle-diff (* pi (/ 1 2)))
+;                          (set! direction-angle (+ (* pi (/ 1 2)) (- direction-angle direction-angle-diff))))))
+           (set! direction dir))))
     ;; r, l, u, d,
 
 
@@ -46,10 +45,10 @@
     (send dc draw-line 0 0 30 30)
     (send dc draw-line 0 30 30 0)
     
-    ;(send dc set-rotation 10)
+    (send dc set-rotation 10)
     
     (define/public (get-bitmap)
-      ;(send dc set-rotation direction-angle)
+      (send dc set-rotation 10)
       buffer)
     ))
 
