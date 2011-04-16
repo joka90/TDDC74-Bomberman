@@ -5,7 +5,7 @@
   (class object%
     (super-new)
     (init-field x-pos y-pos dxdy name lives)
-    (field (height 30) (width 30) (points 0))
+    (field (height 30) (width 30) (points 0) (radius 10) (bomb-count 10))
     
     (define direction 'r)
     (define direction-angle 0)
@@ -44,6 +44,7 @@
     (send dc set-pen "red" 3 'solid)
     (send dc draw-line 0 0 30 30)
     (send dc draw-line 0 30 30 0)
+    (send dc draw-text name 0 0)
     
     (send dc set-rotation 10)
     

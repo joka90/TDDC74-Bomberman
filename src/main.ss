@@ -5,7 +5,7 @@
 (load "stone-class.ss")
 (load "user-interact.ss")
 (load "game-logic.ss")
-;(load "update-graphic.ss")
+(load "bomb-class.ss")
 (load "gui-class.ss")
 (load "main-loop.ss")
 
@@ -22,19 +22,11 @@
        [window-name "New gui!"]
        [width 500]
        [height 500]
-       [image-buffer *draw*]
-       ))
+       [image-buffer *draw*]))
 
 ;; ---------------------------------------------------------------------
 ;; global objects
 ;; ---------------------------------------------------------------------
-;(define test-player
-;  (new player%
-;       [x-pos 30]
-;       [y-pos 30]
-;       [dxdy 3]
-;       [name "kalle"]))
-
 (define stone
   (new stone%
        [x-pos 100]
@@ -74,23 +66,22 @@
 
 
 ;; Handle keys pressd
-;; Skickar vidare till gamelogic som det är nu, ska flyttas till bättre ställe?
-(define keys '((#\w . u)
-               (#\a . l)
-               (#\s . d)
-               (#\d . r)
-               (#\space . drop)))
-;(cadr (assq key keys))
+;; Skickar vidare till gamelogic som det är nu
+
 (define (handle-key-event key)
-  ;(let((action (assq key keys)))
-   ; (if action
         (send test-logic handle-key-event key))
-;))
-  (send test-logic add-key-board-player "test-jocke" 2 2 3 5 '((#\w . u)
-                                          (#\a . l)
-                                          (#\s . d)
-                                          (#\d . r)
-                                          (#\space . drop)))
+
+(send test-logic add-key-board-player "jocke" 2 2 3 5 '((#\w . u)
+                                                             (#\a . l)
+                                                             (#\s . d)
+                                                             (#\d . r)
+                                                             (#\space . drop)))
+-;;palyer 2
+(send test-logic add-key-board-player "pocke" 456 400 3 5 '(('up . u)
+                                                                  ('left . l)
+                                                                  (#\o . d)
+                                                                  ('right . r)
+                                                                  (#\b . drop)))
 
 ;; The procedures that redraws the scene form the main-thread.
 (define (draw)

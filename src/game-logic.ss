@@ -66,12 +66,23 @@
             ((eq? 'u dir)(send proc set-y! (-(get-field y-pos proc) (get-field dxdy proc))))
             ((eq? 'd dir)(send proc set-y! (+(get-field y-pos proc) (get-field dxdy proc))))
             ((eq? 'l dir)(send proc set-x! (-(get-field x-pos proc) (get-field dxdy proc))))
-            ((eq? 'r dir)(send proc set-x! (+(get-field x-pos proc) (get-field dxdy proc))))))
-      (send proc set-dir! dir))
+            ((eq? 'r dir)(send proc set-x! (+(get-field x-pos proc) (get-field dxdy proc))))
+            ((eq? 'drop dir)(add-bomb (get-field x-pos proc) (get-field y-pos proc) proc))))
+      (if(not (eq? 'drop dir))
+      (send proc set-dir! dir)))
     
-    ;(define/public (add-bomb x-pos y-pos owner)(
-    ;                                           
-    ;                                           ))
+    (define/private (add-bomb x y own)
+      (let((temp-bomb 
+            (new bomb%
+                 [x-pos x]
+                 [y-pos y]
+                 [delay 10];;get from proc
+                 [radius (get-field radius own)]
+                 [owner own])))
+        (set! bombs 
+              (cons 
+               temp-bomb
+               bombs))))
     
     
     ;; skickar in alla trackade objects bitmaps i en viss positon.
@@ -81,7 +92,14 @@
             players)
       (map  (lambda (proc)
               (send draw-class draw-bitmap-2 (send proc get-bitmap) (get-field x-pos proc) (get-field y-pos proc)))
-            objects-to-track))
+            objects-to-track)
+      (map  (lambda (proc)
+              (send draw-class draw-bitmap-2 (send proc get-bitmap) (get-field x-pos proc) (get-field y-pos proc))
+              (if(send proc gone-off?)
+                 (display (get-field name (get-field owner proc))))
+              )
+            bombs)
+      )
     
     ))
 

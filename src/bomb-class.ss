@@ -4,7 +4,7 @@
 (define bomb%
   (class object%
     (super-new)
-    (init-field x-pos y-pos delay radius)
+    (init-field x-pos y-pos delay radius owner)
     (field (height 30) (width 30) (type 'bomb))
     
     (define timestamp (current-seconds))
@@ -22,7 +22,7 @@
       timestamp)
     
     (define/public (gone-off?)
-      timestamp)
+      (<= (+ timestamp delay) (current-seconds)))
     
     ;x-pos < x < x-pos+width
     ;y-pos < y < y-pos+height
@@ -32,7 +32,7 @@
       (and
        (or (and (<= x-pos xpos) (<= xpos (+  x-pos width)))
            (and (<= x-pos (+ xpos w)) (<= (+ xpos w) (+ x-pos width))))
-       (or (and (<= y-pos ypos) (<= ypos (+  y-pos height)))
+       (or (and (<= y-pos ypos) (<= ypos (+  y-pos height)))sssssss
            (and (<= y-pos (+ ypos h)) (<= (+ ypos h) (+ y-pos height))))))
     
     
@@ -46,14 +46,11 @@
     (send dc draw-rectangle 0 10 30 10)
     (send dc set-pen "red" 3 'solid)
     (send dc draw-line 0 0 30 30)
-    (send dc draw-line 0 30 30 0)))
+    (send dc draw-line 0 30 30 0)
+    (send dc draw-text  "bomb" 0 0)  
+      ))
 
 
-(define bomb
-  (new bomb%
-       [x-pos 100]
-       [y-pos 100]
-       [delay 10]
-       [radius 10]))
 
-(send bomb get-timestamp)
+
+;(send bomb get-timestamp)
