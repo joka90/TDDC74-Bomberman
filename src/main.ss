@@ -63,7 +63,7 @@
        [width 500]
        [objects-to-track objects]))
 
-
+;;palyer 1
 (send test-logic add-key-board-player "jocke" 2 2 3 5 '((#\w . u)
                                                         (#\a . l)
                                                         (#\s . d)
@@ -78,7 +78,7 @@
 
 ;; The procedures that redraws the scene form the main-thread.
 (define (draw)
-  (send *gui* update-keys-down)
+  (send *gui* update-keys-down);send keys to gamelogic once a loop.
   (send *draw* clear)
   (send test-logic update-scene *draw*)
   ;(send *draw* background)
