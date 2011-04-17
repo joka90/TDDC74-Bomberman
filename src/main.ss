@@ -20,7 +20,7 @@
 (define *gui*
   (new make-gui%
        [window-name "New gui!"]
-       [width 500]
+       [width 800]
        [height 500]
        [image-buffer *draw*]))
 

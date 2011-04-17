@@ -5,11 +5,17 @@
   (class object%
     (super-new)
     (init-field window-name width height image-buffer)
-    (define gui-frame (make-object frame% window-name))
+    (define gui-frame (new frame% 
+                           [label window-name]
+                           [min-width width]
+                           [min-height height]))
+    
+   	 
     
     ;; show gui
     (define/public (show-gui)
-      (send gui-frame show #t))
+      (send gui-frame show #t)
+      (send gui-canvas focus));; move focus to canvas, to get key events
     ;; hide gui
     (define/public (hide-gui)
       (send gui-frame show #f))
@@ -27,10 +33,26 @@
     (define (draw-canvas canvas dc)
       (send image-buffer get-image canvas dc))
     
-    
+    (define rightpanel (new vertical-panel% 
+                           [parent gui-frame]
+                           [alignment '(right top)]))
+    (define leftpanel (new vertical-panel% 
+                            [parent gui-frame]
+                            [min-width (get-field width image-buffer)]	 
+                            [min-height (get-field height image-buffer)]
+                            [alignment '(left top)]))
+  
+    (new button% [parent rightpanel]
+         [label "Left"]
+         [callback (lambda (button event)
+                     (send msg set-label "Left click"))])
+    (new button% [parent rightpanel]
+         [label "Right"]
+         [callback (lambda (button event)
+                     (send msg set-label "Right click"))])
     ;(init-field test name)
     (instantiate button% 
-      ("Quit" gui-frame (lambda (a b) (hide-gui)))
+      ("Quit" rightpanel (lambda (a b) (hide-gui)))
       (horiz-margin 2)
       (vert-margin 2)
       (stretchable-width #f))
@@ -49,10 +71,10 @@
 
     (define gui-canvas
       (instantiate user-interact-canvas% ()
-        (parent gui-frame)
+        (parent leftpanel)
         (paint-callback draw-canvas)
-        (min-height height)
-        (min-width width)
+        (min-height (get-field height image-buffer))
+        (min-width (get-field width image-buffer))
         (stretchable-width #f) 
         (stretchable-height #f)))))
 
