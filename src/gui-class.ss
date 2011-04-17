@@ -33,29 +33,42 @@
     (define (draw-canvas canvas dc)
       (send image-buffer get-image canvas dc))
     
-    (define rightpanel (new vertical-panel% 
-                           [parent gui-frame]
-                           [alignment '(right top)]))
-    (define leftpanel (new vertical-panel% 
-                            [parent gui-frame]
+    (define contentpanel (new horizontal-panel% 
+                                [parent gui-frame]
+                                [alignment '(right center)]))
+    
+    (define leftpanel (new panel% 
+                            [parent contentpanel]
                             [min-width (get-field width image-buffer)]	 
                             [min-height (get-field height image-buffer)]
-                            [alignment '(left top)]))
+                            [alignment '(left center)]))
+    (define rightpanel (new panel% 
+                           [parent contentpanel]
+                           [min-height (get-field height image-buffer)]
+                           [alignment '(right center)]))
   
-    (new button% [parent rightpanel]
-         [label "Left"]
+    (define controllpanel (new horizontal-panel% 
+                                [parent rightpanel]
+                                [alignment '(center bottom)]))
+    (define startbutton (new button% [parent controllpanel]
+         [label "Paus"]
          [callback (lambda (button event)
-                     (send msg set-label "Left click"))])
-    (new button% [parent rightpanel]
-         [label "Right"]
+                     (if(send main-loop running?)
+                        (begin
+                          (send main-loop stop-loop)
+                          (send startbutton set-label "Start"))
+                        (begin
+                          (send main-loop start-loop)
+                          (send startbutton set-label "Paus"))))]))
+    (new button% [parent controllpanel]
+         [label "Reset"]
          [callback (lambda (button event)
-                     (send msg set-label "Right click"))])
-    ;(init-field test name)
-    (instantiate button% 
-      ("Quit" rightpanel (lambda (a b) (hide-gui)))
-      (horiz-margin 2)
-      (vert-margin 2)
-      (stretchable-width #f))
+                     (send main-loop stop-loop))])
+   
+    (new button%
+         [parent controllpanel]
+         [label "Quit"]
+         [callback (lambda (a b) (hide-gui))])
     
     (define gui-menu-bar
       (instantiate menu-bar%

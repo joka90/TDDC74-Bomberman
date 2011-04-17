@@ -1,0 +1,1 @@
+Fixa så att den pausar spellogicen när man inte loopar. För nu reagerar den på knapptryck osv.

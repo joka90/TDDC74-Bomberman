@@ -15,6 +15,9 @@
     (define/public (stop-loop)
       (set! should-run #f))
     
+    (define/public (running?)
+      should-run)
+    
     (define (fps->seconds fps)
       (/ 1 fps))
     
