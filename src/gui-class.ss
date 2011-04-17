@@ -33,6 +33,9 @@
     (define (draw-canvas canvas dc)
       (send image-buffer get-image canvas dc))
     
+    (define/public (update-keys-down)
+      (send gui-canvas send-key-events))
+    
     (define contentpanel (new horizontal-panel% 
                                 [parent gui-frame]
                                 [alignment '(right center)]))
@@ -50,16 +53,18 @@
     (define controllpanel (new horizontal-panel% 
                                 [parent rightpanel]
                                 [alignment '(center bottom)]))
+    
     (define startbutton (new button% [parent controllpanel]
-         [label "Paus"]
-         [callback (lambda (button event)
-                     (if(send main-loop running?)
-                        (begin
-                          (send main-loop stop-loop)
-                          (send startbutton set-label "Start"))
-                        (begin
-                          (send main-loop start-loop)
-                          (send startbutton set-label "Paus"))))]))
+                             [label "Paus"]
+                             [callback (lambda (button event)
+                                         (if(send main-loop running?)
+                                            (begin
+                                              (send main-loop stop-loop)
+                                              (send startbutton set-label "Start"))
+                                            (begin
+                                              (send main-loop start-loop)
+                                              (send startbutton set-label "Paus"))))]))
+    
     (new button% [parent controllpanel]
          [label "Reset"]
          [callback (lambda (button event)
@@ -83,12 +88,13 @@
     
 
     (define gui-canvas
-      (instantiate user-interact-canvas% ()
-        (parent leftpanel)
-        (paint-callback draw-canvas)
-        (min-height (get-field height image-buffer))
-        (min-width (get-field width image-buffer))
-        (stretchable-width #f) 
-        (stretchable-height #f)))))
+      (new user-interact-canvas% 
+           [parent leftpanel]
+           [paint-callback draw-canvas]
+           [on-key-event-callback (lambda(key)(send test-logic handle-key-event key))];; flyttar lite seda
+           [min-height (get-field height image-buffer)]
+           [min-width (get-field width image-buffer)]
+           [stretchable-width #f]
+           [stretchable-height #f]))))
 
 

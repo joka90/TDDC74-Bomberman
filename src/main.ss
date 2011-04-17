@@ -14,13 +14,13 @@
 ;; ---------------------------------------------------------------------
 (define *draw*
   (new make-draw%
-       [width 500]
+       [width 500];;canvas/bitmaps size
        [height 500]))
 
 (define *gui*
   (new make-gui%
        [window-name "New gui!"]
-       [width 800]
+       [width 800];;Window size
        [height 500]
        [image-buffer *draw*]))
 
@@ -61,30 +61,24 @@
   (new game-logic%
        [height 500]
        [width 500]
- ;      [players-to-track players]
        [objects-to-track objects]))
 
 
-;; Handle keys pressd
-;; Skickar vidare till gamelogic som det är nu
-
-(define (handle-key-event key)
-        (send test-logic handle-key-event key))
-
 (send test-logic add-key-board-player "jocke" 2 2 3 5 '((#\w . u)
-                                                             (#\a . l)
-                                                             (#\s . d)
-                                                             (#\d . r)
-                                                             (#\space . drop)))
--;;palyer 2
-(send test-logic add-key-board-player "pocke" 456 400 3 5 '(('up . u)
-                                                                  ('left . l)
-                                                                  (#\o . d)
-                                                                  ('right . r)
-                                                                  (#\b . drop)))
+                                                        (#\a . l)
+                                                        (#\s . d)
+                                                        (#\d . r)
+                                                        (#\space . drop)))
+;;palyer 2
+(send test-logic add-key-board-player "pocke" 456 400 3 5 '((#\i . u)
+                                                            (#\j . l)
+                                                            (#\k . d)
+                                                            (#\l . r)
+                                                            (#\b . drop)))
 
 ;; The procedures that redraws the scene form the main-thread.
 (define (draw)
+  (send *gui* update-keys-down)
   (send *draw* clear)
   (send test-logic update-scene *draw*)
   ;(send *draw* background)
