@@ -10,11 +10,14 @@
                 ;players-to-track 
                 objects-to-track)
     
-    (define spelplan '())
-    (define bombs '())
-    (define players '())
-    (define keyboard-players '())
+    (define spelplan '());;dummy
+    (define bombs '());; List of all active bombs, stored as procedures.
+    (define players '());; List of all active players, stored as procedures.
+    (define keyboard-players '());; List of all keyboard-players, stored as (procedure . keyboard-bindings)
     
+    ;;method to redistubute the keydown's list from the userinteract function.
+    ;; key - list of keys down. 
+    ;; this is called from the gui class via the main-loop every 1/24 sec.
     (define/public (handle-key-event key)
       (map  (lambda (proc)
               (let((action (assq key (cdr proc))))
@@ -22,7 +25,13 @@
                     (move-dir (cdr action) (car proc)))))
             keyboard-players))
      
-    
+    ;;method to add a keboard player. 
+    ;; new-name - string
+    ;; x y - cords
+    ;;number-of-lives - int
+    ;;keybord-bindings - list of keys and the corrisponding action, ex 
+    ;;'((#\w . u)(#\a . l)(#\s . d)(#\d . r)(#\space . drop)
+    ;; u = up, l = left, d = down, r = right, drop = key calling the the drop bomb method.
     (define/public (add-key-board-player new-name x y dxy number-of-lives keybord-bindings)
       (let((temp-player 
             (new player%
@@ -40,6 +49,7 @@
                (cons temp-player keybord-bindings)
                keyboard-players))))
     
+    ;;Function to check if it's possible to move and do so if.
     (define (move? proc dir)
       (let((collition #f)
            (new-x (get-field x-pos proc))
@@ -59,6 +69,7 @@
         (not collition)
         ));; inte klar!!!!!!!!!!!!!!!!!!!
     
+    
     ;; fixa en collitonfunktion som klarar av att hitta ett objekt och berätta vilket håll som den stött i
     (define/public (move-dir dir proc)
       (if (move? proc dir)
@@ -71,6 +82,7 @@
       (if(not (eq? 'drop dir))
       (send proc set-dir! dir)))
     
+    ;;Method to add bombs to a positon and giv it an owner.
     (define/private (add-bomb x y own)
       (let((temp-bomb 
             (new bomb%
@@ -84,19 +96,26 @@
                temp-bomb
                bombs))))
     
+    ;; change here to give the explosion som logic
+    (define/private (on-bomb-explosion bomb)
+      (display (get-field name (get-field owner proc))))
     
     ;; skickar in alla trackade objects bitmaps i en viss positon.
+    ;;track all players
     (define/public (update-scene draw-class)
       (map  (lambda (proc)
               (send draw-class draw-bitmap-2 (send proc get-bitmap) (get-field x-pos proc) (get-field y-pos proc)))
             players)
+      ;;track all objects in the bomb list
       (map  (lambda (proc)
               (send draw-class draw-bitmap-2 (send proc get-bitmap) (get-field x-pos proc) (get-field y-pos proc)))
             objects-to-track)
+      
+      ;;track all bombs in the bomb list
       (map  (lambda (proc)
               (send draw-class draw-bitmap-2 (send proc get-bitmap) (get-field x-pos proc) (get-field y-pos proc))
               (if(send proc gone-off?)
-                 (display (get-field name (get-field owner proc))))
+                 (on-bomb-explosion proc))
               )
             bombs)
       )

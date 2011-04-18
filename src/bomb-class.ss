@@ -15,12 +15,15 @@
     (define/public (set-y! y)
       (set! y-pos y))
     
+    ;;sends the bitmap, called from the game-logic, to update screen.
     (define/public (get-bitmap)
       buffer)
     
+    ;;return timestamp from when the bomb was created.
     (define/public (get-timestamp)
       timestamp)
     
+    ;;returns true if the bomb has gone off.
     (define/public (gone-off?)
       (<= (+ timestamp delay) (current-seconds)))
     

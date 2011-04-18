@@ -1,5 +1,5 @@
 ;(load "paint-tools.ss")
-(require scheme/date)
+(require scheme/date);; for timestamps in bombs
 (load "draw-class.ss")
 (load "player-class.ss")
 (load "stone-class.ss")
@@ -9,20 +9,7 @@
 (load "gui-class.ss")
 (load "main-loop.ss")
 
-;; ---------------------------------------------------------------------
-;; The main globalbitmap *draw* and gui
-;; ---------------------------------------------------------------------
-(define *draw*
-  (new make-draw%
-       [width 500];;canvas/bitmaps size
-       [height 500]))
 
-(define *gui*
-  (new make-gui%
-       [window-name "New gui!"]
-       [width 800];;Window size
-       [height 500]
-       [image-buffer *draw*]))
 
 ;; ---------------------------------------------------------------------
 ;; global objects
@@ -63,7 +50,28 @@
        [width 500]
        [objects-to-track objects]))
 
-;;palyer 1
+;; ---------------------------------------------------------------------
+;; The main globalbitmap *draw* and gui
+;; ---------------------------------------------------------------------
+(define *draw*
+  (new make-draw%
+       [width 500];;canvas/bitmaps size
+       [height 500])) 
+
+(define *gui*
+  (new make-gui%
+       [window-name "New gui!"]
+       [width 800];;Window size
+       [height 500]
+       [image-buffer *draw*];;image buffer, the image to load in to the canvas.
+       [logic-class test-logic]));; logic class to send key events to
+
+
+;; ---------------------------------------------------------------------
+;; add players
+;; ---------------------------------------------------------------------
+
+;;palyer 1 
 (send test-logic add-key-board-player "jocke" 2 2 3 5 '((#\w . u)
                                                         (#\a . l)
                                                         (#\s . d)
@@ -79,10 +87,10 @@
 ;; The procedures that redraws the scene form the main-thread.
 (define (draw)
   (send *gui* update-keys-down);send keys to gamelogic once a loop.
-  (send *draw* clear)
-  (send test-logic update-scene *draw*)
+  (send *draw* clear);; clear bitmap,
+  (send test-logic update-scene *draw*);;update bitmap
   ;(send *draw* background)
-  (send *gui* redraw))
+  (send *gui* redraw));;redraw gui to see the new bitmap
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; END DEFINE ;;;;;;;;;;;;;;;;;;;;;;;;;;
