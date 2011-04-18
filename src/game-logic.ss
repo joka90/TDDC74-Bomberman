@@ -98,7 +98,9 @@
     
     ;; change here to give the explosion som logic
     (define/private (on-bomb-explosion bomb)
-      (display (get-field name (get-field owner proc))))
+      (display (get-field name (get-field owner bomb)))
+      (set! bombs (remv bomb bombs));; remov the bomb from bombs
+      )
     
     ;; skickar in alla trackade objects bitmaps i en viss positon.
     ;;track all players
