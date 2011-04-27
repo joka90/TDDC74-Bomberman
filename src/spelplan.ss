@@ -19,22 +19,19 @@
     (define/public (randomize-stones)
       (define x 0)
       (define y 0)
-      (when (and (<= x width) (<= y height))
+      (define (loop)
+      (if (and (<= x width) (<= y height))
         (cond
           ((or(and(<= x width) (= y 0)) (and (= y height) (<= x width)))
            (vector-set! gamevector (get-pos x y) 2)
                                     (cond 
-                                      ((= x width) (set! x 0) (set! y (+ y 1)))
-                                      (else(set! x (+ x 1)))))
+                                      ((= x width) (set! x 0) (set! y (+ y 1))(loop))
+                                      (else(set! x (+ x 1))(loop)))
           
           ((and(or (= x 0) (= x width)) (!= y 0))
            (vector-set! gamevector (get-pos x y) 2) (cond
-                                                      ((= x width) (set! x 0) (set! y (+ y 1)))
-                                                      ((= x 0) (set! x width))))
-          (else (set! x (+ x 1
-          
-                                                      
-          )))))
+                                                      ((= x width) (set! x 0) (set! y (+ y 1))(loop))
+                                                      ((= x 0) (set! x width)(loop)))))))))))
                                          
    
   
