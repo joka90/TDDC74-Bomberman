@@ -9,6 +9,9 @@
       (new make-draw%
            [width width-px];;canvas/bitmaps size
            [height height-px]))
+  
+    (define stone-border (send the-pen-list find-or-create-pen "black" 2 'solid))
+    (define stone-fill (send the-brush-list find-or-create-brush "yellow" 'solid))
     
     (define/public (update-bitmap)
       (let loop ((index 0))
@@ -17,13 +20,8 @@
               (if (vector-ref gamevector index)
                   (update-bitmap-help (vector-ref gamevector index) (get-pos-invers index)))
               (loop (+ 1 index))))))
-        
-    
-    (define stone-border (send the-pen-list find-or-create-pen "black" 2 'solid))
-    (define stone-fill (send the-brush-list find-or-create-brush "yellow" 'solid))
 
     (define/private (update-bitmap-help type pos)    
-      
       (cond  
         ((eq? type 'indestructeble-stone)
          (send bitmap draw-rectangle (* *blocksize* (car pos)) (* *blocksize* (cdr pos)) *blocksize* *blocksize* stone-border stone-fill))
