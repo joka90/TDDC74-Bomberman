@@ -14,7 +14,7 @@
     
     ;; #f innebär tomt, annars returneras vilken typ av objekt som ligger på positionen. 
     (define/public (collision? x y) ;; kollar om det ligger något på en viss position.
-      (if (= (vector-ref gamevector (get-pos x y)) 0)
+      (if (eq? (vector-ref gamevector (get-pos x y)) 0)
           #f
           (vector-ref gamevector (get-pos x y))))
     
