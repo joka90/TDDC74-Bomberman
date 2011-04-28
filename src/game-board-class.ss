@@ -47,7 +47,7 @@
           (vector-ref gamevector (get-pos x y)))
        #f))
     
-    (define/private (get-pos x y) (+ x (* y width))) ;; översätter vektorn till ett koordinatsystem med (x,y)
+    (define/public (get-pos x y) (+ x (* y width))) ;; översätter vektorn till ett koordinatsystem med (x,y)
     
     (define/public (randomize-stones) ;;metod som ska generera stenarna runt en spelplan
       ; (define x 0)
@@ -72,12 +72,15 @@
     ;;Räknar ut x och y-pos utifrån given pos i vektorn.
     ;; (x-pos . y-pos)
     ;; om utanför, retunera false
-    (define/private  (get-pos-invers pos)
-      (if(< pos (* (+ 1 height) (+ 1 width)))
-         (cons (remainder pos (+ 1 width)) (quotient pos (+ 1 width)))
-         #f))
+    (define/public  (get-pos-invers pos)
+      ;(if(<= pos (* (+ 0 height) (+ 0 width)))
+         (cons (remainder pos (+ 0 width)) (quotient pos (+ 0 width)))
+         ;#f)
+      )
     
     
     
     ))
+
+
                                          
