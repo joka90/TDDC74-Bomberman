@@ -2,7 +2,8 @@
 (require scheme/date);; for timestamps in bombs
 (load "draw-class.ss")
 (load "player-class.ss")
-(load "stone-class.ss")
+(load "stone-class.ss");; temp
+(load "game-board-class.ss")
 (load "user-interact.ss")
 (load "game-logic.ss")
 (load "bomb-class.ss")
@@ -34,9 +35,12 @@
        [x-pos 100]
        [y-pos 300]))
 
+(define *blocksize* 20)
+
 
 ;; global lists to track objects
-(define objects (list stone stone2 stone3 stone4))
+;(define objects (list stone stone2 stone3 stone4))
+(define objects '())
 
 ;(define players (list test-player))
 
@@ -46,8 +50,10 @@
 
 (define test-logic
   (new game-logic%
-       [height 500]
-       [width 500]
+       [height 25]
+       [width 25]
+       [height-px 500]
+       [width-px 500]
        [objects-to-track objects]))
 
 ;; ---------------------------------------------------------------------
@@ -70,15 +76,15 @@
 ;; ---------------------------------------------------------------------
 ;; add players
 ;; ---------------------------------------------------------------------
-
+;;(add-key-board-player new-name x y dxy number-of-lives keybord-bindings)
 ;;palyer 1 
-(send test-logic add-key-board-player "jocke" 2 2 3 5 '((#\w . u)
+(send test-logic add-key-board-player "jocke" 1 1 1 5 '((#\w . u)
                                                         (#\a . l)
                                                         (#\s . d)
                                                         (#\d . r)
                                                         (#\space . drop)))
 ;;palyer 2
-(send test-logic add-key-board-player "pocke" 456 400 3 5 '((#\i . u)
+(send test-logic add-key-board-player "pocke" 24 24 1 5 '((#\i . u)
                                                             (#\j . l)
                                                             (#\k . d)
                                                             (#\l . r)
