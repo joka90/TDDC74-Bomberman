@@ -26,15 +26,15 @@
       
       (cond  
         ((eq? type 'indestructeble-stone)
-         (send bitmap draw-rectangle (* *blocksize* (car pos)) (* *blocksize* (cdr pos)) *blocksize* *blocksize* stone-border stone-fill)
-         ;(display pos)
-         )))
+         (send bitmap draw-rectangle (* *blocksize* (car pos)) (* *blocksize* (cdr pos)) *blocksize* *blocksize* stone-border stone-fill))
+        ((eq? type 'destructeble-stone)
+         (send bitmap draw-rectangle (* *blocksize* (car pos)) (* *blocksize* (cdr pos)) *blocksize* *blocksize* stone-border (send the-brush-list find-or-create-brush "red" 'solid)))))
     
     (define/public (get-bitmap)
       (send bitmap get-bitmap))
     
-    (define/public (add-object-to-board! x y) ;;lägger till ett objekt på en given position
-      (vector-set! gamevector (get-pos x y) 1))
+    (define/public (add-object-to-board! x y type) ;;lägger till ett objekt på en given position
+      (vector-set! gamevector (get-pos x y) type))
     
     (define/public (delete-object-from-board! x y) ;; som ovan fast ta bort
       (vector-set! gamevector (get-pos x y) 0)) 
@@ -49,7 +49,7 @@
     
     (define/public (get-pos x y) (+ x (* y width))) ;; översätter vektorn till ett koordinatsystem med (x,y)
     
-    (define/public (randomize-stones) ;;metod som ska generera stenarna runt en spelplan
+    (define/public (randomize-stones-2) ;;metod som ska generera stenarna runt en spelplan
       ; (define x 0)
       ; (define y 0)
       (let loop ((x 0)
@@ -68,6 +68,40 @@
                   ((= x (- width 1))(loop 0 (+ y 1)))
                   ((= x 0) (loop (- width 1) y)))
                 )))))
+    
+    (define/private (add-destruct-stone? x y)
+      (and
+          (not (or 
+               (and (< x 3) (< y 3));;första hörnet
+               (and (<= (- width 3) x) (< y 3));;andra hörnet
+               (and (< x 3) (<= (- height 3) y));;4 hörnet
+               (and (<= (- width 3) x) (<= (- height 3) y));;3 hörnet
+               ))
+          (= 0 (random 2))))
+    
+    (define/public (randomize-stones)
+      (define (x-led x)
+        (if (< x width)
+            (begin
+              (y-led 0 x)
+              (x-led (+ x 1)))))
+      
+      (define (y-led y x)
+        (if (< y height)
+            (begin
+              (cond
+                ((= x 0)(add-object-to-board! x y 'indestructeble-stone))
+                ((= y 0)(add-object-to-board! x y 'indestructeble-stone))
+                ((= x (- width 1))(add-object-to-board! x y 'indestructeble-stone))
+                ((= y (- height 1))(add-object-to-board! x y 'indestructeble-stone))
+                ((and (even? y) (even? x))(add-object-to-board! x y 'indestructeble-stone))
+                ((add-destruct-stone? x y)(add-object-to-board! x y 'destructeble-stone))
+                )
+              (y-led (+ y 1) x))))
+      
+      (x-led 0);;starta
+      )
+    
     
     ;;Räknar ut x och y-pos utifrån given pos i vektorn.
     ;; (x-pos . y-pos)

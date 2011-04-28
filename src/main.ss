@@ -50,9 +50,9 @@
 
 (define test-logic
   (new game-logic%
-       [height 20]
+       [height 21]
        [width 21]
-       [height-px 600]
+       [height-px 630]
        [width-px 630]
        [objects-to-track objects]))
 
@@ -62,13 +62,13 @@
 (define *draw*
   (new make-draw%
        [width 630];;canvas/bitmaps size
-       [height 600])) 
+       [height 630])) 
 
 (define *gui*
   (new make-gui%
        [window-name "New gui!"]
        [width 800];;Window size
-       [height 600]
+       [height 630]
        [image-buffer *draw*];;image buffer, the image to load in to the canvas.
        [logic-class test-logic]));; logic class to send key events to
 
@@ -84,7 +84,7 @@
                                                         (#\d . r)
                                                         (#\space . drop)))
 ;;palyer 2
-(send test-logic add-key-board-player "pocke" 19 18 1 5 '((#\i . u)
+(send test-logic add-key-board-player "pocke" 19 19 1 5 '((#\i . u)
                                                             (#\j . l)
                                                             (#\k . d)
                                                             (#\l . r)
