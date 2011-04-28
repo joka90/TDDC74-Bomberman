@@ -6,11 +6,18 @@
 (define game-logic%
   (class object%
     (super-new)
-    (init-field height width 
+    (init-field height width height-px width-px
                 ;players-to-track 
                 objects-to-track)
     
-    (define spelplan '());;dummy
+    (define game-board
+      (new board%
+           [height height]
+           [width width]
+           [height-px height-px]
+           [width-px width-px]))
+    (send game-board randomize-stones)
+       
     (define bombs '());; List of all active bombs, stored as procedures.
     (define players '());; List of all active players, stored as procedures.
     (define keyboard-players '());; List of all keyboard-players, stored as (procedure . keyboard-bindings)
@@ -66,6 +73,10 @@
                    (display (get-field type object-to-check)))
                  ))
             objects-to-track)
+        
+        (if(send game-board collision? new-x new-y)
+           (set! collition #t))
+        
         (not collition)
         ));; inte klar!!!!!!!!!!!!!!!!!!!
     
@@ -105,17 +116,20 @@
     ;; skickar in alla trackade objects bitmaps i en viss positon.
     ;;track all players
     (define/public (update-scene draw-class)
+      (send game-board update-bitmap)
+      (send draw-class draw-bitmap-2 (send game-board get-bitmap) 0 0)
+      
       (map  (lambda (proc)
-              (send draw-class draw-bitmap-2 (send proc get-bitmap) (get-field x-pos proc) (get-field y-pos proc)))
+              (send draw-class draw-bitmap-2 (send proc get-bitmap) (* *blocksize* (get-field x-pos proc)) (* *blocksize* (get-field y-pos proc))))
             players)
       ;;track all objects in the bomb list
       (map  (lambda (proc)
-              (send draw-class draw-bitmap-2 (send proc get-bitmap) (get-field x-pos proc) (get-field y-pos proc)))
+              (send draw-class draw-bitmap-2 (send proc get-bitmap) (* *blocksize* (get-field x-pos proc)) (* *blocksize* (get-field y-pos proc))))
             objects-to-track)
       
       ;;track all bombs in the bomb list
       (map  (lambda (proc)
-              (send draw-class draw-bitmap-2 (send proc get-bitmap) (get-field x-pos proc) (get-field y-pos proc))
+              (send draw-class draw-bitmap-2 (send proc get-bitmap) (* *blocksize* (get-field x-pos proc)) (* *blocksize* (get-field y-pos proc)))
               (if(send proc gone-off?)
                  (on-bomb-explosion proc))
               )
