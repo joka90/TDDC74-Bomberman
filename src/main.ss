@@ -50,10 +50,10 @@
 
 (define test-logic
   (new game-logic%
-       [height 19]
-       [width 19]
+       [height 20]
+       [width 21]
        [height-px 600]
-       [width-px 600]
+       [width-px 630]
        [objects-to-track objects]))
 
 ;; ---------------------------------------------------------------------
@@ -61,7 +61,7 @@
 ;; ---------------------------------------------------------------------
 (define *draw*
   (new make-draw%
-       [width 600];;canvas/bitmaps size
+       [width 630];;canvas/bitmaps size
        [height 600])) 
 
 (define *gui*
@@ -84,7 +84,7 @@
                                                         (#\d . r)
                                                         (#\space . drop)))
 ;;palyer 2
-(send test-logic add-key-board-player "pocke" 18 18 1 5 '((#\i . u)
+(send test-logic add-key-board-player "pocke" 19 18 1 5 '((#\i . u)
                                                             (#\j . l)
                                                             (#\k . d)
                                                             (#\l . r)
@@ -116,11 +116,4 @@
   (new make-loop%
        [function-to-loop draw]));; anropar draw spec i update-graphic
 
-;(send main-loop start-loop);; startar loopen
-(define game-board2
-      (new board%
-           [height 19]
-           [width 19]
-           [height-px 600]
-           [width-px 600]))
-(send game-board2 randomize-stones)
+(send main-loop start-loop);; startar loopen

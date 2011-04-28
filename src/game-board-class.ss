@@ -41,7 +41,7 @@
     
     ;; #f innebär tomt, annars returneras vilken typ av objekt som ligger på positionen. 
     (define/public (collision? x y) ;; kollar om det ligger något på en viss position.
-      (if(and (<= 0 x) (<= 0 y) (<= x width) (<= y height))
+      (if(and (<= 0 x) (<= 0 y) (< x width) (<= y height))
        (if (eq? (vector-ref gamevector (get-pos x y)) 0)
           #f
           (vector-ref gamevector (get-pos x y)))
@@ -54,19 +54,19 @@
       ; (define y 0)
       (let loop ((x 0)
                  (y 0))
-        (if (and (<= x width) (<= y height))
+        (if (and (< x width) (< y height))
             (cond
-              ((or(and(<= x width) (= y 0)) (and (= y height) (<= x width)))
+              ((or(and(< x width) (= y 0)) (and (= y  (- height 1)) (< x width)))
                (vector-set! gamevector (get-pos x y) 'indestructeble-stone)
                (cond 
-                 ((= x width) (loop 0 (+ y 1)))
+                 ((= x (- width 1)) (loop 0 (+ y 1)))
                  (else (loop (+ 1 x) y))))
                
-               ((and(or (= x 0) (= x width)) (not (= y 0))) 
+               ((and(or (= x 0) (= x (- width 1))) (not (= y 0))) 
                 (vector-set! gamevector (get-pos x y) 'indestructeble-stone)
                 (cond
-                  ((= x width)(loop 0 (+ y 1)))
-                  ((= x 0) (loop width y)))
+                  ((= x (- width 1))(loop 0 (+ y 1)))
+                  ((= x 0) (loop (- width 1) y)))
                 )))))
     
     ;;Räknar ut x och y-pos utifrån given pos i vektorn.
