@@ -27,7 +27,8 @@
       (cond  
         ((eq? type 'indestructeble-stone)
          (send bitmap draw-rectangle (* *blocksize* (car pos)) (* *blocksize* (cdr pos)) *blocksize* *blocksize* stone-border stone-fill)
-         (display pos))))
+         ;(display pos)
+         )))
     
     (define/public (get-bitmap)
       (send bitmap get-bitmap))

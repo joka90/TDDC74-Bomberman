@@ -35,7 +35,7 @@
        [x-pos 100]
        [y-pos 300]))
 
-(define *blocksize* 20)
+(define *blocksize* 30)
 
 
 ;; global lists to track objects
@@ -50,10 +50,10 @@
 
 (define test-logic
   (new game-logic%
-       [height 25]
-       [width 25]
-       [height-px 500]
-       [width-px 500]
+       [height 20]
+       [width 20]
+       [height-px 600]
+       [width-px 600]
        [objects-to-track objects]))
 
 ;; ---------------------------------------------------------------------
@@ -61,14 +61,14 @@
 ;; ---------------------------------------------------------------------
 (define *draw*
   (new make-draw%
-       [width 500];;canvas/bitmaps size
-       [height 500])) 
+       [width 600];;canvas/bitmaps size
+       [height 600])) 
 
 (define *gui*
   (new make-gui%
        [window-name "New gui!"]
        [width 800];;Window size
-       [height 500]
+       [height 600]
        [image-buffer *draw*];;image buffer, the image to load in to the canvas.
        [logic-class test-logic]));; logic class to send key events to
 
@@ -84,7 +84,7 @@
                                                         (#\d . r)
                                                         (#\space . drop)))
 ;;palyer 2
-(send test-logic add-key-board-player "pocke" 24 24 1 5 '((#\i . u)
+(send test-logic add-key-board-player "pocke" 23 23 1 5 '((#\i . u)
                                                             (#\j . l)
                                                             (#\k . d)
                                                             (#\l . r)
