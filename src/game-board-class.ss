@@ -39,7 +39,81 @@
     (define/public (delete-object-from-board! x y) ;; som ovan fast ta bort
       (vector-set! gamevector (get-pos x y) 0)) 
     
-    (define/public (delete-destruct-from-board-radius! x y radius) ;; som ovan fast med radie, och bara destructs.
+    (define/public (delete-destruct-from-board-radius! x y radius)
+      (define emptyspaces '())
+      (let loop ((x1-temp x) ;; den som ökar
+                 (y1-temp y) ;; den som ökar
+                 (x2-temp x) ;;den som minskar
+                 (y2-temp y));; den som minskar
+        
+        
+        
+        (if  (or (<= x1-temp (+ x radius)) (>= x2-temp (- x radius)) (<= y1-temp (+ y radius)) (>= y2-temp (- y radius))) 
+             (cond
+               
+               ((<= x1-temp (+ x radius))
+                (cond 
+                  
+                  
+                  ((eq? 'destructeble-stone (collision? x1-temp y))      
+                   (delete-object-from-board! x1-temp y)
+                   
+                   (loop (+ x1-temp radius) y1-temp x2-temp y2-temp))
+                  
+                  ((eq? 'indestructeble-stone (collision? x1-temp y))
+                   (loop (+ x1-temp radius) y1-temp x2-temp y2-temp))
+                  
+                  (else
+                   (set! emptyspaces (cons (cons x1-temp y) emptyspaces))
+                   (loop (+ x1-temp 1) y1-temp x2-temp y2-temp))))
+               
+               
+               
+               ((>= x2-temp (- x radius)) 
+                (cond 
+                  ((eq? 'destructeble-stone (collision? x2-temp y))
+                   (delete-object-from-board! x2-temp y)
+                   (loop (+ x1-temp radius) y1-temp (- x2-temp radius) y2-temp))
+                  
+                  ((eq? 'indestructeble-stone (collision? x2-temp y))
+                   (loop (+ x1-temp radius) y1-temp (- x2-temp radius) y2-temp))
+                  
+                  (else 
+                   (set! emptyspaces (cons (cons x2-temp y) emptyspaces))
+                   (loop (+ x1-temp radius) y1-temp (- x2-temp 1) y2-temp))))
+               
+               
+               
+               
+               ((<= y1-temp (+ y radius)) 
+                (cond
+                  ((eq? 'destructeble-stone (collision? x y1-temp))
+                   (delete-object-from-board! x y1-temp)
+                   (loop (+ x1-temp radius) (+ y1-temp radius) (- x2-temp radius) y2-temp))
+                  
+                  ((eq? 'indestructeble-stone (collision? x y1-temp))
+                   (loop (+ x1-temp radius) (+ y1-temp radius) (- x2-temp radius) y2-temp))
+                  
+                  (else 
+                   (set! emptyspaces (cons (cons x y1-temp) emptyspaces))
+                   (loop (+ x1-temp radius) (+ y1-temp 1) (- x2-temp radius) y2-temp))))
+               
+               ((>= y2-temp (- y radius)) 
+                (cond
+                  ((eq? 'destructeble-stone (collision? x y2-temp))
+                   (delete-object-from-board! x y2-temp)
+                   (loop (+ x1-temp radius) (+ y1-temp radius) (- x2-temp radius) (- y2-temp radius)))
+                  
+                  ((eq? 'indestructeble-stone (collision? x y2-temp))
+                   (loop (+ x1-temp radius) (+ y1-temp radius) (- x2-temp radius) (- y2-temp radius)))
+                  
+                  (else 
+                   (set! emptyspaces (cons (cons x y2-temp) emptyspaces))
+                   (loop (+ x1-temp radius) (+ y1-temp radius) (- x2-temp radius) (- y2-temp 1))))))))
+     (display emptyspaces))
+
+    
+    (define/public (delete-destruct-from-board-radius-2! x y radius) ;; som ovan fast med radie, och bara destructs.
       (define (x-led from to)
         (if (<= from to)
             (begin
