@@ -10,9 +10,21 @@
     (define direction 'r)
     (define direction-angle 0)
     (define direction-angle-diff 0);; to track the bitmaps rotation 
+   
     
     (define x-pos-px (* x-pos *blocksize*))
     (define y-pos-px (* y-pos *blocksize*))
+    
+    (define number-of-bombs 0)
+    
+    (define/public (can-bomb?)
+      (<= number-of-bombs bomb-count))
+    
+    (define/public (remv-bomb)
+      (set! number-of-bombs (- number-of-bombs 1)))
+    
+    (define/public (add-bomb)
+      (set! number-of-bombs (+ number-of-bombs 1)))
     
     ;;set px pos and logical pos
     (define/public (set-x-pos-px! x)
@@ -57,6 +69,7 @@
            (set! direction dir))))
     ;; r, l, u, d,
 
+    
 
     ;; bild kod ----------------------------
     (define buffer (make-object bitmap% 30 30 #f))

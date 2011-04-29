@@ -122,6 +122,12 @@
     
     ;;Method to add bombs to a positon and giv it an owner.
     (define/private (add-bomb x y own)
+      (if(send own can-bomb?)
+         (begin
+           (add-bomb-help x y own)
+           (send own add-bomb))))
+    
+    (define/private (add-bomb-help x y own)
       (let((temp-bomb 
             (new bomb%
                  [x-pos x]
@@ -139,6 +145,7 @@
       ;(display (get-field name (get-field owner bomb)))
        (send game-board delete-destruct-from-board-radius! 
              (get-field x-pos bomb) (get-field y-pos bomb) (get-field radius bomb))
+      (send (get-field owner bomb) remv-bomb);;set number of bombs out.
       (set! bombs (remv bomb bombs));; remov the bomb from bombs
       )
     
