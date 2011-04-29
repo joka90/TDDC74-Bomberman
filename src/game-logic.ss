@@ -61,11 +61,21 @@
       (let((collition #f)
            (new-x (get-field x-pos proc))
            (new-y (get-field y-pos proc)))
+        
         (cond
-          ((eq? 'u dir)(set! new-y (-(get-field y-pos proc) (get-field dxdy proc))))
-          ((eq? 'd dir)(set! new-y (+(get-field y-pos proc) (get-field dxdy proc))))
-          ((eq? 'l dir)(set! new-x (-(get-field x-pos proc) (get-field dxdy proc))))
-          ((eq? 'r dir)(set! new-x (+(get-field x-pos proc) (get-field dxdy proc)))))
+          ((and (eq? 'd dir) (not (= 0 (remainder (send proc get-x-pos-px) *blocksize*))))
+           (set! collition #t))
+          ((and (eq? 'r dir) (not (= 0 (remainder (send proc get-y-pos-px) *blocksize*))))
+           (set! collition #t))
+          ((and (eq? 'u dir) (not (= 0 (remainder (send proc get-x-pos-px) *blocksize*))))
+           (set! collition #t))
+          ((and (eq? 'l dir) (not (= 0 (remainder (send proc get-y-pos-px) *blocksize*))))
+           (set! collition #t))
+          ((eq? 'u dir)(set! new-y (-(get-field y-pos proc) 1)))
+          ((eq? 'd dir)(set! new-y (+(get-field y-pos proc) 1)))
+          ((eq? 'l dir)(set! new-x (-(get-field x-pos proc) 1)))
+          ((eq? 'r dir)(set! new-x (+(get-field x-pos proc) 1))))
+        
         (map(lambda (object-to-check)
               (if(and (send object-to-check collition? new-x new-y (get-field height proc) (get-field width proc)) (not collition));; F = ingen kolltion
                  (begin
@@ -74,7 +84,7 @@
                  ))
             objects-to-track)
         
-        (if(send game-board collision? new-x new-y)
+        (if(and (send game-board collision? new-x new-y) (not collition))
            (set! collition #t))
         
         (not collition)
@@ -85,16 +95,39 @@
     (define/public (move-dir dir proc)
       (if (move? proc dir)
           (cond
-            ((eq? 'u dir)(send proc set-y! (-(get-field y-pos proc) (get-field dxdy proc))))
-            ((eq? 'd dir)(send proc set-y! (+(get-field y-pos proc) (get-field dxdy proc))))
-            ((eq? 'l dir)(send proc set-x! (-(get-field x-pos proc) (get-field dxdy proc))))
-            ((eq? 'r dir)(send proc set-x! (+(get-field x-pos proc) (get-field dxdy proc))))
-            ((eq? 'drop dir)(add-bomb (get-field x-pos proc) (get-field y-pos proc) proc))))
+            ((eq? 'u dir)(send proc set-y-pos-px! (-(send proc get-y-pos-px) (get-field dxdy proc))))
+            ((eq? 'd dir)(send proc set-y-pos-px! (+(send proc get-y-pos-px) (get-field dxdy proc))))
+            ((eq? 'l dir)(send proc set-x-pos-px! (-(send proc get-x-pos-px) (get-field dxdy proc))))
+            ((eq? 'r dir)(send proc set-x-pos-px! (+(send proc get-x-pos-px) (get-field dxdy proc))))
+            ((eq? 'drop dir)(add-bomb (get-field x-pos proc) (get-field y-pos proc) proc)))
+          (cond;;flytta om möjligt i rutan
+            ((and (eq? 'u dir) 
+                  (<= (get-field dxdy proc)  (remainder (send proc get-y-pos-px) *blocksize*)))
+             (send proc set-y-pos-px! (-(send proc get-y-pos-px) (get-field dxdy proc))))
+            ((and (eq? 'd dir) 
+                  (<= (get-field dxdy proc)  (remainder (send proc get-y-pos-px) *blocksize*)))
+             (send proc set-y-pos-px! (+(send proc get-y-pos-px) (get-field dxdy proc))))
+            ((and
+              (eq? 'l dir)
+              (<= (get-field dxdy proc)  (remainder (send proc get-x-pos-px) *blocksize*)))
+             (send proc set-x-pos-px! (-(send proc get-x-pos-px) (get-field dxdy proc))))
+            ((and
+              (eq? 'r dir)
+              (<= (get-field dxdy proc)  (remainder (send proc get-x-pos-px) *blocksize*)))
+             (send proc set-x-pos-px! (+(send proc get-x-pos-px) (get-field dxdy proc))))
+            ))
+      
       (if(not (eq? 'drop dir))
       (send proc set-dir! dir)))
     
     ;;Method to add bombs to a positon and giv it an owner.
     (define/private (add-bomb x y own)
+      (if(send own can-bomb?)
+         (begin
+           (add-bomb-help x y own)
+           (send own add-bomb))))
+    
+    (define/private (add-bomb-help x y own)
       (let((temp-bomb 
             (new bomb%
                  [x-pos x]
@@ -112,6 +145,7 @@
       ;(display (get-field name (get-field owner bomb)))
        (send game-board delete-destruct-from-board-radius! 
              (get-field x-pos bomb) (get-field y-pos bomb) (get-field radius bomb))
+      (send (get-field owner bomb) remv-bomb);;set number of bombs out.
       (set! bombs (remv bomb bombs));; remov the bomb from bombs
       )
     
@@ -121,10 +155,12 @@
       (send game-board update-bitmap)
       (send draw-class draw-bitmap-2 (send game-board get-bitmap) 0 0)
       
+      ;;all players
       (map  (lambda (proc)
-              (send draw-class draw-bitmap-2 (send proc get-bitmap) (* *blocksize* (get-field x-pos proc)) (* *blocksize* (get-field y-pos proc))))
+              (send draw-class draw-bitmap-2 (send proc get-bitmap) (send proc get-x-pos-px) (send proc get-y-pos-px)))
             players)
-      ;;track all objects in the bomb list
+      
+      ;;track all objects
       (map  (lambda (proc)
               (send draw-class draw-bitmap-2 (send proc get-bitmap) (* *blocksize* (get-field x-pos proc)) (* *blocksize* (get-field y-pos proc))))
             objects-to-track)
