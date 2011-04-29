@@ -82,7 +82,7 @@
                                                         (#\a . l)
                                                         (#\s . d)
                                                         (#\d . r)
-                                                        (#\space . drop)))
+                                                        (#\q . drop)))
 ;;palyer 2
 (send test-logic add-key-board-player "pocke" 19 19 1 5 '((#\i . u)
                                                             (#\j . l)

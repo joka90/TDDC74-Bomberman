@@ -14,12 +14,14 @@
     (define stone-fill (send the-brush-list find-or-create-brush "yellow" 'solid))
     
     (define/public (update-bitmap)
-      (let loop ((index 0))
+      (define (loop index)
         (if (< index (vector-length gamevector))
             (begin
-              (if (vector-ref gamevector index)
+              (if (vector-ref gamevector index);;finns det något där eller inte?
                   (update-bitmap-help (vector-ref gamevector index) (get-pos-invers index)))
-              (loop (+ 1 index))))))
+              (loop (+ 1 index)))))
+      (send bitmap clear)
+      (loop 0))
 
     (define/private (update-bitmap-help type pos)    
       (cond  
@@ -36,6 +38,30 @@
     
     (define/public (delete-object-from-board! x y) ;; som ovan fast ta bort
       (vector-set! gamevector (get-pos x y) 0)) 
+    
+    (define/public (delete-destruct-from-board-radius! x y radius) ;; som ovan fast med radie, och bara destructs.
+      (define (x-led from to)
+        (if (<= from to)
+            (begin
+              (if(eq? 'destructeble-stone (collision? from y))
+                 (begin
+                   (delete-object-from-board! from y)
+                   (display x)(display " ")(display y)(newline)))
+              (x-led (+ from 1) to))))
+      
+      (define (y-led from to)
+        (if (<= from to)
+            (begin
+              (if(eq? 'destructeble-stone (collision? x from))
+                 (begin
+                   (delete-object-from-board! x from)
+                   (display x)(display " ")(display y)(newline)))
+              (y-led (+ from 1) to))))
+      
+      (x-led (- x radius) (+ x radius))
+      (y-led (- y radius) (+ y radius))
+      
+      ) 
     
     ;; #f innebär tomt, annars returneras vilken typ av objekt som ligger på positionen. 
     (define/public (collision? x y) ;; kollar om det ligger något på en viss position.

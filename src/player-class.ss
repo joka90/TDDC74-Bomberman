@@ -5,7 +5,7 @@
   (class object%
     (super-new)
     (init-field x-pos y-pos dxdy name lives)
-    (field (height 30) (width 30) (points 0) (radius 10) (bomb-count 10))
+    (field (height 30) (width 30) (points 0) (radius 1) (bomb-count 5) (delay 5))
     
     (define direction 'r)
     (define direction-angle 0)

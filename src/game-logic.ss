@@ -99,7 +99,7 @@
             (new bomb%
                  [x-pos x]
                  [y-pos y]
-                 [delay 10];;get from proc
+                 [delay (get-field delay own)];;get from proc
                  [radius (get-field radius own)]
                  [owner own])))
         (set! bombs 
@@ -107,9 +107,11 @@
                temp-bomb
                bombs))))
     
-    ;; change here to give the explosion som logic
+    ;; change here to give the explosion some logic
     (define/private (on-bomb-explosion bomb)
-      (display (get-field name (get-field owner bomb)))
+      ;(display (get-field name (get-field owner bomb)))
+       (send game-board delete-destruct-from-board-radius! 
+             (get-field x-pos bomb) (get-field y-pos bomb) (get-field radius bomb))
       (set! bombs (remv bomb bombs));; remov the bomb from bombs
       )
     
