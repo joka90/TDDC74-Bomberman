@@ -70,24 +70,31 @@
     ;; r, l, u, d,
 
     
-
-    ;; bild kod ----------------------------
-    (define buffer (make-object bitmap% 30 30 #f))
-    (define dc (make-object bitmap-dc% buffer))
-    (send dc clear)
-    (send dc set-brush "green" 'solid)
-    (send dc set-pen "blue" 1 'solid)
-    (send dc draw-rectangle 0 10 30 10)
-    (send dc set-pen "red" 3 'solid)
-    (send dc draw-line 0 0 30 30)
-    (send dc draw-line 0 30 30 0)
-    (send dc draw-text name 0 0)
+     (define bitmap
+      (new make-draw%
+           [width *blocksize*];;canvas/bitmaps size
+           [height *blocksize*]))
+  
+    (define bitmap-up (make-object bitmap% "img/u.bmp" 'unknown #f))
+    (define bitmap-down (make-object bitmap% "img/d.bmp" 'unknown #f))
+    (define bitmap-left (make-object bitmap% "img/l.bmp" 'unknown #f))
+    (define bitmap-right (make-object bitmap% "img/r.bmp" 'unknown #f))
     
-    (send dc set-rotation 10)
+    (define/public (update-bitmap)
+      (send bitmap clear)  
+      (cond  
+        ((eq? direction 'u)
+         (send bitmap draw-bitmap-2 bitmap-up 0 0))
+        ((eq? direction 'd)
+         (send bitmap draw-bitmap-2 bitmap-down 0 0))
+        ((eq? direction 'l)
+         (send bitmap draw-bitmap-2 bitmap-left 0 0))
+        ((eq? direction 'r)
+         (send bitmap draw-bitmap-2 bitmap-right 0 0))))
     
     (define/public (get-bitmap)
-      (send dc set-rotation 10)
-      buffer)
+      (update-bitmap)
+      (send bitmap get-bitmap))
     ))
 
 
