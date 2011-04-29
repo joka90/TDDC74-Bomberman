@@ -47,9 +47,11 @@
       (send draw-dc draw-line x y (+ x size-x) (+ y size-y)))
     
     ;; A procedures that draws text
-    (define/public (draw-text text x y pen brush)
-      (send draw-dc set-pen pen)
-      (send draw-dc set-brush brush)
+    (define/public (draw-text text x y 
+                              ;pen brush
+                              )
+      ;(send draw-dc set-pen pen)
+      ;(send draw-dc set-brush brush)
       (send draw-dc draw-text text x y))
     
     ;; A procedures that draws a picture from file

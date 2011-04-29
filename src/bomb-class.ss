@@ -15,9 +15,7 @@
     (define/public (set-y! y)
       (set! y-pos y))
     
-    ;;sends the bitmap, called from the game-logic, to update screen.
-    (define/public (get-bitmap)
-      buffer)
+
     
     ;;return timestamp from when the bomb was created.
     (define/public (get-timestamp)
@@ -35,22 +33,34 @@
       (and
        (or (and (<= x-pos xpos) (<= xpos (+  x-pos width)))
            (and (<= x-pos (+ xpos w)) (<= (+ xpos w) (+ x-pos width))))
-       (or (and (<= y-pos ypos) (<= ypos (+  y-pos height)))sssssss
+       (or (and (<= y-pos ypos) (<= ypos (+  y-pos height)))
            (and (<= y-pos (+ ypos h)) (<= (+ ypos h) (+ y-pos height))))))
     
     
     
-    ;; bild kod ----------------------------
-    (define buffer (make-object bitmap% 30 30 #f))
-    (define dc (make-object bitmap-dc% buffer))
-    (send dc clear)
-    (send dc set-brush "red" 'solid)
-    (send dc set-pen "green" 3 'solid)
-    (send dc draw-rectangle 0 10 30 10)
-    (send dc set-pen "red" 3 'solid)
-    (send dc draw-line 0 0 30 30)
-    (send dc draw-line 0 30 30 0)
-    (send dc draw-text  "bomb" 0 0)  
+    (define bitmap
+      (new make-draw%
+           [width *blocksize*];;canvas/bitmaps size
+           [height *blocksize*]))
+  
+    (define bitmap-bomb-1 (make-object bitmap% "img/bomb1.png" 'unknown #f))
+    (define bitmap-bomb-2 (make-object bitmap% "img/bomb2.png" 'unknown #f))
+
+    
+    (define/public (update-bitmap)
+      (send bitmap clear)  
+      (cond  
+        ((< (- (+ timestamp delay) (current-seconds)) 2)
+         (send bitmap draw-bitmap-2 bitmap-bomb-1 0 0))
+        (else
+         (send bitmap draw-bitmap-2 bitmap-bomb-2 0 0)))
+      (send bitmap draw-text (number->string (- (+ timestamp delay) (current-seconds))) 0 0)
+      )
+    
+    ;;sends the bitmap, called from the game-logic, to update screen.
+    (define/public (get-bitmap)
+      (update-bitmap)
+      (send bitmap get-bitmap))  
       ))
 
 
