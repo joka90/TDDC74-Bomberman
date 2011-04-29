@@ -78,13 +78,13 @@
 ;; ---------------------------------------------------------------------
 ;;(add-key-board-player new-name x y dxy number-of-lives keybord-bindings)
 ;;palyer 1 
-(send test-logic add-key-board-player "jocke" 1 1 1 5 '((#\w . u)
+(send test-logic add-key-board-player "jocke" 1 1 10 5 '((#\w . u)
                                                         (#\a . l)
                                                         (#\s . d)
                                                         (#\d . r)
                                                         (#\q . drop)))
 ;;palyer 2
-(send test-logic add-key-board-player "pocke" 19 19 1 5 '((#\i . u)
+(send test-logic add-key-board-player "pocke" 19 19 5 5 '((#\i . u)
                                                             (#\j . l)
                                                             (#\k . d)
                                                             (#\l . r)
