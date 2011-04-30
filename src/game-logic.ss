@@ -39,14 +39,15 @@
     ;;keybord-bindings - list of keys and the corrisponding action, ex 
     ;;'((#\w . u)(#\a . l)(#\s . d)(#\d . r)(#\space . drop)
     ;; u = up, l = left, d = down, r = right, drop = key calling the the drop bomb method.
-    (define/public (add-key-board-player new-name x y dxy number-of-lives keybord-bindings)
+    (define/public (add-key-board-player new-name x y dxy number-of-lives player-color keybord-bindings)
       (let((temp-player 
             (new player%
                  [x-pos x]
                  [y-pos y]
                  [dxdy dxy]
                  [name new-name]
-                 [lives number-of-lives])))
+                 [lives number-of-lives]
+                 [color player-color])))
         (set! players 
               (cons 
                temp-player

@@ -4,7 +4,7 @@
 (define player%
   (class object%
     (super-new)
-    (init-field x-pos y-pos dxdy name lives)
+    (init-field x-pos y-pos dxdy name lives color)
     (field (height 30) (width 30) (points 0) (radius 2) (bomb-count 5) (delay 5))
     
     (define direction 'r)
@@ -75,22 +75,11 @@
            [width *blocksize*];;canvas/bitmaps size
            [height *blocksize*]))
   
-    (define bitmap-up (make-object bitmap% "img/u.bmp" 'unknown #f))
-    (define bitmap-down (make-object bitmap% "img/d.bmp" 'unknown #f))
-    (define bitmap-left (make-object bitmap% "img/l.bmp" 'unknown #f))
-    (define bitmap-right (make-object bitmap% "img/r.bmp" 'unknown #f))
     
     (define/public (update-bitmap)
       (send bitmap clear)  
-      (cond  
-        ((eq? direction 'u)
-         (send bitmap draw-bitmap-2 bitmap-up 0 0))
-        ((eq? direction 'd)
-         (send bitmap draw-bitmap-2 bitmap-down 0 0))
-        ((eq? direction 'l)
-         (send bitmap draw-bitmap-2 bitmap-left 0 0))
-        ((eq? direction 'r)
-         (send bitmap draw-bitmap-2 bitmap-right 0 0))))
+      (send bitmap draw-bitmap-2 (send *image-store* get-image color direction) 0 0)
+    )
     
     (define/public (get-bitmap)
       (update-bitmap)

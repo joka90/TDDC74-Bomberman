@@ -42,18 +42,15 @@
       (new make-draw%
            [width *blocksize*];;canvas/bitmaps size
            [height *blocksize*]))
-  
-    (define bitmap-bomb-1 (make-object bitmap% "img/bomb1.png" 'unknown #f))
-    (define bitmap-bomb-2 (make-object bitmap% "img/bomb2.png" 'unknown #f))
 
     
     (define/public (update-bitmap)
       (send bitmap clear)  
       (cond  
         ((< (- (+ timestamp delay) (current-seconds)) 2)
-         (send bitmap draw-bitmap-2 bitmap-bomb-1 0 0))
+         (send bitmap draw-bitmap-2 (send *image-store* get-image 'bomb-1) 0 0))
         (else
-         (send bitmap draw-bitmap-2 bitmap-bomb-2 0 0)))
+         (send bitmap draw-bitmap-2 (send *image-store* get-image 'bomb-2) 0 0)))
       (send bitmap draw-text (number->string (- (+ timestamp delay) (current-seconds))) 0 0)
       )
     

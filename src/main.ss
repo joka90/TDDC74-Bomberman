@@ -33,7 +33,7 @@
 (send *image-store* add-image 'blue-player '((r . "img/r.bmp")(l . "img/l.bmp")(d . "img/d.bmp")(u . "img/u.bmp")))
 (send *image-store* add-image 'bomb-1 "img/bomb1.png")
 (send *image-store* add-image 'bomb-2 "img/bomb2.png")
-;;FIX att detta används istället för manuelt
+
 
 ;; ---------------------------------------------------------------------
 ;; game logic
@@ -67,15 +67,15 @@
 ;; ---------------------------------------------------------------------
 ;; add players
 ;; ---------------------------------------------------------------------
-;;(add-key-board-player new-name x y dxy number-of-lives keybord-bindings)
+;;(add-key-board-player new-name x y dxy number-of-lives color keybord-bindings)
 ;;palyer 1 
-(send test-logic add-key-board-player "jocke" 1 1 10 5 '((#\w . u)
+(send test-logic add-key-board-player "jocke" 1 1 10 5 'red-player '((#\w . u)
                                                         (#\a . l)
                                                         (#\s . d)
                                                         (#\d . r)
                                                         (#\q . drop)))
 ;;palyer 2
-(send test-logic add-key-board-player "pocke" 19 19 5 5 '((#\i . u)
+(send test-logic add-key-board-player "pocke" 19 19 5 5 'blue-player '((#\i . u)
                                                             (#\j . l)
                                                             (#\k . d)
                                                             (#\l . r)
