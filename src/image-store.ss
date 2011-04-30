@@ -58,10 +58,11 @@
     
     ))
 
-;(define *image-store*
-;  (new make-image-store%))
+(define *image-store*
+  (new make-image-store%))
 
 ;(send *image-store* add-image 'player '((r . "img/r.bmp")(l . "img/l.bmp")(d . "img/d.bmp")(u . "img/u.bmp")))
 ;(send *image-store* get-image 'player 'r)
 ;(assq 'u (list (list 'r "img/r.bmp")(list 'l "img/l.bmp")(list 'd "img/d.bmp")(list 'u "img/u.bmp")))
 ;(list? (cadr (list (list 'r "img/r.bmp")(list 'l "img/l.bmp")(list 'd "img/d.bmp")(list 'u "img/u.bmp"))))
+;(send *image-store* add-image 'bomb-1 "img/bomb1.png")

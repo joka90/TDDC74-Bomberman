@@ -29,7 +29,11 @@
 (define *image-store*
   (new make-image-store%))
 
-(send *image-store* add-image 'player '(('r . "img/r.bmp")('l . "img/l.bmp")('d . "img/d.bmp")('u . "img/u.bmp")))
+(send *image-store* add-image 'red-player '((r . "img/r.bmp")(l . "img/l.bmp")(d . "img/d.bmp")(u . "img/u.bmp")))
+(send *image-store* add-image 'blue-player '((r . "img/r.bmp")(l . "img/l.bmp")(d . "img/d.bmp")(u . "img/u.bmp")))
+(send *image-store* add-image 'bomb-1 "img/bomb1.png")
+(send *image-store* add-image 'bomb-2 "img/bomb2.png")
+;;FIX att detta används istället för manuelt
 
 ;; ---------------------------------------------------------------------
 ;; game logic
