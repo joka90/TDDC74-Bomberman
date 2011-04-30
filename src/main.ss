@@ -1,6 +1,7 @@
 ;(load "paint-tools.ss")
 (require scheme/date);; for timestamps in bombs
 (load "draw-class.ss")
+(load "image-store.ss")
 (load "player-class.ss")
 (load "stone-class.ss");; temp
 (load "game-board-class.ss")
@@ -15,25 +16,6 @@
 ;; ---------------------------------------------------------------------
 ;; global objects just for testing
 ;; ---------------------------------------------------------------------
-(define stone
-  (new stone%
-       [x-pos 100]
-       [y-pos 100]))
-
-(define stone2
-  (new stone%
-       [x-pos 200]
-       [y-pos 100]))
-
-(define stone3
-  (new stone%
-       [x-pos 250]
-       [y-pos 150]))
-
-(define stone4
-  (new stone%
-       [x-pos 100]
-       [y-pos 300]))
 
 (define *blocksize* 30)
 
@@ -43,6 +25,11 @@
 (define objects '())
 
 ;(define players (list test-player))
+
+(define *image-store*
+  (new make-image-store%))
+
+(send *image-store* add-image 'player '(('r . "img/r.bmp")('l . "img/l.bmp")('d . "img/d.bmp")('u . "img/u.bmp")))
 
 ;; ---------------------------------------------------------------------
 ;; game logic

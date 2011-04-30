@@ -155,16 +155,6 @@
       (send game-board update-bitmap)
       (send draw-class draw-bitmap-2 (send game-board get-bitmap) 0 0)
       
-      ;;all players
-      (map  (lambda (proc)
-              (send draw-class draw-bitmap-2 (send proc get-bitmap) (send proc get-x-pos-px) (send proc get-y-pos-px)))
-            players)
-      
-      ;;track all objects
-      (map  (lambda (proc)
-              (send draw-class draw-bitmap-2 (send proc get-bitmap) (* *blocksize* (get-field x-pos proc)) (* *blocksize* (get-field y-pos proc))))
-            objects-to-track)
-      
       ;;track all bombs in the bomb list
       (map  (lambda (proc)
               (send draw-class draw-bitmap-2 (send proc get-bitmap) (* *blocksize* (get-field x-pos proc)) (* *blocksize* (get-field y-pos proc)))
@@ -172,6 +162,19 @@
                  (on-bomb-explosion proc))
               )
             bombs)
+      
+ 
+      ;;track all objects
+      (map  (lambda (proc)
+              (send draw-class draw-bitmap-2 (send proc get-bitmap) (* *blocksize* (get-field x-pos proc)) (* *blocksize* (get-field y-pos proc))))
+            objects-to-track)
+      
+      ;;all players
+      (map  (lambda (proc)
+              (send draw-class draw-bitmap-2 (send proc get-bitmap) (send proc get-x-pos-px) (send proc get-y-pos-px)))
+            players)
+      
+      
       )
     
     ))
