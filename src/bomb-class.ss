@@ -7,7 +7,7 @@
     (init-field x-pos y-pos delay radius owner)
     (field (height 30) (width 30) (type 'bomb))
     
-    (define timestamp (current-seconds))
+    (define timestamp (*current-sec*))
       
     (define/public (set-x! x)
       (set! x-pos x))
@@ -23,7 +23,7 @@
     
     ;;returns true if the bomb has gone off.
     (define/public (gone-off?)
-      (<= (+ timestamp delay) (current-seconds)))
+      (<= (+ timestamp delay) (*current-sec*)))
     
     ;x-pos < x < x-pos+width
     ;y-pos < y < y-pos+height
@@ -47,11 +47,11 @@
     (define/public (update-bitmap)
       (send bitmap clear)  
       (cond  
-        ((< (- (+ timestamp delay) (current-seconds)) 2)
+        ((< (- (+ timestamp delay) (*current-sec*)) 2)
          (send bitmap draw-bitmap-2 (send *image-store* get-image 'bomb-1) 0 0))
         (else
          (send bitmap draw-bitmap-2 (send *image-store* get-image 'bomb-2) 0 0)))
-      (send bitmap draw-text (number->string (- (+ timestamp delay) (current-seconds))) 0 0)
+      (send bitmap draw-text (number->string (- (+ timestamp delay) (*current-sec*))) 0 0)
       )
     
     ;;sends the bitmap, called from the game-logic, to update screen.

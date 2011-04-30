@@ -38,6 +38,8 @@
 ;; ---------------------------------------------------------------------
 ;; game logic
 ;; ---------------------------------------------------------------------
+(define (*current-sec*)
+  (send main-loop get-current-sec))
 
 (define test-logic
   (new game-logic%
@@ -106,5 +108,6 @@
 (define main-loop
   (new make-loop%
        [function-to-loop draw]));; anropar draw spec i update-graphic
+
 
 (send main-loop start-loop);; startar loopen
