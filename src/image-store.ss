@@ -71,7 +71,7 @@
           ((and
             (list? (cdr temp-cons));;kollar om det är flera bilder.
             (not (null? args))); och args inte tom
-           (get-image-rot (car args) (cdr temp-cons) args));; anropar sig själv med flera bild listan.
+           (get-image-rot (car args) (cdr temp-cons) (cdr args)));; anropar sig själv med flera bild listan.
           ((list? (cdr temp-cons))(error "You need a argument to select image"))
           (else
            (cdr temp-cons)))
@@ -85,16 +85,16 @@
           ((and
             (list? (cdr temp-cons));;kollar om det är flera bilder.
             (not (null? args))); och args inte tom
-           (get-image-anim 1 (cdr temp-cons)))
+           (get-image-anim (car args) (cdr temp-cons)))
           (else
            (cdr temp-cons)))
       ))
     
     ;;detect if load one or more images. And load a single image
     (define/private (get-image-anim name image-list-2)
-      (let ((temp-cons (assq name image-list-2)))
+      (let ((temp-cons (assq (car name) image-list-2)))
         (cond
-          ((not temp-cons)(error "error, wrong name 3"))
+          ((not temp-cons)(error "error, wrong name 3" name))
           (else
            (cdr temp-cons)))
       ))

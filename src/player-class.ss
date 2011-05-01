@@ -8,8 +8,6 @@
     (field (height 30) (width 30) (points 0) (radius 2) (bomb-count 5) (delay 5))
     
     (define direction 'r)
-    (define direction-angle 0)
-    (define direction-angle-diff 0);; to track the bitmaps rotation 
    
     
     (define x-pos-px (* x-pos *blocksize*))
@@ -57,15 +55,7 @@
     (define/public (set-dir! dir)
       (if(not (eq? dir direction))
          (begin
-;           (cond
-;            ((eq? dir 'r)(set! direction-angle-diff 0)
-;                          (set! direction-angle (+ 0 (- direction-angle direction-angle-diff)))
-;             ((eq? dir 'l)(set! direction-angle-diff pi)
-;                          (set! direction-angle (+ pi (- direction-angle direction-angle-diff))))
-;             ((eq? dir 'u)(set! direction-angle-diff (* pi (/ 2 3)))
-;                          (set! direction-angle (+ (* pi (/ 2 3)) (- direction-angle direction-angle-diff))))
-;             ((eq? dir 'd)(set! direction-angle-diff (* pi (/ 1 2)))
-;                          (set! direction-angle (+ (* pi (/ 1 2)) (- direction-angle direction-angle-diff))))))
+ 
            (set! direction dir))))
     ;; r, l, u, d,
 
@@ -75,11 +65,30 @@
            [width 40];;canvas/bitmaps size
            [height 62]))
   
+    (define animation 1)
+    (define animation-start 1)
+    (define animation-stop 5)
+    (define animation-duration 4);frames with same image
+    (define animation-duration-count 0)
+    
+    (define/private (update-animation-help)
+      (if(< animation-duration-count animation-duration)
+         (set! animation-duration-count (+ animation-duration-count 1))
+         (begin
+           (set! animation-duration-count 0)
+           (if(< animation animation-stop)
+              (set! animation (+ animation 1))
+              (begin
+                (set! animation animation-start)
+                
+                ))
+           )))
     
     (define/public (update-bitmap)
       (send bitmap clear)
       (send bitmap background-transp)
-      (send bitmap draw-bitmap-2 (send *image-store* get-image color direction) 0 0)
+      (update-animation-help)
+      (send bitmap draw-bitmap-2 (send *image-store* get-image color direction animation) 0 0)
     )
     
     (define/public (get-bitmap)

@@ -28,6 +28,10 @@
     (define/public (background)
       (send draw-dc set-background  (make-object color% (random 255) (random 255) (random 255))))
     
+    ; A procedure that sets the background color of the GUI
+    (define/public (set-background-color! r g b)
+      (send draw-dc set-background  (make-object color% r g b)))
+    
     (define/public (background-transp)
       (send draw-dc set-background  (make-object color% 0 0 0 0)))
     

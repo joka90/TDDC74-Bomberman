@@ -29,7 +29,7 @@
 
 (define *image-store*
   (new make-image-store%))
-
+;;http://www.spriters-resource.com/snes/S.html
 (send *image-store* add-image 'red-player '((r . ("img/red-player/r-" ".png" 5))
                                             (l . ("img/red-player/l-" ".png" 5))
                                             (u . ("img/red-player/u-" ".png" 5))
@@ -46,6 +46,8 @@
 (send *image-store* add-image 'bomb-1 "img/bomb1.png")
 (send *image-store* add-image 'bomb-2 "img/bomb2.png")
 
+(send *image-store* add-image 'non-dest-block "img/non-dest-block.png")
+(send *image-store* add-image 'dest-block "img/dest-block.png")
 
 ;; ---------------------------------------------------------------------
 ;; game logic

@@ -21,14 +21,16 @@
                   (update-bitmap-help (vector-ref gamevector index) (get-pos-invers index)))
               (loop (+ 1 index)))))
       (send bitmap clear)
+      (send bitmap set-background-color! 15 150 0)
       (loop 0))
 
     (define/private (update-bitmap-help type pos)    
       (cond  
         ((eq? type 'indestructeble-stone)
-         (send bitmap draw-rectangle (* *blocksize* (car pos)) (* *blocksize* (cdr pos)) *blocksize* *blocksize* stone-border stone-fill))
+         
+         (send bitmap draw-bitmap-2 (send *image-store* get-image 'non-dest-block)  (* *blocksize* (car pos)) (* *blocksize* (cdr pos))))
         ((eq? type 'destructeble-stone)
-         (send bitmap draw-rectangle (* *blocksize* (car pos)) (* *blocksize* (cdr pos)) *blocksize* *blocksize* stone-border (send the-brush-list find-or-create-brush "red" 'solid)))))
+         (send bitmap draw-bitmap-2 (send *image-store* get-image 'dest-block)  (* *blocksize* (car pos)) (* *blocksize* (cdr pos))))))
     
     (define/public (get-bitmap)
       (send bitmap get-bitmap))
