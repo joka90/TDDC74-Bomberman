@@ -28,6 +28,10 @@
     (define/public (background)
       (send draw-dc set-background  (make-object color% (random 255) (random 255) (random 255))))
     
+    (define/public (background-transp)
+      (send draw-dc set-background  (make-object color% 0 0 0 0)))
+    
+    
     ;; A procedures that draws an ellipse
     (define/public (draw-circle x y size-x size-y pen brush)
       (send draw-dc set-pen pen)

@@ -3,6 +3,7 @@
     (super-new)
     
     (define image-list '())
+    (define anim 1)
     
     ;;add-rot-image name(symbol), load-list list ex:
     ;    '(('r . "img/r.bmp")('l . "img/l.bmp")('d . "img/d.bmp")('u . "img/u.bmp"))
@@ -10,9 +11,16 @@
       (define temp-list '())
       
       (map  (lambda (image)
+              (if(string? (cdr image))
+                 (set! temp-list (cons
+                                  (cons (car image) (make-object bitmap% (cdr image) 'unknown #f #t))
+                                  temp-list))
               (set! temp-list (cons
-                                (cons (car image) (make-object bitmap% (cdr image) 'unknown #f))
-                                temp-list)))
+                                  (cons (car image) (add-anim-image (cdr image)))
+                                  temp-list))
+              )
+              ;(display "stoppa in kod som klarar av att hämta ett antal bilder utifrån nummer");(string-append* "a" (number->string num) '("c" "d"))
+              )
               load-list)
       ;;add to image list as (NAME .  '(('r . IMAGEDATA) ... ('u . IMAGEDATA)))
       (set! image-list (cons
@@ -20,6 +28,28 @@
                         image-list))
       )
     
+    ;load data: ("img/red-player/r-" ".png" 5)
+    ;returns '((1 . IMAGEDATA) ... (5 . IMAGEDATA)))
+    (define/private (add-anim-image load-data)
+      (define temp-list '())
+      (define prefix (car load-data))
+      (define file-ending (cadr load-data))
+      
+      (define (loop i)
+        (if(<= i (caddr load-data))
+           (begin
+             (set! temp-list (cons
+                                (cons i (make-object bitmap% 
+                                          (string-append 
+                                           prefix
+                                           (number->string i) 
+                                           file-ending) 'unknown #f))
+                                temp-list))
+     
+             (loop (+ 1 i)))))
+      (loop 1)
+      temp-list)
+      
     ;;detect if load one or more images. And load a single image
     (define/public (add-image name image)
       (cond
@@ -41,22 +71,37 @@
           ((and
             (list? (cdr temp-cons));;kollar om det är flera bilder.
             (not (null? args))); och args inte tom
-           (get-image-rot (car args) (cdr temp-cons)));; anropar sig själv med flera bild listan.
+           (get-image-rot (car args) (cdr temp-cons) args));; anropar sig själv med flera bild listan.
           ((list? (cdr temp-cons))(error "You need a argument to select image"))
           (else
            (cdr temp-cons)))
       ))
     
      ;;detect if load one or more images. And load a single image
-    (define/private (get-image-rot name image-list-2)
+    (define/private (get-image-rot name image-list-2 . args)
       (let ((temp-cons (assq name image-list-2)))
         (cond
           ((not temp-cons)(error "error, wrong name 2"))
+          ((and
+            (list? (cdr temp-cons));;kollar om det är flera bilder.
+            (not (null? args))); och args inte tom
+           (get-image-anim 1 (cdr temp-cons)))
+          (else
+           (cdr temp-cons)))
+      ))
+    
+    ;;detect if load one or more images. And load a single image
+    (define/private (get-image-anim name image-list-2)
+      (let ((temp-cons (assq name image-list-2)))
+        (cond
+          ((not temp-cons)(error "error, wrong name 3"))
           (else
            (cdr temp-cons)))
       ))
     
     ))
+
+;(string-append* "a" (number->string num) '("c" "d"))
 
 ;(define *image-store*
 ;  (new make-image-store%))

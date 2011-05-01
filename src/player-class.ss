@@ -72,12 +72,13 @@
     
      (define bitmap
       (new make-draw%
-           [width *blocksize*];;canvas/bitmaps size
-           [height *blocksize*]))
+           [width 40];;canvas/bitmaps size
+           [height 62]))
   
     
     (define/public (update-bitmap)
-      (send bitmap clear)  
+      (send bitmap clear)
+      (send bitmap background-transp)
       (send bitmap draw-bitmap-2 (send *image-store* get-image color direction) 0 0)
     )
     

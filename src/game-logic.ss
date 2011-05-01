@@ -172,7 +172,10 @@
       
       ;;all players
       (map  (lambda (proc)
-              (send draw-class draw-bitmap-2 (send proc get-bitmap) (send proc get-x-pos-px) (send proc get-y-pos-px)))
+              (send draw-class draw-bitmap-2
+                    (send proc get-bitmap)
+                    (- (send proc get-x-pos-px) 5)
+                    (- (send proc get-y-pos-px) 35)))
             players)
       
       

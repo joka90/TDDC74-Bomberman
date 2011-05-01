@@ -1,5 +1,6 @@
 ;(load "paint-tools.ss")
 (require scheme/date);; for timestamps in bombs
+(require racket/string);; for image loading
 (load "draw-class.ss")
 (load "image-store.ss")
 (load "player-class.ss")
@@ -29,8 +30,19 @@
 (define *image-store*
   (new make-image-store%))
 
-(send *image-store* add-image 'red-player '((r . "img/r.bmp")(l . "img/l.bmp")(d . "img/d.bmp")(u . "img/u.bmp")))
-(send *image-store* add-image 'blue-player '((r . "img/r.bmp")(l . "img/l.bmp")(d . "img/d.bmp")(u . "img/u.bmp")))
+(send *image-store* add-image 'red-player '((r . ("img/red-player/r-" ".png" 5))
+                                            (l . ("img/red-player/l-" ".png" 5))
+                                            (u . ("img/red-player/u-" ".png" 5))
+                                            (d . ("img/red-player/d-" ".png" 5))))
+
+(send *image-store* add-image 'blue-player '((r . ("img/red-player/r-" ".png" 5))
+                                             (l . ("img/red-player/l-" ".png" 5))
+                                             (u . ("img/red-player/u-" ".png" 5))
+                                             (d . ("img/red-player/d-" ".png" 5))))
+
+
+
+
 (send *image-store* add-image 'bomb-1 "img/bomb1.png")
 (send *image-store* add-image 'bomb-2 "img/bomb2.png")
 
@@ -71,17 +83,19 @@
 ;; ---------------------------------------------------------------------
 ;;(add-key-board-player new-name x y dxy number-of-lives color keybord-bindings)
 ;;palyer 1 
-(send test-logic add-key-board-player "jocke" 1 1 10 5 'red-player '((#\w . u)
-                                                        (#\a . l)
-                                                        (#\s . d)
-                                                        (#\d . r)
-                                                        (#\q . drop)))
+(send test-logic add-key-board-player "jocke" 1 1 10 5 'red-player 
+      '((#\w . u)
+        (#\a . l)
+        (#\s . d)
+        (#\d . r)
+        (#\q . drop)))
 ;;palyer 2
-(send test-logic add-key-board-player "pocke" 19 19 5 5 'blue-player '((#\i . u)
-                                                            (#\j . l)
-                                                            (#\k . d)
-                                                            (#\l . r)
-                                                            (#\b . drop)))
+(send test-logic add-key-board-player "pocke" 19 19 5 5 'blue-player 
+      '((#\i . u)
+        (#\j . l)
+        (#\k . d)
+        (#\l . r)
+        (#\b . drop)))
 
 ;; The procedures that redraws the scene form the main-thread.
 (define (draw)
