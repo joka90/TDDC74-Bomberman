@@ -39,10 +39,10 @@
       (send bitmap clear)  
       (cond  
         ((< (- (+ timestamp delay) (*current-sec*)) 1)
-         (send bitmap draw-bitmap-2 (send *image-store* get-image 'bomb-1 ;direction
+         (send bitmap draw-bitmap-2 (send *image-store* get-image 'flame-small direction
                                           ) 0 0))
         (else
-         (send bitmap draw-bitmap-2 (send *image-store* get-image 'bomb-2 ;direction
+         (send bitmap draw-bitmap-2 (send *image-store* get-image 'flame-big direction
                                           ) 0 0)))
       )
     
