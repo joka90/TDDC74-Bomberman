@@ -47,6 +47,13 @@
 (send *image-store* add-image 'bomb-1 "img/bomb1.png")
 (send *image-store* add-image 'bomb-2 "img/bomb2.png")
 
+;((0 . 'powerup-speed)
+;              (1 . 'powerup-multi-bomb)
+;              (2 . 'powerup-stronger-bomb))
+
+(send *image-store* add-image 'powerup-multi-bomb "img/max-image.png")
+(send *image-store* add-image 'powerup-speed "img/speed-powerup.png")
+(send *image-store* add-image 'powerup-stronger-bomb "img/power-image.png")
 (send *image-store* add-image 'non-dest-block "img/non-dest-block.png")
 (send *image-store* add-image 'dest-block "img/dest-block.png")
 

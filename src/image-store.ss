@@ -67,7 +67,7 @@
     (define/public (get-image name . args)
       (let ((temp-cons (assq name image-list)))
         (cond
-          ((not temp-cons)(error "error, wrong name"))
+          ((not temp-cons)(error "error, wrong name " name))
           ((and
             (list? (cdr temp-cons));;kollar om det är flera bilder.
             (not (null? args))); och args inte tom
