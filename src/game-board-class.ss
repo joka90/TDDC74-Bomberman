@@ -43,6 +43,7 @@
     
     (define/public (delete-destruct-from-board-radius! x y radius)
       (define emptyspaces '())
+      (define delete-block '())
       (let loop ((x1-temp x) ;; den som ökar
                  (y1-temp y) ;; den som ökar
                  (x2-temp x) ;;den som minskar
@@ -58,7 +59,8 @@
                   
                   
                   ((eq? 'destructeble-stone (collision? x1-temp y))      
-                   (delete-object-from-board! x1-temp y)
+                   (set! delete-block (cons (cons x1-temp y) delete-block))
+                   ;(delete-object-from-board! x1-temp y) ;; ny lista på gång så att det fungerar med flammor osv som ska skrivas ut.
                    
                    (loop (+ x1-temp radius) y1-temp x2-temp y2-temp))
                   
@@ -66,7 +68,7 @@
                    (loop (+ x1-temp radius) y1-temp x2-temp y2-temp))
                   
                   (else
-                   (set! emptyspaces (cons (cons x1-temp y) emptyspaces))
+                   (set! emptyspaces (cons (list x1-temp y 'r) emptyspaces))
                    (loop (+ x1-temp 1) y1-temp x2-temp y2-temp))))
                
                
@@ -74,14 +76,15 @@
                ((>= x2-temp (- x radius)) 
                 (cond 
                   ((eq? 'destructeble-stone (collision? x2-temp y))
-                   (delete-object-from-board! x2-temp y)
+                   ;(delete-object-from-board! x2-temp y)
+                   (set! delete-block (cons (cons x2-temp y) delete-block))
                    (loop (+ x1-temp radius) y1-temp (- x2-temp radius) y2-temp))
                   
                   ((eq? 'indestructeble-stone (collision? x2-temp y))
                    (loop (+ x1-temp radius) y1-temp (- x2-temp radius) y2-temp))
                   
                   (else 
-                   (set! emptyspaces (cons (cons x2-temp y) emptyspaces))
+                   (set! emptyspaces (cons (list x2-temp y 'l) emptyspaces))
                    (loop (+ x1-temp radius) y1-temp (- x2-temp 1) y2-temp))))
                
                
@@ -90,29 +93,32 @@
                ((<= y1-temp (+ y radius)) 
                 (cond
                   ((eq? 'destructeble-stone (collision? x y1-temp))
-                   (delete-object-from-board! x y1-temp)
+                   ;(delete-object-from-board! x y1-temp)
+                   (set! delete-block (cons (cons x y1-temp) delete-block))
                    (loop (+ x1-temp radius) (+ y1-temp radius) (- x2-temp radius) y2-temp))
                   
                   ((eq? 'indestructeble-stone (collision? x y1-temp))
                    (loop (+ x1-temp radius) (+ y1-temp radius) (- x2-temp radius) y2-temp))
                   
                   (else 
-                   (set! emptyspaces (cons (cons x y1-temp) emptyspaces))
+                   (set! emptyspaces (cons (list x y1-temp 'd) emptyspaces))
                    (loop (+ x1-temp radius) (+ y1-temp 1) (- x2-temp radius) y2-temp))))
                
                ((>= y2-temp (- y radius)) 
                 (cond
                   ((eq? 'destructeble-stone (collision? x y2-temp))
-                   (delete-object-from-board! x y2-temp)
+                   ;(delete-object-from-board! x y2-temp)
+                   (set! delete-block (cons (cons x y2-temp) delete-block))
                    (loop (+ x1-temp radius) (+ y1-temp radius) (- x2-temp radius) (- y2-temp radius)))
                   
                   ((eq? 'indestructeble-stone (collision? x y2-temp))
                    (loop (+ x1-temp radius) (+ y1-temp radius) (- x2-temp radius) (- y2-temp radius)))
                   
                   (else 
-                   (set! emptyspaces (cons (cons x y2-temp) emptyspaces))
+                   (set! emptyspaces (cons (list x y2-temp 'u) emptyspaces))
                    (loop (+ x1-temp radius) (+ y1-temp radius) (- x2-temp radius) (- y2-temp 1))))))))
-     (display emptyspaces))
+     (cons emptyspaces
+           delete-block))
 
     
     (define/public (delete-destruct-from-board-radius-2! x y radius) ;; som ovan fast med radie, och bara destructs.
