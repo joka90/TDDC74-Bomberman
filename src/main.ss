@@ -58,6 +58,7 @@
 (send *image-store* add-image 'powerup-stronger-bomb "img/power-image.png")
 (send *image-store* add-image 'non-dest-block "img/non-dest-block.png")
 (send *image-store* add-image 'dest-block "img/dest-block.png")
+(send *image-store* add-image 'bg "img/bg.png")
 
 ;; ---------------------------------------------------------------------
 ;; game logic

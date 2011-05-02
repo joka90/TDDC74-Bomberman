@@ -9,9 +9,30 @@
       (new make-draw%
            [width width-px];;canvas/bitmaps size
            [height height-px]))
+    
+
   
-    (define stone-border (send the-pen-list find-or-create-pen "black" 2 'solid))
-    (define stone-fill (send the-brush-list find-or-create-brush "yellow" 'solid))
+    (define background
+      (new make-draw%
+           [width width-px];;canvas/bitmaps size
+           [height height-px]))
+    
+    (define (make-bg)
+      (define (x-led x)
+        (if (< x width)
+            (begin
+              (y-led 0 x)
+              (x-led (+ x 2)))))
+      
+      (define (y-led y x)
+        (if (< y height)
+            (begin
+              (send background draw-bitmap-2 (send *image-store* get-image 'bg)  (* *blocksize* y) (* *blocksize* x))
+                
+              (y-led (+ y 2) x))))
+      (send background clear)
+      (x-led 0);;starta
+      )
     
     (define/public (update-bitmap)
       (define (loop index)
@@ -21,7 +42,7 @@
                   (update-bitmap-help (vector-ref gamevector index) (get-pos-invers index)))
               (loop (+ 1 index)))))
       (send bitmap clear)
-      (send bitmap set-background-color! 15 150 0)
+      (send bitmap draw-bitmap-2 (send background get-bitmap) 0 0)
       (loop 0))
 
     (define/private (update-bitmap-help type pos)    
@@ -208,6 +229,7 @@
               (y-led (+ y 1) x))))
       
       (x-led 0);;starta
+      (make-bg);;sätt bakgrund
       )
     
     
