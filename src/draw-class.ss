@@ -5,7 +5,7 @@
   (class object%
     (super-new)
     (init-field width height)
-    (define draw-buffer (make-object bitmap% width height #f))
+    (define draw-buffer (make-object bitmap% width height #f #t))
     (define draw-dc (make-object bitmap-dc% draw-buffer))
     
     (define/public (clear)
@@ -69,6 +69,6 @@
     ;; A procedures that draws a picture from a bitmap
     (define/public (draw-bitmap-2 bitmap x y)
       ;;send to main bitmap
-      (send draw-dc draw-bitmap bitmap x y))
+      (send draw-dc draw-bitmap bitmap x y 'opaque))
     
     ))
