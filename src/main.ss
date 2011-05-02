@@ -10,6 +10,7 @@
 (load "game-logic.ss")
 (load "powerup-class.ss")
 (load "bomb-class.ss")
+(load "flame-class.ss")
 (load "gui-class.ss")
 (load "main-loop.ss")
 (load "timer-class.ss")
@@ -47,6 +48,9 @@
 
 (send *image-store* add-image 'bomb-1 "img/bomb1.png")
 (send *image-store* add-image 'bomb-2 "img/bomb2.png")
+
+;(send *image-store* add-image 'flame-1 '((r . "img/flame-1-r-l.png")
+ ;                                        (l . "img/flame-1-u-d.png")))
 
 
 (send *image-store* add-image 'powerup-multi-bomb "img/max-image.png")

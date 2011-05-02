@@ -21,8 +21,9 @@
     (define bombs '());; List of all active bombs, stored as procedures.
     (define players '());; List of all active players, stored as procedures.
     (define keyboard-players '());; List of all keyboard-players, stored as (procedure . keyboard-bindings)
-    (define powerups (list (new powerup% [x-pos 10] [y-pos 5])))
+    (define powerups '())
     (define to-do-list '())
+    (define bomb-flames '())
     
     ;;method to redistubute the keydown's list from the userinteract function.
     ;; key - list of keys down. 
@@ -87,6 +88,7 @@
                  (begin
                    (send object-to-check use-power-up proc);; add powerup to player
                    (set! powerups (remv object-to-check powerups));;remove poverup from game
+                   ;(display powerups)
                    )
                  ))
             powerups)
@@ -169,23 +171,67 @@
                             (get-field y-pos bomb)
                             (get-field radius bomb)))
       
+      (send (get-field owner bomb) remv-bomb);;set number of bombs out on player
+      (set! bombs (remv bomb bombs));; remov the bomb from bombs
+      
       ;;kolla mot olika powerups
       (map  (lambda (flame)
               (map  (lambda (bomb-to-check)
-                      (if(send bomb-to-check collision? (car flame) (cadr flame)))
-                         (on-bomb-explosion bomb-to-check); spräng
-                         )
+                      (if(send bomb-to-check collition? (car flame) (cadr flame))
+                           (on-bomb-explosion bomb-to-check); spräng
+                           )
+                      )
                       bombs)
               (map  (lambda (powerup-to-check)
-                      (if(send powerup-to-check collision? (car flame) (cadr flame)))
+                      (if(send powerup-to-check collition? (car flame) (cadr flame))
                          (set! powerups (remv powerup-to-check powerups));;remove poverup from game
-                         )
-                      powerups))
-            
-            (cdr result))
-      
-      (send (get-field owner bomb) remv-bomb);;set number of bombs out on player
-      (set! bombs (remv bomb bombs));; remov the bomb from bombs
+                         ))
+                      powerups)
+              ;;add flames here to
+              (set! bomb-flames 
+                    (cons 
+                     (new flame% 
+                          [x-pos (car flame)]
+                          [y-pos (cadr flame)]
+                          [delay 2] 
+                          [owner (get-field owner bomb)]
+                          [direction (caddr flame)])
+                     bomb-flames))
+              ;(display (caddr flame))(newline)
+              )
+            (car result))
+      ;;add to todo list
+      (set! to-do-list 
+            (cons 
+             (new make-timer% 
+                  [delay 0];;spräng så fort som möjligt
+                  [proc (lambda (arg)(remove-blocks arg))]
+                  [args (list (cadr result))])
+             to-do-list))
+      )
+    
+    (define/private (remove-blocks block-list)
+      (map  (lambda (block)
+              (send game-board
+                    delete-object-from-board!
+                    (car block);x
+                    (cadr block));y
+              (if (= 5 (random 10))
+                  (begin
+                    (display "adding ")
+                  (set! powerups 
+                        (cons 
+                          (new powerup% 
+                               [x-pos (car block)] 
+                               [y-pos (cadr block)])
+                         powerups)))))
+            block-list))
+    
+    (define/private(on-die player flame)
+      (display (get-field name player))
+      (display "was killed by")
+      (display (get-field name (get-field owner flame)))
+      (newline)
       )
     
     ;; skickar in alla trackade objects bitmaps i en viss positon.
@@ -205,10 +251,34 @@
               )
             bombs)
       
+       ;;track all bombs in the flames list and check collisons between player and flames.
+      (map  (lambda (proc)
+              ;tarck all timers
+              (map  (lambda (player)
+                      (if(send proc collition?
+                               (get-field x-pos player)
+                               (get-field y-pos player))
+                         (on-die player proc));;on die
+                      )
+                    players)
+              (send draw-class draw-bitmap-2
+                    (send proc get-bitmap)
+                    (* *blocksize* (get-field x-pos proc))
+                    (* *blocksize* (get-field y-pos proc)))
+              (if(send proc gone-off?)
+                 (set! bomb-flames (remv proc bomb-flames)))
+              )
+            bomb-flames)
+      
+      
       ;;tarck all timers
        (map  (lambda (proc)
               (if(send proc gone-off?)
-                 (send proc run-proc));;run proc
+                 (begin
+                   (send proc run-proc)
+                   (set! to-do-list (remv proc to-do-list))
+                   )
+                 );;run proc
               )
             to-do-list)
  

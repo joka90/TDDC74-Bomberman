@@ -59,7 +59,7 @@
                   
                   
                   ((eq? 'destructeble-stone (collision? x1-temp y))      
-                   (set! delete-block (cons (cons x1-temp y) delete-block))
+                   (set! delete-block (cons (list x1-temp y) delete-block))
                    ;(delete-object-from-board! x1-temp y) ;; ny lista på gång så att det fungerar med flammor osv som ska skrivas ut.
                    
                    (loop (+ x1-temp radius) y1-temp x2-temp y2-temp))
@@ -77,7 +77,7 @@
                 (cond 
                   ((eq? 'destructeble-stone (collision? x2-temp y))
                    ;(delete-object-from-board! x2-temp y)
-                   (set! delete-block (cons (cons x2-temp y) delete-block))
+                   (set! delete-block (cons (list x2-temp y) delete-block))
                    (loop (+ x1-temp radius) y1-temp (- x2-temp radius) y2-temp))
                   
                   ((eq? 'indestructeble-stone (collision? x2-temp y))
@@ -94,7 +94,7 @@
                 (cond
                   ((eq? 'destructeble-stone (collision? x y1-temp))
                    ;(delete-object-from-board! x y1-temp)
-                   (set! delete-block (cons (cons x y1-temp) delete-block))
+                   (set! delete-block (cons (list x y1-temp) delete-block))
                    (loop (+ x1-temp radius) (+ y1-temp radius) (- x2-temp radius) y2-temp))
                   
                   ((eq? 'indestructeble-stone (collision? x y1-temp))
@@ -108,7 +108,7 @@
                 (cond
                   ((eq? 'destructeble-stone (collision? x y2-temp))
                    ;(delete-object-from-board! x y2-temp)
-                   (set! delete-block (cons (cons x y2-temp) delete-block))
+                   (set! delete-block (cons (list x y2-temp) delete-block))
                    (loop (+ x1-temp radius) (+ y1-temp radius) (- x2-temp radius) (- y2-temp radius)))
                   
                   ((eq? 'indestructeble-stone (collision? x y2-temp))
@@ -117,8 +117,9 @@
                   (else 
                    (set! emptyspaces (cons (list x y2-temp 'u) emptyspaces))
                    (loop (+ x1-temp radius) (+ y1-temp radius) (- x2-temp radius) (- y2-temp 1))))))))
-     (cons emptyspaces
-           delete-block))
+    (list emptyspaces
+           delete-block);;return list of objects to delete and to add flames to
+      )
       
     
     

@@ -4,7 +4,7 @@
 (define make-timer%
   (class object%
     (super-new)
-    (init-field delay proc)
+    (init-field delay proc args)
     
     (define timestamp (*current-sec*))
 
@@ -14,7 +14,7 @@
       (<= (+ timestamp delay) (*current-sec*)))
     
     (define/public (run-proc)
-      (proc)
+      (apply proc args)
       )
     
       ))
