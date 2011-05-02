@@ -21,7 +21,7 @@
     (define bombs '());; List of all active bombs, stored as procedures.
     (define players '());; List of all active players, stored as procedures.
     (define keyboard-players '());; List of all keyboard-players, stored as (procedure . keyboard-bindings)
-    (define powerups '())
+    (define powerups (list (new powerup% [x-pos 10] [y-pos 5])))
     
     ;;method to redistubute the keydown's list from the userinteract function.
     ;; key - list of keys down. 
@@ -82,11 +82,10 @@
               (if(and 
                   (send object-to-check collition? new-x new-y) 
                   (not collition);; F = ingen kolltion
-                  ;(not (eq? (get-field owner object-to-check) proc))
                   )
                  (begin
                    (send object-to-check use-power-up proc);; add powerup to player
-                   ;(display (get-field type object-to-check))
+                   (set! powerups (remv object-to-check powerups));;remove poverup from game
                    )
                  ))
             powerups)
