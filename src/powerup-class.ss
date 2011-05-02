@@ -5,13 +5,12 @@
   (class object%
     (super-new)
     (init-field x-pos y-pos)
-    (field (type 'powerup-speed))
+    (field (type (cdr (assq (random 3)
+                            '((0 . powerup-speed)
+                              (1 . powerup-multi-bomb)
+                              (2 . powerup-stronger-bomb))))))
     
-    (define (random-type)
-      (cdr (assq (random 3)
-            '((0 . 'powerup-speed)
-              (1 . 'powerup-multi-bomb)
-              (2 . 'powerup-stronger-bomb)))))
+    
       
     (define/public (set-x! x)
       (set! x-pos x))

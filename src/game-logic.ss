@@ -161,9 +161,14 @@
     
     ;; change here to give the explosion some logic
     (define/private (on-bomb-explosion bomb)
-      ;(display (get-field name (get-field owner bomb)))
-       (send game-board delete-destruct-from-board-radius! 
-             (get-field x-pos bomb) (get-field y-pos bomb) (get-field radius bomb))
+      ;;game-board returns (to-delete . emptyspaces)
+       (define result (send game-board 
+                            delete-destruct-from-board-radius! 
+                            (get-field x-pos bomb)
+                            (get-field y-pos bomb)
+                            (get-field radius bomb)))
+      
+      
       (send (get-field owner bomb) remv-bomb);;set number of bombs out.
       (set! bombs (remv bomb bombs));; remov the bomb from bombs
       )
