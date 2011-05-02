@@ -29,7 +29,7 @@
     ;y-pos < y < y-pos+height
     ;x-pos < x+w < x-pos+width
     ;y-pos < y+h < y-pos+height
-    (define/public (collition? xpos ypos h w)
+    (define/public (collition? xpos ypos)
       (and (= xpos x-pos)
            (= ypos y-pos)
            (< timestamp (*current-sec*));dvs en sek att röra sig på

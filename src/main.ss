@@ -8,6 +8,7 @@
 (load "game-board-class.ss")
 (load "user-interact.ss")
 (load "game-logic.ss")
+(load "powerup-class.ss")
 (load "bomb-class.ss")
 (load "gui-class.ss")
 (load "main-loop.ss")

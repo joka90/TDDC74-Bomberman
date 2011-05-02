@@ -21,6 +21,7 @@
     (define bombs '());; List of all active bombs, stored as procedures.
     (define players '());; List of all active players, stored as procedures.
     (define keyboard-players '());; List of all keyboard-players, stored as (procedure . keyboard-bindings)
+    (define powerups '())
     
     ;;method to redistubute the keydown's list from the userinteract function.
     ;; key - list of keys down. 
@@ -79,7 +80,20 @@
         
         (map(lambda (object-to-check)
               (if(and 
-                  (send object-to-check collition? new-x new-y (get-field height proc) (get-field width proc)) 
+                  (send object-to-check collition? new-x new-y) 
+                  (not collition);; F = ingen kolltion
+                  ;(not (eq? (get-field owner object-to-check) proc))
+                  )
+                 (begin
+                   (send object-to-check use-power-up proc);; add powerup to player
+                   ;(display (get-field type object-to-check))
+                   )
+                 ))
+            powerups)
+        
+        (map(lambda (object-to-check)
+              (if(and 
+                  (send object-to-check collition? new-x new-y) 
                   (not collition);; F = ingen kolltion
                   ;(not (eq? (get-field owner object-to-check) proc))
                   )
@@ -180,6 +194,14 @@
                     (* *blocksize* (get-field x-pos proc))
                     (* *blocksize* (get-field y-pos proc))))
             objects-to-track)
+      
+      ;;track all powerups
+      (map  (lambda (proc)
+              (send draw-class draw-bitmap-2
+                    (send proc get-bitmap)
+                    (* *blocksize* (get-field x-pos proc))
+                    (* *blocksize* (get-field y-pos proc))))
+            powerups)
       
       ;;all players
       (map  (lambda (proc)
