@@ -22,6 +22,7 @@
     (define players '());; List of all active players, stored as procedures.
     (define keyboard-players '());; List of all keyboard-players, stored as (procedure . keyboard-bindings)
     (define powerups (list (new powerup% [x-pos 10] [y-pos 5])))
+    (define to-do-list '())
     
     ;;method to redistubute the keydown's list from the userinteract function.
     ;; key - list of keys down. 
@@ -168,8 +169,22 @@
                             (get-field y-pos bomb)
                             (get-field radius bomb)))
       
+      ;;kolla mot olika powerups
+      (map  (lambda (flame)
+              (map  (lambda (bomb-to-check)
+                      (if(send bomb-to-check collision? (car flame) (cadr flame)))
+                         (on-bomb-explosion bomb-to-check); spräng
+                         )
+                      bombs)
+              (map  (lambda (powerup-to-check)
+                      (if(send powerup-to-check collision? (car flame) (cadr flame)))
+                         (set! powerups (remv powerup-to-check powerups));;remove poverup from game
+                         )
+                      powerups))
+            
+            (cdr result))
       
-      (send (get-field owner bomb) remv-bomb);;set number of bombs out.
+      (send (get-field owner bomb) remv-bomb);;set number of bombs out on player
       (set! bombs (remv bomb bombs));; remov the bomb from bombs
       )
     
@@ -190,6 +205,12 @@
               )
             bombs)
       
+      ;;tarck all timers
+       (map  (lambda (proc)
+              (if(send proc gone-off?)
+                 (send proc run-proc));;run proc
+              )
+            to-do-list)
  
       ;;track all objects
       (map  (lambda (proc)

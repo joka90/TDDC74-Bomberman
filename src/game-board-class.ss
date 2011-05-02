@@ -119,7 +119,8 @@
                    (loop (+ x1-temp radius) (+ y1-temp radius) (- x2-temp radius) (- y2-temp 1))))))))
      (cons emptyspaces
            delete-block))
-
+      
+    
     
     (define/public (delete-destruct-from-board-radius-2! x y radius) ;; som ovan fast med radie, och bara destructs.
       (define (x-led from to)
