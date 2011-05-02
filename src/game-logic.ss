@@ -81,7 +81,7 @@
               (if(and 
                   (send object-to-check collition? new-x new-y (get-field height proc) (get-field width proc)) 
                   (not collition);; F = ingen kolltion
-                  (not (eq? (get-field owner object-to-check) proc))
+                  ;(not (eq? (get-field owner object-to-check) proc))
                   )
                  (begin
                    (set! collition #t)
@@ -163,7 +163,10 @@
       
       ;;track all bombs in the bomb list
       (map  (lambda (proc)
-              (send draw-class draw-bitmap-2 (send proc get-bitmap) (* *blocksize* (get-field x-pos proc)) (* *blocksize* (get-field y-pos proc)))
+              (send draw-class draw-bitmap-2
+                    (send proc get-bitmap)
+                    (* *blocksize* (get-field x-pos proc))
+                    (* *blocksize* (get-field y-pos proc)))
               (if(send proc gone-off?)
                  (on-bomb-explosion proc))
               )
@@ -172,7 +175,10 @@
  
       ;;track all objects
       (map  (lambda (proc)
-              (send draw-class draw-bitmap-2 (send proc get-bitmap) (* *blocksize* (get-field x-pos proc)) (* *blocksize* (get-field y-pos proc))))
+              (send draw-class draw-bitmap-2
+                    (send proc get-bitmap)
+                    (* *blocksize* (get-field x-pos proc))
+                    (* *blocksize* (get-field y-pos proc))))
             objects-to-track)
       
       ;;all players

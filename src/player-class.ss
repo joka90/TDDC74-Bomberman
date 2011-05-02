@@ -14,15 +14,28 @@
     (define y-pos-px (* y-pos *blocksize*))
     
     (define number-of-bombs 0)
+    (define last-bomb-timestamp 0)
+    (define last-bomb-place '());; (x . y)
     
     (define/public (can-bomb?)
-      (<= number-of-bombs bomb-count))
+      (and
+       (<= number-of-bombs bomb-count)
+       (or
+        (< last-bomb-timestamp (*current-sec*)); en sek delay eller 
+        (not (and 
+              (eq? x-pos (car last-bomb-place))
+              (eq? y-pos (cdr last-bomb-place))));; inte samma ställe
+        )
+       ))
     
     (define/public (remv-bomb)
       (set! number-of-bombs (- number-of-bombs 1)))
     
     (define/public (add-bomb)
-      (set! number-of-bombs (+ number-of-bombs 1)))
+      (set! number-of-bombs (+ number-of-bombs 1))
+      (set! last-bomb-timestamp (*current-sec*))
+      (set! last-bomb-place (cons x-pos y-pos))
+      )
     
     ;;set px pos and logical pos
     (define/public (set-x-pos-px! x)
