@@ -78,12 +78,17 @@
           ((eq? 'r dir)(set! new-x (+(get-field x-pos proc) 1))))
         
         (map(lambda (object-to-check)
-              (if(and (send object-to-check collition? new-x new-y (get-field height proc) (get-field width proc)) (not collition));; F = ingen kolltion
+              (if(and 
+                  (send object-to-check collition? new-x new-y (get-field height proc) (get-field width proc)) 
+                  (not collition);; F = ingen kolltion
+                  (not (eq? (get-field owner object-to-check) proc))
+                  )
                  (begin
                    (set! collition #t)
-                   (display (get-field type object-to-check)))
+                   ;(display (get-field type object-to-check))
+                   )
                  ))
-            objects-to-track)
+            bombs)
         
         (if(and (send game-board collision? new-x new-y) (not collition))
            (set! collition #t))

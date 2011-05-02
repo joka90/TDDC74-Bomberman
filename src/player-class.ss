@@ -7,8 +7,8 @@
     (init-field x-pos y-pos dxdy name lives color)
     (field (height 30) (width 30) (points 0) (radius 2) (bomb-count 5) (delay 5))
     
-    (define direction 'r)
-   
+    (define direction 'd)
+    (define moving #f)
     
     (define x-pos-px (* x-pos *blocksize*))
     (define y-pos-px (* y-pos *blocksize*))
@@ -53,10 +53,8 @@
       x-pos-px)
     
     (define/public (set-dir! dir)
-      (if(not (eq? dir direction))
-         (begin
- 
-           (set! direction dir))))
+      (set! moving #t)
+      (set! direction dir))
     ;; r, l, u, d,
 
     
@@ -72,7 +70,9 @@
     (define animation-duration-count 0)
     
     (define/private (update-animation-help)
-      (if(< animation-duration-count animation-duration)
+      
+      (if moving
+       (if(< animation-duration-count animation-duration)
          (set! animation-duration-count (+ animation-duration-count 1))
          (begin
            (set! animation-duration-count 0)
@@ -82,12 +82,18 @@
                 (set! animation animation-start)
                 
                 ))
-           )))
+           ))
+       (begin
+         (set! animation 0))
+         )
+       
+       )
     
     (define/public (update-bitmap)
       (send bitmap clear)
       (send bitmap background-transp)
       (update-animation-help)
+      (set! moving #f)
       (send bitmap draw-bitmap-2 (send *image-store* get-image color direction animation) 0 0)
     )
     

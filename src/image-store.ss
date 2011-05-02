@@ -29,7 +29,7 @@
       )
     
     ;load data: ("img/red-player/r-" ".png" 5)
-    ;returns '((1 . IMAGEDATA) ... (5 . IMAGEDATA)))
+    ;returns '((0 . IMAGEDATA) ... (5 . IMAGEDATA)))
     (define/private (add-anim-image load-data)
       (define temp-list '())
       (define prefix (car load-data))
@@ -47,7 +47,7 @@
                                 temp-list))
      
              (loop (+ 1 i)))))
-      (loop 1)
+      (loop 0);;to load from 0
       temp-list)
       
     ;;detect if load one or more images. And load a single image
