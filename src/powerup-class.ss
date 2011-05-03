@@ -33,8 +33,9 @@
         ))
     
      (define/private (add-speed player)
+       (if (< (get-field dxdy player) 15)  
       (set-field! dxdy player (+ (get-field dxdy player) 5))
-       )
+       ))
     
     (define/private (add-multi-bomb player)
       (set-field! bomb-count player (+ (get-field bomb-count player) 3))

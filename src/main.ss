@@ -38,10 +38,10 @@
                                             (u . ("img/red-player/u-" ".png" 5))
                                             (d . ("img/red-player/d-" ".png" 5))))
 
-(send *image-store* add-image 'blue-player '((r . ("img/red-player/r-" ".png" 5))
-                                             (l . ("img/red-player/l-" ".png" 5))
-                                             (u . ("img/red-player/u-" ".png" 5))
-                                             (d . ("img/red-player/d-" ".png" 5))))
+(send *image-store* add-image 'blue-player '((r . ("img/blue-player/r-" ".png" 5))
+                                             (l . ("img/blue-player/l-" ".png" 5))
+                                             (u . ("img/blue-player/u-" ".png" 5))
+                                             (d . ("img/blue-player/d-" ".png" 5))))
 
 
 
@@ -49,9 +49,15 @@
 (send *image-store* add-image 'bomb-1 "img/bomb1.png")
 (send *image-store* add-image 'bomb-2 "img/bomb2.png")
 
-;(send *image-store* add-image 'flame-1 '((r . "img/flame-1-r-l.png")
- ;                                        (l . "img/flame-1-u-d.png")))
+(send *image-store* add-image 'flame-big '((r . "img/flame-big-h.png")
+                                           (l . "img/flame-big-h.png")
+                                           (u . "img/flame-big-v.png")
+                                           (d . "img/flame-big-v.png")))
 
+(send *image-store* add-image 'flame-small '((r . "img/flame-small-h.png")
+                                             (l . "img/flame-small-h.png")
+                                             (u . "img/flame-small-v.png")
+                                             (d . "img/flame-small-v.png")))
 
 (send *image-store* add-image 'powerup-multi-bomb "img/max-image.png")
 (send *image-store* add-image 'powerup-speed "img/speed-powerup.png")
@@ -96,7 +102,7 @@
 ;; ---------------------------------------------------------------------
 ;;(add-key-board-player new-name x y dxy number-of-lives color keybord-bindings)
 ;;palyer 1 
-(send test-logic add-key-board-player "jocke" 1 1 10 5 'red-player 
+(send test-logic add-key-board-player "jocke" 1 1 5 5 'red-player 
       '((#\w . u)
         (#\a . l)
         (#\s . d)
