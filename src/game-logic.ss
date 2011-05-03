@@ -216,7 +216,7 @@
                     delete-object-from-board!
                     (car block);x
                     (cadr block));y
-              (if (= 5 (random 10))
+              (if (= 0 (random 10));en på tio
                   (begin
                     (display "adding ")
                   (set! powerups 

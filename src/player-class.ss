@@ -5,7 +5,7 @@
   (class object%
     (super-new)
     (init-field x-pos y-pos dxdy name lives color)
-    (field (height 30) (width 30) (points 0) (radius 2) (bomb-count 5) (delay 5))
+    (field (height 30) (width 30) (points 0) (radius 1) (bomb-count 1) (delay 5))
     
     (define direction 'd)
     (define moving #f)
@@ -19,7 +19,7 @@
     
     (define/public (can-bomb?)
       (and
-       (<= number-of-bombs bomb-count)
+       (< number-of-bombs bomb-count)
        (or
         (< last-bomb-timestamp (*current-sec*)); en sek delay eller 
         (not (and 

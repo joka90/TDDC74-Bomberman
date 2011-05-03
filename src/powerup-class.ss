@@ -33,12 +33,16 @@
         ))
     
      (define/private (add-speed player)
-       (if (< (get-field dxdy player) 15)  
-      (set-field! dxdy player (+ (get-field dxdy player) 5))
+       (if (< (get-field dxdy player) 15)
+           (begin
+             (set-field! dxdy player (+ (get-field dxdy player) 5))
+             (send player set-x! (get-field x-pos player));;fast fix for out of sync in collition detection
+             (send player set-y! (get-field y-pos player))
+             )
        ))
     
     (define/private (add-multi-bomb player)
-      (set-field! bomb-count player (+ (get-field bomb-count player) 3))
+      (set-field! bomb-count player (+ (get-field bomb-count player) 2))
       )
     
     (define/private (add-stronger-bomb player)

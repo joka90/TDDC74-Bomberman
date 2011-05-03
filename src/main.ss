@@ -116,6 +116,20 @@
         (#\l . r)
         (#\b . drop)))
 
+(send test-logic add-key-board-player "tocke" 1 19 5 5 'blue-player 
+      '((up . u)
+        (left . l)
+        (down . d)
+        (right . r)
+        (#\0 . drop)))
+
+(send test-logic add-key-board-player "focke" 19 1 5 5 'red-player 
+      '((#\8 . u)
+        (#\4 . l)
+        (#\5 . d)
+        (#\6 . r)
+        (#\7 . drop)))
+
 ;; The procedures that redraws the scene form the main-thread.
 (define (draw)
   (send *gui* update-keys-down);send keys to gamelogic once a loop.
