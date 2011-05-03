@@ -4,9 +4,8 @@
 (define make-loop%
   (class object%
     (super-new)
-    (init-field function-to-loop)
+    (init-field function-to-loop fps)
     (define should-run #f)
-    (define fps 24)
     (define paustime-timestamp-stop 0)
     (define paustime-tot 0)
     
