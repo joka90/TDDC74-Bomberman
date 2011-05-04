@@ -19,7 +19,8 @@
     ;; Skickar vidare alla nedtryckta knappar till on-key-event-callback funktionen. Som defineras när klassen skapas. Som det är nu så skickas dem till game-logic
     ;;Denna metod anropas utifrån via gui-classen via main-loop för att skicka vidare nedtrycka knappar.
     (define/public (send-key-events)
-        (map(lambda (key)
+        (for-each
+         (lambda (key)
               (on-key-event-callback key))
             keysdown))
     

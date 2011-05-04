@@ -25,11 +25,13 @@
     (define to-do-list '())
     (define bomb-flames '())
     
+    
     ;;method to redistubute the keydown's list from the userinteract function.
     ;; key - list of keys down. 
     ;; this is called from the gui class via the main-loop every 1/24 sec.
     (define/public (handle-key-event key)
-      (map  (lambda (proc)
+      (for-each
+       (lambda (proc)
               (let((action (assq key (cdr proc))))
                 (if action
                     (move-dir (cdr action) (car proc)))))
@@ -80,7 +82,8 @@
           ((eq? 'l dir)(set! new-x (-(get-field x-pos proc) 1)))
           ((eq? 'r dir)(set! new-x (+(get-field x-pos proc) 1))))
         
-        (map(lambda (object-to-check)
+        (for-each
+         (lambda (object-to-check)
               (if(and 
                   (send object-to-check collition? new-x new-y) 
                   (not collition);; F = ingen kolltion
@@ -93,7 +96,8 @@
                  ))
             powerups)
         
-        (map(lambda (object-to-check)
+        (for-each
+         (lambda (object-to-check)
               (if(and 
                   (send object-to-check collition? new-x new-y) 
                   (not collition);; F = ingen kolltion
@@ -164,25 +168,27 @@
     
     ;; change here to give the explosion some logic
     (define/private (on-bomb-explosion bomb)
-      ;;game-board returns (to-delete . emptyspaces)
+      ;;game-board returns (emptyspaces delete-block)
        (define result (send game-board 
                             delete-destruct-from-board-radius! 
                             (get-field x-pos bomb)
                             (get-field y-pos bomb)
                             (get-field radius bomb)))
+      (define flames (car result))
+      (define to-blow-up (cadr result))
       
       (send (get-field owner bomb) remv-bomb);;set number of bombs out on player
       (set! bombs (remv bomb bombs));; remov the bomb from bombs
       
-      ;;kolla mot olika powerups
-      (map  (lambda (flame)
-              (map  (lambda (bomb-to-check)
+      ;;kolla mot olika powerups och bomber för kjedjesprängning
+      (for-each  (lambda (flame)
+              (for-each  (lambda (bomb-to-check)
                       (if(send bomb-to-check collition? (car flame) (cadr flame))
                            (on-bomb-explosion bomb-to-check); spräng
                            )
                       )
                       bombs)
-              (map  (lambda (powerup-to-check)
+              (for-each  (lambda (powerup-to-check)
                       (if(send powerup-to-check collition? (car flame) (cadr flame))
                          (set! powerups (remv powerup-to-check powerups));;remove poverup from game
                          ))
@@ -199,24 +205,26 @@
                      bomb-flames))
               ;(display (caddr flame))(newline)
               )
-            (car result))
-      ;;add to todo list
+            flames)
+      ;;add to todo list, to remove next loop.
       (set! to-do-list 
             (cons 
              (new make-timer% 
                   [delay 0];;spräng så fort som möjligt
                   [proc (lambda (arg)(remove-blocks arg))]
-                  [args (list (cadr result))])
+                  [args (list to-blow-up)])
              to-do-list))
       )
     
     (define/private (remove-blocks block-list)
-      (map  (lambda (block)
-              (send game-board
-                    delete-object-from-board!
-                    (car block);x
-                    (cadr block));y
-              (if (and (= 2 (random 6)) );en på tio
+      (for-each  (lambda (block)
+              (if (and  
+                   (send game-board;;check if delete succeded and delete
+                         delete-object-from-board!
+                         (car block);x
+                         (cadr block));y
+                   (= 2 (random 6));en på sex
+                   )
                   (begin
                     (display "adding ")
                     (display (car block))(display " ")
@@ -243,7 +251,7 @@
       (send draw-class draw-bitmap-2 (send game-board get-bitmap) 0 0)
       
       ;;track all bombs in the bomb list
-      (map  (lambda (proc)
+      (for-each  (lambda (proc)
               (send draw-class draw-bitmap-2
                     (send proc get-bitmap)
                     (* *blocksize* (get-field x-pos proc))
@@ -254,7 +262,7 @@
             bombs)
       
        ;;track all bombs in the flames list and check collisons between player and flames.
-      (map  (lambda (proc)
+      (for-each  (lambda (proc)
               ;tarck all timers
               (map  (lambda (player)
                       (if(send proc collition?
@@ -274,7 +282,7 @@
       
       
       ;;tarck all timers
-       (map  (lambda (proc)
+       (for-each  (lambda (proc)
               (if(send proc gone-off?)
                  (begin
                    (send proc run-proc)
@@ -285,7 +293,7 @@
             to-do-list)
  
       ;;track all objects
-      (map  (lambda (proc)
+      (for-each  (lambda (proc)
               (send draw-class draw-bitmap-2
                     (send proc get-bitmap)
                     (* *blocksize* (get-field x-pos proc))
@@ -293,7 +301,7 @@
             objects-to-track)
       
       ;;track all powerups
-      (map  (lambda (proc)
+      (for-each  (lambda (proc)
               (send draw-class draw-bitmap-2
                     (send proc get-bitmap)
                     (* *blocksize* (get-field x-pos proc))
@@ -301,7 +309,7 @@
             powerups)
       
       ;;all players
-      (map  (lambda (proc)
+      (for-each  (lambda (proc)
               (send draw-class draw-bitmap-2
                     (send proc get-bitmap)
                     (- (send proc get-x-pos-px) 5)

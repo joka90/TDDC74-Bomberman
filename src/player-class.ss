@@ -5,18 +5,29 @@
   (class object%
     (super-new)
     (init-field x-pos y-pos dxdy name lives color)
-    (field (height 30) (width 30) (points 0) (radius 1) (bomb-count 1) (delay 5))
+    (field
+     (x-pos-px (* x-pos *blocksize*))
+     (y-pos-px (* y-pos *blocksize*))
+     (type 'player)
+     (height 30)
+     (width 30)
+     (points 0)
+     (radius 1)
+     (delay 5)
+     (bomb-count 1)
+     (number-of-bombs 0)
+     (last-bomb-timestamp 0)
+     (last-bomb-place '());; (x . y)
+     (direction 'd);;player dir
+     (moving #f);; if player is moving or not.
+     (animation 1);;current frame in animation
+     (animation-start 1);;where to start from
+     (animation-stop 5);;where to stop
+     (animation-duration 4);frames with same image
+     (animation-duration-count 0);;frame counter
+     )
     
-    (define direction 'd)
-    (define moving #f)
-    
-    (define x-pos-px (* x-pos *blocksize*))
-    (define y-pos-px (* y-pos *blocksize*))
-    
-    (define number-of-bombs 0)
-    (define last-bomb-timestamp 0)
-    (define last-bomb-place '());; (x . y)
-    
+
     (define/public (can-bomb?)
       (and
        (< number-of-bombs bomb-count)
@@ -76,11 +87,6 @@
            [width 40];;canvas/bitmaps size
            [height 62]))
   
-    (define animation 1)
-    (define animation-start 1)
-    (define animation-stop 5)
-    (define animation-duration 4);frames with same image
-    (define animation-duration-count 0)
     
     (define/private (update-animation-help)
       

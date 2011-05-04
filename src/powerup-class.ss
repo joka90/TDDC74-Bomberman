@@ -11,19 +11,19 @@
                               (2 . powerup-stronger-bomb))))))
     
     
-      
+    
     (define/public (set-x! x)
       (set! x-pos x))
     
     (define/public (set-y! y)
       (set! y-pos y))
     
-
     
     (define/public (collition? xpos ypos)
-      (and (= xpos x-pos)
-           (= ypos y-pos)
-           ))
+      (if(and (= xpos x-pos)
+              (= ypos y-pos))
+         type;;return type if coll
+         #f))
     
     (define/public (use-power-up player)
       (cond
@@ -32,7 +32,7 @@
         ((eq? type 'powerup-stronger-bomb)(add-stronger-bomb player))
         ))
     
-     (define/private (add-speed player)
+    (define/private (add-speed player)
        (if (< (get-field dxdy player) 15)
            (begin
              (set-field! dxdy player (+ (get-field dxdy player) 5))

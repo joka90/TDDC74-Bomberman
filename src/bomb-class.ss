@@ -16,7 +16,6 @@
       (set! y-pos y))
     
 
-    
     ;;return timestamp from when the bomb was created.
     (define/public (get-timestamp)
       timestamp)
@@ -25,15 +24,14 @@
     (define/public (gone-off?)
       (<= (+ timestamp delay) (*current-sec*)))
     
-    ;x-pos < x < x-pos+width
-    ;y-pos < y < y-pos+height
-    ;x-pos < x+w < x-pos+width
-    ;y-pos < y+h < y-pos+height
+
     (define/public (collition? xpos ypos)
-      (and (= xpos x-pos)
+      (if(and (= xpos x-pos)
            (= ypos y-pos)
-           (< timestamp (*current-sec*));dvs en sek att röra sig på
-           ))
+           (< timestamp (*current-sec*)));dvs en sek att röra sig på
+           type;;return type if coll
+           #f))
+           
     
     
     
