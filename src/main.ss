@@ -1,10 +1,10 @@
 ;(load "paint-tools.ss")
 (require scheme/date);; for timestamps in bombs
 (require racket/string);; for image loading
+(load "help-classes.ss");; small helpclasses from lists etc.
 (load "draw-class.ss")
 (load "image-store.ss")
 (load "player-class.ss")
-(load "stone-class.ss");; temp
 (load "game-board-class.ss")
 (load "user-interact.ss")
 (load "game-logic.ss")
@@ -16,19 +16,12 @@
 (load "timer-class.ss")
 
 
-
 ;; ---------------------------------------------------------------------
 ;; global objects just for testing
 ;; ---------------------------------------------------------------------
 
 (define *blocksize* 30)
 
-
-;; global lists to track objects
-;(define objects (list stone stone2 stone3 stone4))
-(define objects '())
-
-;(define players (list test-player))
 
 (define *image-store*
   (new make-image-store%))
@@ -77,8 +70,7 @@
        [height 21]
        [width 21]
        [height-px 630]
-       [width-px 630]
-       [objects-to-track objects]))
+       [width-px 630]))
 
 ;; ---------------------------------------------------------------------
 ;; The main globalbitmap *draw* and gui
