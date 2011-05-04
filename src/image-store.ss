@@ -13,7 +13,7 @@
       (map  (lambda (image)
               (if(string? (cdr image))
                  (set! temp-list (cons
-                                  (cons (car image) (read-bitmap (cdr image) 'png/alpha #f #t))
+                                  (cons (car image) (make-object bitmap% (cdr image) 'png/mask))
                                   temp-list))
               (set! temp-list (cons
                                   (cons (car image) (add-anim-image (cdr image)))
@@ -43,7 +43,7 @@
                                           (string-append 
                                            prefix
                                            (number->string i) 
-                                           file-ending) 'unknown #f))
+                                           file-ending) 'png/mask))
                                 temp-list))
      
              (loop (+ 1 i)))))

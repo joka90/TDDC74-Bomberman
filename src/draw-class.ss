@@ -5,7 +5,7 @@
   (class object%
     (super-new)
     (init-field width height)
-    (define draw-buffer (make-object bitmap% width height #f))
+    (define draw-buffer (make-object bitmap% width height #f #t))
     (define draw-dc (make-object bitmap-dc% draw-buffer))
     
     (define/public (clear)

@@ -216,9 +216,11 @@
                     delete-object-from-board!
                     (car block);x
                     (cadr block));y
-              (if (= 2 (random 6));en på tio
+              (if (and (= 2 (random 6)) );en på tio
                   (begin
                     (display "adding ")
+                    (display (car block))(display " ")
+                    (display (cadr block))(newline)
                   (set! powerups 
                         (cons 
                           (new powerup% 

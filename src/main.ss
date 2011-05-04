@@ -102,28 +102,28 @@
 ;; ---------------------------------------------------------------------
 ;;(add-key-board-player new-name x y dxy number-of-lives color keybord-bindings)
 ;;palyer 1 
-(send test-logic add-key-board-player "jocke" 1 1 5 5 'red-player 
+(send test-logic add-key-board-player "jocke" 1 1 10 5 'red-player 
       '((#\w . u)
         (#\a . l)
         (#\s . d)
         (#\d . r)
         (#\q . drop)))
 ;;palyer 2
-(send test-logic add-key-board-player "pocke" 19 19 5 5 'blue-player 
+(send test-logic add-key-board-player "pocke" 19 19 10 5 'blue-player 
       '((#\i . u)
         (#\j . l)
         (#\k . d)
         (#\l . r)
         (#\b . drop)))
 
-(send test-logic add-key-board-player "tocke" 1 19 5 5 'blue-player 
+(send test-logic add-key-board-player "tocke" 1 19 10 5 'blue-player 
       '((up . u)
         (left . l)
         (down . d)
         (right . r)
         (#\0 . drop)))
 
-(send test-logic add-key-board-player "focke" 19 1 5 5 'red-player 
+(send test-logic add-key-board-player "focke" 19 1 10 5 'red-player 
       '((#\8 . u)
         (#\4 . l)
         (#\5 . d)

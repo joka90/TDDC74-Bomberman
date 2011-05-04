@@ -44,7 +44,8 @@
 
     
     (define/public (update-bitmap)
-      (send bitmap clear)  
+      (send bitmap clear)
+      (send bitmap background-transp)
       (cond  
         ((< (- (+ timestamp delay) (*current-sec*)) 2)
          (send bitmap draw-bitmap-2 (send *image-store* get-image 'bomb-1) 0 0))
