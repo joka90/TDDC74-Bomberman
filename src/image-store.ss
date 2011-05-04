@@ -57,7 +57,7 @@
          (add-rot-image name image))
         (else
          (set! image-list (cons
-                           (cons name (make-object bitmap% image 'unknown #f))
+                           (cons name (make-object bitmap% image 'png/mask))
                            image-list)))
         ))
     

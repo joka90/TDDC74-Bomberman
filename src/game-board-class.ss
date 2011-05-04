@@ -4,6 +4,7 @@
     (super-new)
     (init-field height width height-px width-px)
     (define gamevector (make-vector  (* (+ 1 height) (+ 1 width))))
+    (define changed #f)
     
     (define bitmap
       (new make-draw%
@@ -36,14 +37,16 @@
     
     (define/public (update-bitmap)
       (define (loop index)
-        (if (< index (vector-length gamevector))
-            (begin
-              (if (vector-ref gamevector index);;finns det något där eller inte?
-                  (update-bitmap-help (vector-ref gamevector index) (get-pos-invers index)))
-              (loop (+ 1 index)))))
-      (send bitmap clear)
-      (send bitmap draw-bitmap-2 (send background get-bitmap) 0 0)
-      (loop 0))
+              (if (< index (vector-length gamevector))
+                  (begin
+                    (if (vector-ref gamevector index);;finns det något där eller inte?
+                        (update-bitmap-help (vector-ref gamevector index) (get-pos-invers index)))
+                    (loop (+ 1 index)))))
+      (if changed
+          (begin
+            (send bitmap clear)
+            (send bitmap draw-bitmap-2 (send background get-bitmap) 0 0)
+            (loop 0))))
 
     (define/private (update-bitmap-help type pos)    
       (cond  
@@ -57,10 +60,12 @@
       (send bitmap get-bitmap))
     
     (define/public (add-object-to-board! x y type) ;;lägger till ett objekt på en given position
-      (vector-set! gamevector (get-pos x y) type))
+      (vector-set! gamevector (get-pos x y) type)
+      (set! changed #t))
     
     (define/public (delete-object-from-board! x y) ;; som ovan fast ta bort
-      (vector-set! gamevector (get-pos x y) 0)) 
+      (vector-set! gamevector (get-pos x y) 0)
+      (set! changed #t))
     
     (define/public (delete-destruct-from-board-radius! x y radius)
       (define emptyspaces '())

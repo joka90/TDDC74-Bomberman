@@ -48,7 +48,13 @@
     
     ;;sends the bitmap, called from the game-logic, to update screen.
     (define/public (get-bitmap)
-      (update-bitmap)
-      (send bitmap get-bitmap))  
+      ;(update-bitmap)
+      ;(send bitmap get-bitmap)
+      (cond  
+        ((< (- (+ timestamp delay) (*current-sec*)) 1)
+         (send *image-store* get-image 'flame-small direction))
+        (else
+         (send *image-store* get-image 'flame-big direction))))
+ 
       ))
 

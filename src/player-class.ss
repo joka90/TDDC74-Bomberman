@@ -103,17 +103,17 @@
        )
     
     (define/public (update-bitmap)
-      (send bitmap clear)
-      (send bitmap background-transp)
+      ;(send bitmap clear)
+      ;(send bitmap background-transp)
       
       (update-animation-help)
       (set! moving #f)
-      (send bitmap draw-bitmap-2 (send *image-store* get-image color direction animation) 0 0)
+      ;(send bitmap draw-bitmap-2 (send *image-store* get-image color direction animation) 0 0)
     )
     
     (define/public (get-bitmap)
       (update-bitmap)
-      (send bitmap get-bitmap))
+      (send *image-store* get-image color direction animation))
     ))
 
 
