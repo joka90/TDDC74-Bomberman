@@ -229,11 +229,24 @@
                  block-list))
     
     (define/private(on-die player flame)
+      (if (send player possible-to-die?)
+      (begin
       (display (get-field name player))
-      (display "was killed by")
+      (display " was killed by ")
       (display (get-field name (get-field owner flame)))
       (newline)
-      )
+      
+      
+      (set-field! lives player (- (get-field lives player) 1))
+      (set-field! bomb-count player 1)
+      (set-field! dxdy player 10)
+      (set-field! radius player 1)
+      (display (get-field spawn-x-pos player)) (display (get-field spawn-y-pos player)) 
+      (send player set-x! (get-field spawn-x-pos player))
+      (send player set-y! (get-field spawn-y-pos player))
+      (set-field! timestamp-invincible player (*current-sec*))
+      (set-field! direction player 'd)
+      )))
     
     ;; skickar in alla trackade objects bitmaps i en viss positon.
     ;;track all players
