@@ -19,17 +19,17 @@
      (timestamp (*current-sec*)))
            
 
-    (define x-upper (cdr (assq 'u limits)))
-    (define x-lower (cdr (assq 'd limits)))
-    (define y-upper (cdr (assq 'l limits)))
-    (define y-lower (cdr (assq 'r limits)))
+    (define x-upper (cdr (assq 'l limits)))
+    (define x-lower (cdr (assq 'r limits)))
+    (define y-upper (cdr (assq 'u limits)))
+    (define y-lower (cdr (assq 'd limits)))
     
     (define calc-x-pos (- center-x-pos x-upper))
-    (define calc-y-pos (- center-x-pos y-upper))
+    (define calc-y-pos (- center-y-pos y-upper))
     
     
-    (define calc-width (+ 1 y-upper y-lower))
-    (define calc-height (+ 1 x-upper x-lower))
+    (define calc-height (+ 1 y-upper y-lower))
+    (define calc-width (+ 1 x-upper x-lower))
     
    
     
@@ -52,11 +52,11 @@
     (define/public (collition? xpos ypos)
       (if(or
           (and (= xpos center-x-pos)
-               (<= (- center-y-pos y-lower) ypos)
-               (>= (+ center-y-pos y-upper) ypos))
+               (<= ypos (+ center-y-pos y-lower))
+               (<= (- center-y-pos y-upper) ypos))
           (and (= ypos center-y-pos)
-               (<= (- center-x-pos x-lower) xpos)
-               (>= (+ center-x-pos x-upper) xpos)))
+               (<=  xpos (+ center-x-pos x-lower))
+               (<= (- center-x-pos x-upper) xpos)))
          type;;return type if coll
          #f))
 
@@ -64,7 +64,17 @@
       (new make-draw%
            [width (* *blocksize* calc-width)];;canvas/bitmaps size
            [height (* *blocksize* calc-height)]))
-
+    
+    (define/private (draw-flames type)
+      (define (draw-x from to)
+        (if(<= from to)
+           (begin
+             
+             (draw-x (+ 1 from) to))))
+      
+      (draw-x x-upper x-lower)
+        )
+    
     
     (define/public (update-bitmap)
       ;(send bitmap clear)  
@@ -86,11 +96,11 @@
       (send bitmap set-background-color! 23 4 1 1)
       (cond  
         ((< (- (+ timestamp delay) (*current-sec*)) 1)
-         ;(send *image-store* get-image 'flame-small direction)
+         
          (send bitmap get-bitmap)
          )
         (else
-         ;(send *image-store* get-image 'flame-big direction)
+  
          (send bitmap get-bitmap)
          )))
  
