@@ -76,12 +76,18 @@
        [width 630];;canvas/bitmaps size
        [height 630])) 
 
+(define *status-draw*
+  (new make-draw%
+       [width 170];;canvas/bitmaps size
+       [height 600])) 
+
 (define *gui*
   (new make-gui%
        [window-name "New gui!"]
        [width 800];;Window size
        [height 630]
-       [image-buffer *draw*];;image buffer, the image to load in to the canvas.
+       [image-buffer *draw*]
+       [image-buffer-status *status-draw*];;image buffer, the image to load in to the canvas.
        [logic-class test-logic]));; logic class to send key events to
 
 
