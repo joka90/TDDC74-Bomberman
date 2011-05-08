@@ -9,7 +9,7 @@
     (define draw-dc (make-object bitmap-dc% draw-buffer))
     
     (define/public (clear)
-      (send draw-dc clear))
+      (send draw-dc erase))
     
   
     (define/public (get-image canvas dc)
@@ -29,8 +29,8 @@
       (send draw-dc set-background  (make-object color% (random 255) (random 255) (random 255))))
     
     ; A procedure that sets the background color of the GUI
-    (define/public (set-background-color! r g b)
-      (send draw-dc set-background  (make-object color% r g b)))
+    (define/public (set-background-color! r g b a)
+      (send draw-dc set-background  (make-object color% r g b a)))
     
     (define/public (background-transp)
       (send draw-dc set-background  (make-object color% 0 0 0 0)))
@@ -69,6 +69,6 @@
     ;; A procedures that draws a picture from a bitmap
     (define/public (draw-bitmap-2 bitmap x y)
       ;;send to main bitmap
-      (send draw-dc draw-bitmap bitmap x y 'solid (make-object color% 0 0 0) (send bitmap get-loaded-mask)))
+      (send draw-dc draw-bitmap bitmap x y))
     
     ))

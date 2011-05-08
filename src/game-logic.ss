@@ -169,6 +169,7 @@
       
       (define flames (car result))
       (define to-blow-up (cadr result))
+      (define flame-limits (caddr result))
       
       ;;set number of bombs out on player
       (send (get-field owner bomb) remv-bomb)
@@ -194,18 +195,22 @@
                                    ))
                               (get-field inner-list powerups))
                    
-                   ;;add flame to a list for tracking
-                   (send bomb-flames add-to-list! 
-                         (new flame% 
-                              [x-pos (car flame)]
-                              [y-pos (cadr flame)]
-                              [delay 2] 
-                              [owner (get-field owner bomb)]
-                              [direction (caddr flame)]))
+                   
          
                    );;end lambda for-each flame
                  flames)
-      
+      ;;add flame to a list for tracking
+      (display flame-limits)
+      (display " x: ")(display (get-field x-pos bomb))
+      (display " y: ")(display (get-field y-pos bomb))(newline)
+      (send bomb-flames add-to-list! 
+            (new flame% 
+                 [center-x-pos (get-field x-pos bomb)]
+                 [center-y-pos (get-field y-pos bomb)]
+                 [delay 2] 
+                 [owner (get-field owner bomb)]
+                 [limits flame-limits]))
+      ;(display to-blow-up)
       ;;add to todo list, to remove next loop.
       (send to-do-list add-to-list!
             (new make-timer% 
@@ -229,11 +234,24 @@
                  block-list))
     
     (define/private(on-die player flame)
+      (if (send player possible-to-die?)
+      (begin
       (display (get-field name player))
-      (display "was killed by")
+      (display " was killed by ")
       (display (get-field name (get-field owner flame)))
       (newline)
-      )
+      
+      
+      (set-field! lives player (- (get-field lives player) 1))
+      (set-field! bomb-count player 1)
+      (set-field! dxdy player 10)
+      (set-field! radius player 1)
+      (display (get-field spawn-x-pos player)) (display (get-field spawn-y-pos player)) 
+      (send player set-x! (get-field spawn-x-pos player))
+      (send player set-y! (get-field spawn-y-pos player))
+      (set-field! timestamp-invincible player (*current-sec*))
+      (set-field! direction player 'd)
+      )))
     
     ;; skickar in alla trackade objects bitmaps i en viss positon.
     ;;track all players
@@ -265,8 +283,8 @@
                          (get-field inner-list players))
                    (send draw-class draw-bitmap-2
                          (send flame get-bitmap)
-                         (* *blocksize* (get-field x-pos flame))
-                         (* *blocksize* (get-field y-pos flame)))
+                         (* *blocksize* (send flame get-x-pos))
+                         (* *blocksize* (send flame get-y-pos)))
                    (if(send flame gone-off?)
                       (send bomb-flames remove-from-list! flame)))
                  (get-field inner-list bomb-flames))

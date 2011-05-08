@@ -113,7 +113,8 @@
         (left . l)
         (down . d)
         (right . r)
-        (#\0 . drop)))
+        (#\0 . drop)
+        (numpad0 . drop)))
 
 (send test-logic add-key-board-player "focke" 19 1 10 5 'red-player 
       '((#\8 . u)
