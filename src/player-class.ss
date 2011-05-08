@@ -117,17 +117,22 @@
        )
     
     (define/public (update-bitmap)
-      ;(send bitmap clear)
+      (send bitmap clear)
       ;(send bitmap background-transp)
       
       (update-animation-help)
       (set! moving #f)
-      ;(send bitmap draw-bitmap-2 (send *image-store* get-image color direction animation) 0 0)
+      (send bitmap draw-bitmap-2 (send *image-store* get-image color direction animation) 0 0)
+      (if(not (possible-to-die?))
+         (send bitmap draw-bitmap-2 (send *image-store* get-image 'invincible) 0 0))
+      ;(send bitmap set-alpha! 0.5)
     )
     
     (define/public (get-bitmap)
       (update-bitmap)
-      (send *image-store* get-image color direction animation))
+      ;(send *image-store* get-image color direction animation)
+      (send bitmap get-bitmap)
+      )
     ))
 
 

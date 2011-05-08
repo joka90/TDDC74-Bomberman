@@ -36,7 +36,7 @@
                                              (u . ("img/blue-player/u-" ".png" 5))
                                              (d . ("img/blue-player/d-" ".png" 5))))
 
-
+(send *image-store* add-image 'invincible "img/invincible.png")
 
 
 (send *image-store* add-image 'bomb-1 "img/bomb1.png")

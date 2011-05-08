@@ -36,6 +36,9 @@
     (define/public (background-transp)
       (send draw-dc set-background  (make-object color% 0 0 0 0)))
     
+    (define/public (set-alpha! a)
+      (send draw-dc set-alpha a))
+    
     
     ;; A procedures that draws an ellipse
     (define/public (draw-circle x y size-x size-y pen brush)
