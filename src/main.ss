@@ -42,15 +42,11 @@
 (send *image-store* add-image 'bomb-1 "img/bomb1.png")
 (send *image-store* add-image 'bomb-2 "img/bomb2.png")
 
-(send *image-store* add-image 'flame-big '((r . "img/flame-big-h.png")
-                                           (l . "img/flame-big-h.png")
-                                           (u . "img/flame-big-v.png")
-                                           (d . "img/flame-big-v.png")))
+(send *image-store* add-image 'flame-big '((x . "img/flame-big-h.png")
+                                           (y . "img/flame-big-v.png")))
 
-(send *image-store* add-image 'flame-small '((r . "img/flame-small-h.png")
-                                             (l . "img/flame-small-h.png")
-                                             (u . "img/flame-small-v.png")
-                                             (d . "img/flame-small-v.png")))
+(send *image-store* add-image 'flame-small '((x . "img/flame-small-h.png")
+                                             (y . "img/flame-small-v.png")))
 
 (send *image-store* add-image 'powerup-multi-bomb "img/max-image.png")
 (send *image-store* add-image 'powerup-speed "img/speed-powerup.png")
