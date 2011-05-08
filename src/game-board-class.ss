@@ -7,12 +7,12 @@
      (gamevector (make-vector  (* (+ 1 height) (+ 1 width))))
      (changed #f))
  
-    (define/public (add-object-to-board! x y type) ;;lägger till ett objekt på en given position
+    (define/public (add-object-to-board! x y type) ;;lägger till ett objekt av en viss typ på en given position
       (vector-set! gamevector (get-pos x y) type)
       (set! changed #t))
     
-    ;;delete object from board and if unsuccessfull return false
-    (define/public (delete-object-from-board! x y) ;; som ovan fast ta bort
+    ;;ta bort objekt från brädan och om det redan är tomt så returneras falskt
+    (define/public (delete-object-from-board! x y)
       (let((object (get-object-at-pos x y)))
         (if (not (eq? object 0))
             (begin
@@ -29,9 +29,11 @@
     (define/public  (get-pos-invers pos)
       (cons (remainder pos (+ 0 width)) (quotient pos (+ 0 width))))
     
+    ;; Tar fram vad för objekt som ligger i en viss position
     (define/public (get-object-at-pos x y)
       (vector-ref gamevector (get-pos x y)))
     
+    ;; funktion för att ta bort block utifrån sprängkrafts-radie
     (define/public (delete-destruct-from-board-radius! x y radius)
       (define emptyspaces '())
       (define delete-block '())
@@ -43,16 +45,13 @@
         
         
         (if  (or (<= x1-temp (+ x radius)) (>= x2-temp (- x radius)) (<= y1-temp (+ y radius)) (>= y2-temp (- y radius))) 
+             
              (cond
                
                ((<= x1-temp (+ x radius))
-                (cond 
-                  
-                  
+                (cond
                   ((eq? 'destructeble-stone (collision? x1-temp y))      
                    (set! delete-block (cons (list x1-temp y) delete-block))
-                   ;(delete-object-from-board! x1-temp y) ;; ny lista på gång så att det fungerar med flammor osv som ska skrivas ut.
-                   
                    (loop (+ x1-temp radius) y1-temp x2-temp y2-temp))
                   
                   ((eq? 'indestructeble-stone (collision? x1-temp y))
@@ -67,7 +66,6 @@
                ((>= x2-temp (- x radius)) 
                 (cond 
                   ((eq? 'destructeble-stone (collision? x2-temp y))
-                   ;(delete-object-from-board! x2-temp y)
                    (set! delete-block (cons (list x2-temp y) delete-block))
                    (loop (+ x1-temp radius) y1-temp (- x2-temp radius) y2-temp))
                   
@@ -84,7 +82,6 @@
                ((<= y1-temp (+ y radius)) 
                 (cond
                   ((eq? 'destructeble-stone (collision? x y1-temp))
-                   ;(delete-object-from-board! x y1-temp)
                    (set! delete-block (cons (list x y1-temp) delete-block))
                    (loop (+ x1-temp radius) (+ y1-temp radius) (- x2-temp radius) y2-temp))
                   
@@ -98,7 +95,6 @@
                ((>= y2-temp (- y radius)) 
                 (cond
                   ((eq? 'destructeble-stone (collision? x y2-temp))
-                   ;(delete-object-from-board! x y2-temp)
                    (set! delete-block (cons (list x y2-temp) delete-block))
                    (loop (+ x1-temp radius) (+ y1-temp radius) (- x2-temp radius) (- y2-temp radius)))
                   
