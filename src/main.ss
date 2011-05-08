@@ -120,7 +120,12 @@
         (#\4 . l)
         (#\5 . d)
         (#\6 . r)
-        (#\7 . drop)))
+        (#\7 . drop)
+        (numpad8 . u)
+        (numpad4 . l)
+        (numpad5 . d)
+        (numpad6 . r)
+        (numpad7 . drop)))
 
 ;; The procedures that redraws the scene form the main-thread.
 (define (draw)
