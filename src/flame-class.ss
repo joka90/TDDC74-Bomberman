@@ -50,8 +50,13 @@
     
     
     (define/public (collition? xpos ypos)
-      (if(and (= xpos x-pos)
-              (= ypos y-pos))
+      (if(or
+          (and (= xpos center-x-pos)
+               (<= (- center-y-pos y-lower) ypos)
+               (>= (+ center-y-pos y-upper) ypos))
+          (and (= ypos center-y-pos)
+               (<= (- center-x-pos x-lower) xpos)
+               (>= (+ center-x-pos x-upper) xpos)))
          type;;return type if coll
          #f))
 
