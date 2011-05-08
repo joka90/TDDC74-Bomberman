@@ -169,6 +169,7 @@
       
       (define flames (car result))
       (define to-blow-up (cadr result))
+      (define flame-limits (caddr result))
       
       ;;set number of bombs out on player
       (send (get-field owner bomb) remv-bomb)
@@ -194,18 +195,22 @@
                                    ))
                               (get-field inner-list powerups))
                    
-                   ;;add flame to a list for tracking
-                   (send bomb-flames add-to-list! 
-                         (new flame% 
-                              [x-pos (car flame)]
-                              [y-pos (cadr flame)]
-                              [delay 2] 
-                              [owner (get-field owner bomb)]
-                              [direction (caddr flame)]))
+                   
          
                    );;end lambda for-each flame
                  flames)
-      
+      ;;add flame to a list for tracking
+      (display flame-limits)
+      (display " x: ")(display (get-field x-pos bomb))
+      (display " y: ")(display (get-field y-pos bomb))(newline)
+      (send bomb-flames add-to-list! 
+            (new flame% 
+                 [center-x-pos (get-field x-pos bomb)]
+                 [center-y-pos (get-field y-pos bomb)]
+                 [delay 2] 
+                 [owner (get-field owner bomb)]
+                 [limits flame-limits]))
+      ;(display to-blow-up)
       ;;add to todo list, to remove next loop.
       (send to-do-list add-to-list!
             (new make-timer% 
@@ -265,8 +270,8 @@
                          (get-field inner-list players))
                    (send draw-class draw-bitmap-2
                          (send flame get-bitmap)
-                         (* *blocksize* (get-field x-pos flame))
-                         (* *blocksize* (get-field y-pos flame)))
+                         (* *blocksize* (send flame get-x-pos))
+                         (* *blocksize* (send flame get-y-pos)))
                    (if(send flame gone-off?)
                       (send bomb-flames remove-from-list! flame)))
                  (get-field inner-list bomb-flames))

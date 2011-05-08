@@ -13,7 +13,7 @@
       (map  (lambda (image)
               (if(string? (cdr image))
                  (set! temp-list (cons
-                                  (cons (car image) (make-object bitmap% (cdr image) 'png/mask))
+                                  (cons (car image) (make-object bitmap% (cdr image) 'png/alpha))
                                   temp-list))
               (set! temp-list (cons
                                   (cons (car image) (add-anim-image (cdr image)))
@@ -43,7 +43,7 @@
                                           (string-append 
                                            prefix
                                            (number->string i) 
-                                           file-ending) 'png/mask))
+                                           file-ending) 'png/alpha))
                                 temp-list))
      
              (loop (+ 1 i)))))
@@ -57,7 +57,7 @@
          (add-rot-image name image))
         (else
          (set! image-list (cons
-                           (cons name (make-object bitmap% image 'png/mask))
+                           (cons name (make-object bitmap% image 'png/alpha))
                            image-list)))
         ))
     
