@@ -13,8 +13,7 @@
      (keyboard-players (new list-object%));; List of all keyboard-players, stored as (object . keyboard-bindings)
      (powerups (new list-object%))
      (to-do-list (new list-object%))
-     (bomb-flames (new list-object%))
-     )
+     (bomb-flames (new list-object%)))
     
     (define game-board
       (new board%
@@ -22,6 +21,7 @@
            [width width]
            [height-px height-px]
            [width-px width-px]))
+    
     (send game-board randomize-stones)
     
     

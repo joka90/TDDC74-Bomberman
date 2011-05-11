@@ -9,8 +9,7 @@
     (define draw-dc (make-object bitmap-dc% draw-buffer))
     
     (define/public (clear)
-      (send draw-dc erase)
-      )
+      (send draw-dc erase))
     
   
     (define/public (get-image canvas dc)

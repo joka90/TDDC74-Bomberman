@@ -6,8 +6,6 @@
     (super-new)
     (init-field x-pos y-pos delay radius owner)
     (field
-     (height 30)
-     (width 30)
      (type 'bomb)
      (timestamp (*current-m-sec*))
      (bomb-font (make-object font% 10 'modern 'normal 'bold 'smoothed)))

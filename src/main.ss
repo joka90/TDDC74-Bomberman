@@ -157,5 +157,5 @@
        [function-to-loop draw]
        [fps 24]));; anropar draw spec i update-graphic
 
-;(play-sound "sound/bg_music.mp3" #f)
+
 (send main-loop start-loop);; startar loopen

@@ -11,8 +11,6 @@
      owner
      limits)
     (field
-     (height 30)
-     (width 30)
      (type 'flame)
      (x-pos 0)
      (y-pos 0)
@@ -85,8 +83,7 @@
                    (* *blocksize* from))
              (draw-y (+ 1 from) to))))
       (draw-x 0 (+ 1 x-upper x-lower))
-      (draw-y 0 (+ 1 y-upper y-lower))
-      )
+      (draw-y 0 (+ 1 y-upper y-lower)))
     
     
     (define/public (update-bitmap) 
@@ -94,8 +91,7 @@
         ((< (- (+ timestamp delay) (*current-m-sec*)) 1000)
          (draw-flames 'flame-small))
         (else
-         (draw-flames 'flame-big)))
-      )
+         (draw-flames 'flame-big))))
     
     ;;sends the bitmap, called from the game-logic, to update screen.
     (define/public (get-bitmap)
