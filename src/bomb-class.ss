@@ -9,7 +9,8 @@
      (height 30)
      (width 30)
      (type 'bomb)
-     (timestamp (*current-m-sec*)))
+     (timestamp (*current-m-sec*))
+     (bomb-font (make-object font% 10 'modern 'normal 'bold 'smoothed)))
       
     (define/public (set-x! x)
       (set! x-pos x))
@@ -51,8 +52,7 @@
          (send bitmap draw-bitmap-2 (send *image-store* get-image 'bomb-1) 0 0))
         (else
          (send bitmap draw-bitmap-2 (send *image-store* get-image 'bomb-2) 0 0)))
-      (send bitmap draw-text (number->string (/ (- (+ timestamp delay) (*current-m-sec*)) 1000)) 0 0)
-      )
+      (send bitmap draw-text (number->string (/ (- (+ timestamp delay) (*current-m-sec*)) 1000)) 0 0 bomb-font))
     
     ;;sends the bitmap, called from the game-logic, to update screen.
     (define/public (get-bitmap)

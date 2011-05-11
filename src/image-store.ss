@@ -18,9 +18,7 @@
               (set! temp-list (cons
                                   (cons (car image) (add-anim-image (cdr image)))
                                   temp-list))
-              )
-              ;(display "stoppa in kod som klarar av att hämta ett antal bilder utifrån nummer");(string-append* "a" (number->string num) '("c" "d"))
-              )
+              ))
               load-list)
       ;;add to image list as (NAME .  '(('r . IMAGEDATA) ... ('u . IMAGEDATA)))
       (set! image-list (cons

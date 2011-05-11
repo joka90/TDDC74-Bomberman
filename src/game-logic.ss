@@ -97,10 +97,7 @@
                (not collition);; F = ingen kolltion
                ;(not (eq? (get-field owner object-to-check) player))
                )
-              (begin
                 (set! collition #t)
-                ;(display (get-field type object-to-check))
-                )
               ))
          (get-field inner-list bombs))
         
@@ -199,10 +196,8 @@
          
                    );;end lambda for-each flame
                  flames)
-      ;;add flame to a list for tracking
-      (display flame-limits)
-      (display " x: ")(display (get-field x-pos bomb))
-      (display " y: ")(display (get-field y-pos bomb))(newline)
+	
+		;;make a new flamegroupe and add to flame list
       (send bomb-flames add-to-list! 
             (new flame% 
                  [center-x-pos (get-field x-pos bomb)]
@@ -210,7 +205,7 @@
                  [delay 1500] 
                  [owner (get-field owner bomb)]
                  [limits flame-limits]))
-      ;(display to-blow-up)
+     
       ;;add to todo list, to remove next loop.
       (send to-do-list add-to-list!
             (new make-timer% 
@@ -236,17 +231,10 @@
     (define/private(on-die player flame)
       (if (send player possible-to-die?)
       (begin
-      (display (get-field name player))
-      (display " was killed by ")
-      (display (get-field name (get-field owner flame)))
-      (newline)
-      
-      
       (set-field! lives player (- (get-field lives player) 1))
       (set-field! bomb-count player 1)
       (set-field! dxdy player 10)
       (set-field! radius player 1)
-      (display (get-field spawn-x-pos player)) (display (get-field spawn-y-pos player)) 
       (send player set-x! (get-field spawn-x-pos player))
       (send player set-y! (get-field spawn-y-pos player))
       (set-field! timestamp-invincible player (*current-m-sec*))
