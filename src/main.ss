@@ -1,7 +1,7 @@
 ;(load "paint-tools.ss")
-(require scheme/date);; tid för bomber och liknande.
-(require racket/string);; för att ladda in bilder
-(load "help-classes.ss");; små hjälpklasser för listor mm.
+(require scheme/date);; tid fï¿½r bomber och liknande.
+(require racket/string);; fï¿½r att ladda in bilder
+(load "help-classes.ss");; smï¿½ hjï¿½lpklasser fï¿½r listor mm.
 (load "draw-class.ss")
 (load "image-store.ss")
 (load "player-class.ss")
@@ -20,10 +20,10 @@
 ;; globala objekt
 ;; ---------------------------------------------------------------------
 
-;; Storleken på blocken i spelplanen
+;; Storleken pï¿½ blocken i spelplanen
 (define *blocksize* 30)
 
-;;Bildinladdningsfunktion så att det inte ska lagga när senare.
+;;Bildinladdningsfunktion sï¿½ att det inte ska lagga nï¿½r senare.
 (define *image-store*
   (new make-image-store%))
 ;;http://www.spriters-resource.com/snes/S.html
@@ -87,14 +87,15 @@
 (define *gui*
   (new make-gui%
        [window-name "New gui!"]
-       [width 800];;fönsterstorlek
+       [width 800];;fï¿½nsterstorlek
        [height 630]
        [image-buffer *draw*];;bildbuffer, laddar bilden till canvas
-       [logic-class test-logic]));; logisk klass att sända tangentbords-nedtryckningar till.
+       [image-buffer-status *status-draw*];;image buffer, the image to load in to the canvas.
+       [logic-class test-logic]));; logisk klass att sï¿½nda tangentbords-nedtryckningar till.
 
 
 ;; ---------------------------------------------------------------------
-;; Lägga till spelare
+;; Lï¿½gga till spelare
 ;; ---------------------------------------------------------------------
 ;;(add-key-board-player new-name x y dxy number-of-lives color keybord-bindings)
 ;;spelare 1
@@ -132,23 +133,23 @@
         (numpad6 . r)
         (numpad7 . drop)))
 
-;; Procedurerna som ritar om brädan från huvudtråden. 
+;; Procedurerna som ritar om brï¿½dan frï¿½n huvudtrï¿½den. 
 (define (draw)
-  (send *gui* update-keys-down);Skicka tangenter till spellogiken en gång per loop-varv 
+  (send *gui* update-keys-down);Skicka tangenter till spellogiken en gï¿½ng per loop-varv 
   (send *draw* clear);; rensa bitmap
   (send test-logic update-scene *draw*);;uppdatera bitmap
   ;(send *draw* background)
-  (send *gui* redraw));; Rita om gui för att se nya bitmapen
+  (send *gui* redraw));; Rita om gui fï¿½r att se nya bitmapen
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; END DEFINE ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; ------------------------------------------------------------
-;; Görs alltid innan start
+;; Gï¿½rs alltid innan start
 ;; ------------------------------------------------------------
 (send *draw* clear);; Rensar buffern som ritar
 (send *gui* show-gui);; startar gui
-(send *draw* background);; Ändrar bakgrund i ritningsbuffern.
+(send *draw* background);; ï¿½ndrar bakgrund i ritningsbuffern.
 (send *gui* redraw);; updaterar canvas
 
 ;; ------------------------------------------------------------
