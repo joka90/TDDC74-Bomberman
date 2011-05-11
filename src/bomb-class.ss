@@ -1,6 +1,6 @@
 ;; ---------------------------------------------------------------------
-;; class make bomb, timestamp and delay to cunt when to explode. Radius to calculate wath to ...
-;; ---------------------------------------------------------------------
+;; klass make bomb, timestamp and delay för att räkna ut när det ska explodera. Radius för att räkna ut vad som skall tas bort
+;;---------------------------------------------------------------------
 (define bomb%
   (class object%
     (super-new)
@@ -16,20 +16,20 @@
       (set! y-pos y))
     
 
-    ;;return timestamp from when the bomb was created.
+    ;;returnera tidsstämpel från när bomben skapades.
     (define/public (get-timestamp)
       timestamp)
     
-    ;;returns true if the bomb has gone off.
+    ;;returnerar sant om bomben has sprängts.
     (define/public (gone-off?)
       (<= (+ timestamp delay) (*current-sec*)))
     
-
+    ;; skickas in (x,y) och och returnerar vilken typ som bomben kolliderar med, annars returneras falskt. 
     (define/public (collition? xpos ypos)
       (if(and (= xpos x-pos)
            (= ypos y-pos)
-           (< timestamp (*current-sec*)));dvs en sek att röra sig på
-           type;;return type if coll
+           (< timestamp (*current-sec*)));dvs en sekund att röra sig på
+           type
            #f))
            
     
@@ -37,10 +37,10 @@
     
     (define bitmap
       (new make-draw%
-           [width *blocksize*];;canvas/bitmaps size
+           [width *blocksize*];;canvas-/bitmapsstorlek
            [height *blocksize*]))
 
-    
+    ;;uppdatera bitmapen för bomb med tidsskrift och olika bombbilder
     (define/public (update-bitmap)
       (send bitmap clear)
       (send bitmap background-transp)
@@ -52,7 +52,7 @@
       (send bitmap draw-text (number->string (- (+ timestamp delay) (*current-sec*))) 0 0)
       )
     
-    ;;sends the bitmap, called from the game-logic, to update screen.
+    ;;Skickar bitmapen, anropas från spellogiken för att uppdatera skärmen
     (define/public (get-bitmap)
       (update-bitmap)
       (send bitmap get-bitmap))  
