@@ -148,7 +148,7 @@
 ;; ------------------------------------------------------------
 (send *draw* clear);; Rensar buffern som ritar
 (send *gui* show-gui);; startar gui
-(send *gui* redraw);; updaterar canvas
+(send *gui* redraw);; uppdaterar canvas
 
 ;; ------------------------------------------------------------
 ;; Huvudloop

@@ -132,26 +132,27 @@
     
     
     ;; #f innebär tomt, annars returneras vilken typ av objekt som ligger på positionen. 
-    (define/public (collision? x y) ;; kollar om det ligger något på en viss position.
-      (let((object (get-object-at-pos x y)))
-        (if(and (<= 0 x) (<= 0 y) (< x width) (<= y height))
+    (define/public (collision? x y)
+      (if(and (<= 0 x) (<= 0 y) (< x width) (<= y height))
+         (let((object (get-object-at-pos x y)))
            (if (eq? object 0)
                #f
-               object)
-           #f)))
+               object))
+         #f))
     
     
-    ;;help function to check if to add random stone at a pos.
+    ;;hjälpfunktion för att kolla om man ska lägga till en sten på en position utanför startplatserna för spelaren
     (define/private (add-destruct-stone? x y)
       (and
        (not (or 
              (and (< x 3) (< y 3));;första hörnet
              (and (<= (- width 3) x) (< y 3));;andra hörnet
-             (and (< x 3) (<= (- height 3) y));;4 hörnet
-             (and (<= (- width 3) x) (<= (- height 3) y));;3 hörnet
+             (and (< x 3) (<= (- height 3) y));;fjärde hörnet
+             (and (<= (- width 3) x) (<= (- height 3) y));;tredje hörnet
              ))
        (= 0 (random 2))))
     
+    ;;funktion för att placera ut stenarna på spelplanen, både oförstörbara och förstörbara
     (define/public (randomize-stones)
       (define (x-led x)
         (if (< x width)
@@ -180,14 +181,15 @@
     
     (define bitmap
       (new make-draw%
-           [width width-px];;canvas/bitmaps size
+           [width width-px];;canvas-/bitmapsstorlek
            [height height-px]))
     
     (define background
       (new make-draw%
-           [width width-px];;canvas/bitmaps size
+           [width width-px];;canvas-/bitmapsstorlek
            [height height-px]))
     
+    ;;Fixar rutmönstret på spelplanen
     (define (make-bg)
       (define (x-led x)
         (if (< x width)
@@ -204,6 +206,7 @@
       (send background clear)
       (x-led 0);;starta
       )
+    
     
     (define/public (update-bitmap)
       (define (loop index)
