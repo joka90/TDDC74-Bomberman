@@ -4,7 +4,7 @@
 (define make-gui%
   (class object%
     (super-new)
-    (init-field window-name width height image-buffer logic-class)
+    (init-field window-name width height image-buffer image-buffer-status logic-class)
     (define gui-frame (new frame% 
                            [label window-name]
                            [min-width width]
@@ -34,6 +34,10 @@
     ;; get new canvas from global draw class on redraw
     (define (draw-canvas canvas dc)
       (send image-buffer get-image canvas dc))
+    
+    ;; get new canvas from global draw class on redraw
+    (define (draw-status-canvas canvas dc)
+      (send image-buffer-status get-image canvas dc))
     
     ;;Anropas utifrån för att skicka vidare key-events från canvasen i denna klass.
     (define/public (update-keys-down)
@@ -101,6 +105,18 @@
            [min-height (get-field height image-buffer)]
            [min-width (get-field width image-buffer)]
            [stretchable-width #f]
-           [stretchable-height #f]))))
+           [stretchable-height #f]))
+    
+     (define gui-status-canvas
+      (new user-interact-canvas% 
+           [parent rightpanel]
+           [paint-callback draw-status-canvas]
+           [on-key-event-callback (lambda(key)(send logic-class handle-key-event key))];; flyttar lite seda
+           [min-height (- height 100)]
+           [min-width (- width (get-field width image-buffer))]
+           [stretchable-width #f]
+           [stretchable-height #f]))
+    
+    ))
 
 

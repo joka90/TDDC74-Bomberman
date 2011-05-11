@@ -1,7 +1,7 @@
 ;(load "paint-tools.ss")
-(require scheme/date);; tid fÃ¶r bomber och liknande.
-(require racket/string);; fÃ¶r att ladda in bilder
-(load "help-classes.ss");; smÃ¥ hjÃ¤lpklasser fÃ¶r listor mm.
+(require scheme/date);; tid för bomber och liknande.
+(require racket/string);; för att ladda in bilder
+(load "help-classes.ss");; små hjälpklasser för listor mm.
 (load "draw-class.ss")
 (load "image-store.ss")
 (load "player-class.ss")
@@ -20,10 +20,10 @@
 ;; globala objekt
 ;; ---------------------------------------------------------------------
 
-;; Storleken pÃ¥ blocken i spelplanen
+;; Storleken på blocken i spelplanen
 (define *blocksize* 30)
 
-;;Bildinladdningsfunktion sÃ¥ att det inte ska lagga nÃ¤r senare.
+;;Bildinladdningsfunktion så att det inte ska lagga när senare.
 (define *image-store*
   (new make-image-store%))
 ;;http://www.spriters-resource.com/snes/S.html
@@ -37,21 +37,17 @@
                                              (u . ("img/blue-player/u-" ".png" 5))
                                              (d . ("img/blue-player/d-" ".png" 5))))
 
-
+(send *image-store* add-image 'invincible "img/invincible.png")
 
 
 (send *image-store* add-image 'bomb-1 "img/bomb1.png")
 (send *image-store* add-image 'bomb-2 "img/bomb2.png")
 
-(send *image-store* add-image 'flame-big '((r . "img/flame-big-h.png")
-                                           (l . "img/flame-big-h.png")
-                                           (u . "img/flame-big-v.png")
-                                           (d . "img/flame-big-v.png")))
+(send *image-store* add-image 'flame-big '((x . "img/flame-big-h.png")
+                                           (y . "img/flame-big-v.png")))
 
-(send *image-store* add-image 'flame-small '((r . "img/flame-small-h.png")
-                                             (l . "img/flame-small-h.png")
-                                             (u . "img/flame-small-v.png")
-                                             (d . "img/flame-small-v.png")))
+(send *image-store* add-image 'flame-small '((x . "img/flame-small-h.png")
+                                             (y . "img/flame-small-v.png")))
 
 (send *image-store* add-image 'powerup-multi-bomb "img/max-image.png")
 (send *image-store* add-image 'powerup-speed "img/speed-powerup.png")
@@ -63,9 +59,8 @@
 ;; ---------------------------------------------------------------------
 ;; Spellogik
 ;; ---------------------------------------------------------------------
-;;Ger oss nuvarande sekund
-(define (*current-sec*)
-  (send main-loop get-current-sec))
+(define (*current-m-sec*)
+  (send main-loop get-current-m-sec))
 
 
 ;;Skapar en logik m.h.a. spellogiks-klassen
@@ -84,17 +79,22 @@
        [width 630];;canvas-/bitmapsstorlek
        [height 630])) 
 
+(define *status-draw*
+  (new make-draw%
+       [width 170];;canvas/bitmaps size
+       [height 600])) 
+
 (define *gui*
   (new make-gui%
        [window-name "New gui!"]
-       [width 800];;fÃ¶nsterstorlek
+       [width 800];;fönsterstorlek
        [height 630]
        [image-buffer *draw*];;bildbuffer, laddar bilden till canvas
-       [logic-class test-logic]));; logisk klass att sÃ¤nda tangentbords-nedtryckningar till.
+       [logic-class test-logic]));; logisk klass att sända tangentbords-nedtryckningar till.
 
 
 ;; ---------------------------------------------------------------------
-;; LÃ¤gga till spelare
+;; Lägga till spelare
 ;; ---------------------------------------------------------------------
 ;;(add-key-board-player new-name x y dxy number-of-lives color keybord-bindings)
 ;;spelare 1
@@ -132,23 +132,23 @@
         (numpad6 . r)
         (numpad7 . drop)))
 
-;; Procedurerna som ritar om brÃ¤dan frÃ¥n huvudtrÃ¥den. 
+;; Procedurerna som ritar om brädan från huvudtråden. 
 (define (draw)
-  (send *gui* update-keys-down);Skicka tangenter till spellogiken en gÃ¥ng per loop-varv 
+  (send *gui* update-keys-down);Skicka tangenter till spellogiken en gång per loop-varv 
   (send *draw* clear);; rensa bitmap
   (send test-logic update-scene *draw*);;uppdatera bitmap
   ;(send *draw* background)
-  (send *gui* redraw));; Rita om gui fÃ¶r att se nya bitmapen
+  (send *gui* redraw));; Rita om gui för att se nya bitmapen
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; END DEFINE ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; ------------------------------------------------------------
-;; GÃ¶rs alltid innan start
+;; Görs alltid innan start
 ;; ------------------------------------------------------------
 (send *draw* clear);; Rensar buffern som ritar
 (send *gui* show-gui);; startar gui
-(send *draw* background);; Ã„ndrar bakgrund i ritningsbuffern.
+(send *draw* background);; Ändrar bakgrund i ritningsbuffern.
 (send *gui* redraw);; updaterar canvas
 
 ;; ------------------------------------------------------------

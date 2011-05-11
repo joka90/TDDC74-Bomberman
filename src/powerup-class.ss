@@ -42,7 +42,7 @@
        ))
     
     (define/private (add-multi-bomb player)
-      (set-field! bomb-count player (+ (get-field bomb-count player) 2))
+      (set-field! bomb-count player (+ (get-field bomb-count player) 5))
       )
     
     (define/private (add-stronger-bomb player)
