@@ -7,12 +7,13 @@
      (gamevector (make-vector  (* (+ 1 height) (+ 1 width))))
      (changed #f))
  
-    (define/public (add-object-to-board! x y type) ;;lägger till ett objekt på en given position
+    ;;lägger till ett objekt på en given position och sätter att ändrat till sant.
+    (define/public (add-object-to-board! x y type) 
       (vector-set! gamevector (get-pos x y) type)
       (set! changed #t))
     
-    ;;delete object from board and if unsuccessfull return false
-    (define/public (delete-object-from-board! x y) ;; som ovan fast ta bort
+    ;;Tar bort objekt från brädan och om det inte går, returneras falskt
+    (define/public (delete-object-from-board! x y)
       (let((object (get-object-at-pos x y)))
         (if (not (eq? object 0))
             (begin
@@ -20,18 +21,20 @@
               (set! changed #t))
             #f)))
     
+    ;; Ger en punkt (x,y):s motsvarande position i vektorn
     (define/public (get-pos x y)
-      (+ x (* y width))) ;; översätter vektorn till ett koordinatsystem med (x,y)
+      (+ x (* y width))) 
     
     ;;Räknar ut x och y-pos utifrån given pos i vektorn.
     ;; (x-pos . y-pos)
-    ;; om utanför, retunera false
     (define/public  (get-pos-invers pos)
       (cons (remainder pos (+ 0 width)) (quotient pos (+ 0 width))))
     
+    ;;Returnerar objekt som ligger i en viss (x,y)-position
     (define/public (get-object-at-pos x y)
       (vector-ref gamevector (get-pos x y)))
     
+    ;;funktion för att ta bort block i spelplanen utifrån position och sprängradie, kollar i de olika riktningar som finns.
     (define/public (delete-destruct-from-board-radius! x y radius)
       (let ((x1-run? #t)
             (y1-run? #t)
@@ -52,11 +55,11 @@
                ((eq? 'destructeble-stone (collision? x1-temp y))
                 (set! delete-block (cons (list x1-temp y 'r) delete-block))
                 (set! x1-run? #f)
-                (loop x1-temp y1-temp x2-temp y2-temp));;hoppa ur denna loopen
+                (loop x1-temp y1-temp x2-temp y2-temp));;hoppa ur denna loop
                
                ((eq? 'indestructeble-stone (collision? x1-temp y))
                 (set! x1-run? #f)
-                (loop x1-temp y1-temp x2-temp y2-temp));;hoppa ur denna loopen
+                (loop x1-temp y1-temp x2-temp y2-temp));;hoppa ur denna loop
                (else
                 (set! emptyspaces (cons (list x1-temp y 'r) emptyspaces))
                 (loop (+ x1-temp 1) y1-temp x2-temp y2-temp))));;fortsätt denna loop
@@ -108,7 +111,7 @@
                 (loop x1-temp y1-temp x2-temp (- y2-temp 1)))))
             
             (else
-             ;;Set limits relative to bomb
+             ;;gränserna relativt till bombens position
              (set! limits (list
                            (cons 'r (- x1-temp x 1))
                            (cons 'd (- y1-temp y 1))
@@ -122,7 +125,7 @@
         (list
          emptyspaces
          delete-block
-         limits);;return list of objects to delete, to add flames to
+         limits);;returnerar lista av objekt att ta bort, för att lägga till flammor
         ))
       
     
