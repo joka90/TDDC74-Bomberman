@@ -15,6 +15,16 @@
      (to-do-list (new list-object%))
      (bomb-flames (new list-object%)))
     
+    (define game-status-bitmap
+      (new make-draw%
+           [width 170];;canvas-/bitmapsstorlek
+           [height height-px])) 
+    
+    (define game-board-bitmap
+      (new make-draw%
+           [width width-px];;canvas-/bitmapsstorlek
+           [height height-px])) 
+    
     (define game-board
       (new board%
            [height height]
@@ -104,11 +114,9 @@
         (if(and (send game-board collision? new-x new-y) (not collition))
            (set! collition #t))
         
-        (not collition)
-        ));; inte klar!!!!!!!!!!!!!!!!!!!
+        (not collition)))
     
     
-    ;; fixa en collitonfunktion som klarar av att hitta ett objekt och berätta vilket håll som den stött i
     (define/public (move-dir dir player)
       (if (move? player dir)
           (cond
@@ -131,8 +139,7 @@
             ((and
               (eq? 'r dir)
               (<= (get-field dxdy player)  (remainder (send player get-x-pos-px) *blocksize*)))
-             (send player set-x-pos-px! (+(send player get-x-pos-px) (get-field dxdy player))))
-            ))
+             (send player set-x-pos-px! (+(send player get-x-pos-px) (get-field dxdy player))))))
       
       (if(not (eq? 'drop dir))
          (send player set-dir! dir)))
@@ -190,14 +197,10 @@
                                 (if(send powerup-to-check collition? (car flame) (cadr flame))
                                    (send powerups remove-from-list! powerup-to-check);;remove poverup from game
                                    ))
-                              (get-field inner-list powerups))
-                   
-                   
-         
-                   );;end lambda for-each flame
+                              (get-field inner-list powerups)));;end lambda for-each flame
                  flames)
 	
-		;;make a new flamegroupe and add to flame list
+      ;;make a new flamegroupe and add to flame list
       (send bomb-flames add-to-list! 
             (new flame% 
                  [center-x-pos (get-field x-pos bomb)]
@@ -211,8 +214,7 @@
             (new make-timer% 
                  [delay 0];;spräng så fort som möjligt
                  [proc (lambda (arg)(remove-blocks arg))]
-                 [args (list to-blow-up)]))
-      )
+                 [args (list to-blow-up)])))
     
     (define/private (remove-blocks block-list)
       (for-each  (lambda (block)
@@ -238,18 +240,24 @@
       (send player set-x! (get-field spawn-x-pos player))
       (send player set-y! (get-field spawn-y-pos player))
       (set-field! timestamp-invincible player (*current-m-sec*))
-      (set-field! direction player 'd)
-      )))
+      (set-field! direction player 'd))))
     
     ;; skickar in alla trackade objects bitmaps i en viss positon.
     ;;track all players
     (define/public (update-scene draw-class)
       (send game-board update-bitmap)
+      (update-game-logic)
       (send draw-class draw-bitmap-2 (send game-board get-bitmap) 0 0)
+      (send draw-class draw-bitmap-2 (send game-board-bitmap get-bitmap) 0 0)
+      (send draw-class draw-bitmap-2 (send game-status-bitmap get-bitmap) width-px 0)
+      )
+    
+    (define/private (update-game-logic)
+      (send game-board-bitmap clear)
       
       ;;track all bombs in the bomb list
       (for-each  (lambda (bomb)
-                   (send draw-class draw-bitmap-2
+                   (send game-board-bitmap draw-bitmap-2
                          (send bomb get-bitmap)
                          (* *blocksize* (get-field x-pos bomb))
                          (* *blocksize* (get-field y-pos bomb)))
@@ -269,14 +277,13 @@
                               (on-die player flame));;on die
                            )
                          (get-field inner-list players))
-                   (send draw-class draw-bitmap-2
+                   (send game-board-bitmap draw-bitmap-2
                          (send flame get-bitmap)
                          (* *blocksize* (send flame get-x-pos))
                          (* *blocksize* (send flame get-y-pos)))
                    (if(send flame gone-off?)
                       (send bomb-flames remove-from-list! flame)))
                  (get-field inner-list bomb-flames))
-      
       
       ;;tarck all timers
       (for-each  (lambda (to-do)
@@ -290,7 +297,7 @@
       
       ;;track all powerups
       (for-each  (lambda (powerup)
-                   (send draw-class draw-bitmap-2
+                   (send game-board-bitmap draw-bitmap-2
                          (send powerup get-bitmap)
                          (* *blocksize* (get-field x-pos powerup))
                          (* *blocksize* (get-field y-pos powerup))))
@@ -298,12 +305,11 @@
       
       ;;all players
       (for-each  (lambda (player)
-                   (send draw-class draw-bitmap-2
+                   (send game-board-bitmap draw-bitmap-2
                          (send player get-bitmap)
                          (- (send player get-x-pos-px) 5)
                          (- (send player get-y-pos-px) 35)))
                  (get-field inner-list players))
-      
       )
     
     ))

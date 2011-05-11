@@ -64,7 +64,7 @@
 
 
 ;;Skapar en logik m.h.a. spellogiks-klassen
-(define test-logic
+(define bomberman-logic
   (new game-logic%
        [height 21]
        [width 21]
@@ -76,7 +76,7 @@
 ;; ---------------------------------------------------------------------
 (define *draw*
   (new make-draw%
-       [width 630];;canvas-/bitmapsstorlek
+       [width 800];;canvas-/bitmapsstorlek
        [height 630])) 
 
 (define *status-draw*
@@ -88,10 +88,9 @@
   (new make-gui%
        [window-name "New gui!"]
        [width 800];;f�nsterstorlek
-       [height 630]
+       [height 650]
        [image-buffer *draw*];;bildbuffer, laddar bilden till canvas
-       [image-buffer-status *status-draw*];;image buffer, the image to load in to the canvas.
-       [logic-class test-logic]));; logisk klass att s�nda tangentbords-nedtryckningar till.
+       [logic-class bomberman-logic]));; logisk klass att s�nda tangentbords-nedtryckningar till.
 
 
 ;; ---------------------------------------------------------------------
@@ -99,21 +98,21 @@
 ;; ---------------------------------------------------------------------
 ;;(add-key-board-player new-name x y dxy number-of-lives color keybord-bindings)
 ;;spelare 1
-(send test-logic add-key-board-player "jocke" 1 1 10 5 'blue-player 
+(send bomberman-logic add-key-board-player "jocke" 1 1 10 5 'blue-player 
       '((#\w . u)
         (#\a . l)
         (#\s . d)
         (#\d . r)
         (#\q . drop)))
 ;;spelare 2
-(send test-logic add-key-board-player "pocke" 19 19 10 5 'blue-player 
+(send bomberman-logic add-key-board-player "pocke" 19 19 10 5 'blue-player 
       '((#\i . u)
         (#\j . l)
         (#\k . d)
         (#\l . r)
         (#\b . drop)))
 ;;spelare 3
-(send test-logic add-key-board-player "tocke" 1 19 10 5 'red-player 
+(send bomberman-logic add-key-board-player "tocke" 1 19 10 5 'red-player 
       '((up . u)
         (left . l)
         (down . d)
@@ -121,7 +120,7 @@
         (#\0 . drop)
         (numpad0 . drop)))
 ;;spelare 4
-(send test-logic add-key-board-player "focke" 19 1 10 5 'red-player 
+(send bomberman-logic add-key-board-player "focke" 19 1 10 5 'red-player 
       '((#\8 . u)
         (#\4 . l)
         (#\5 . d)
@@ -137,7 +136,7 @@
 (define (draw)
   (send *gui* update-keys-down);Skicka tangenter till spellogiken en g�ng per loop-varv 
   (send *draw* clear);; rensa bitmap
-  (send test-logic update-scene *draw*);;uppdatera bitmap
+  (send bomberman-logic update-scene *draw*);;uppdatera bitmap och skicka till main bitmappen
   ;(send *draw* background)
   (send *gui* redraw));; Rita om gui f�r att se nya bitmapen
 
@@ -149,14 +148,13 @@
 ;; ------------------------------------------------------------
 (send *draw* clear);; Rensar buffern som ritar
 (send *gui* show-gui);; startar gui
-(send *draw* background);; �ndrar bakgrund i ritningsbuffern.
 (send *gui* redraw);; updaterar canvas
 
 ;; ------------------------------------------------------------
 ;; Huvudloop
 ;; ------------------------------------------------------------
 (define main-loop
-  (new make-loop%
+  (new loop-this-proc%
        [function-to-loop draw]
        [fps 24]));; anropar draw spec i update-graphic
 

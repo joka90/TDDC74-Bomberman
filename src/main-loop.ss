@@ -1,7 +1,7 @@
 ;; --------------------------------------------------------------------
 ;; main loop
 ;; --------------------------------------------------------------------
-(define make-loop%
+(define loop-this-proc%
   (class object%
     (super-new)
     (init-field function-to-loop fps)
