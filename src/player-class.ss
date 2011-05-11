@@ -15,11 +15,11 @@
      (width 30)
      (points 0)
      (radius 1)
-     (delay 5)
+     (delay 5000);; bombdelay in ms
      (bomb-count 1)
      (number-of-bombs 0);; how many bombs on board
      (last-bomb-timestamp 0)
-     (invincible-in-sec 10)
+     (invincible-in-m-sec 10000)
      (timestamp-invincible 0)
      (last-bomb-place '());; (x . y)
      (direction 'd);;player dir
@@ -33,14 +33,14 @@
     
     ;;returns true if the bomb has gone off.
     (define/public (possible-to-die?)
-      (<= (+ timestamp-invincible invincible-in-sec) (*current-sec*)))
+      (<= (+ timestamp-invincible invincible-in-m-sec) (*current-m-sec*)))
       
     
     (define/public (can-bomb?)
       (and
        (< number-of-bombs bomb-count)
        (or
-        (< last-bomb-timestamp (*current-sec*)); en sek delay eller 
+        (< (+ last-bomb-timestamp 1000) (*current-m-sec*)); en sek delay eller 
         (not (and 
               (eq? x-pos (car last-bomb-place))
               (eq? y-pos (cdr last-bomb-place))));; inte samma ställe
@@ -52,7 +52,7 @@
     
     (define/public (add-bomb)
       (set! number-of-bombs (+ number-of-bombs 1))
-      (set! last-bomb-timestamp (*current-sec*))
+      (set! last-bomb-timestamp (*current-m-sec*))
       (set! last-bomb-place (cons x-pos y-pos))
       )
     

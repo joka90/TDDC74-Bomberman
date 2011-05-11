@@ -14,13 +14,13 @@
         (set! should-run #t)
         (if(not (= 0 paustime-timestamp-stop))
            (begin
-             (set! paustime-tot (+ paustime-tot (- (current-seconds) paustime-timestamp-stop)))
+             (set! paustime-tot (+ paustime-tot (- (current-inexact-milliseconds) paustime-timestamp-stop)))
              (set! paustime-timestamp-stop 0)))
       (thread loop)))
     
     (define/public (stop-loop)
       (set! should-run #f)
-      (set! paustime-timestamp-stop (current-seconds)))
+      (set! paustime-timestamp-stop (current-inexact-milliseconds)))
     
     (define/public (running?)
       should-run)
@@ -28,9 +28,8 @@
     (define (fps->seconds fps)
       (/ 1 fps))
     
-    
-    (define/public (get-current-sec)
-      (- (current-seconds) paustime-tot))
+    (define/public (get-current-m-sec)
+      (- (current-inexact-milliseconds) paustime-tot))
     
     (define sleep-time (fps->seconds fps))
     

@@ -58,8 +58,8 @@
 ;; ---------------------------------------------------------------------
 ;; game logic
 ;; ---------------------------------------------------------------------
-(define (*current-sec*)
-  (send main-loop get-current-sec))
+(define (*current-m-sec*)
+  (send main-loop get-current-m-sec))
 
 (define test-logic
   (new game-logic%

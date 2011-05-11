@@ -207,7 +207,7 @@
             (new flame% 
                  [center-x-pos (get-field x-pos bomb)]
                  [center-y-pos (get-field y-pos bomb)]
-                 [delay 2] 
+                 [delay 1500] 
                  [owner (get-field owner bomb)]
                  [limits flame-limits]))
       ;(display to-blow-up)
@@ -249,7 +249,7 @@
       (display (get-field spawn-x-pos player)) (display (get-field spawn-y-pos player)) 
       (send player set-x! (get-field spawn-x-pos player))
       (send player set-y! (get-field spawn-y-pos player))
-      (set-field! timestamp-invincible player (*current-sec*))
+      (set-field! timestamp-invincible player (*current-m-sec*))
       (set-field! direction player 'd)
       )))
     

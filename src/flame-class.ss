@@ -16,7 +16,7 @@
      (type 'flame)
      (x-pos 0)
      (y-pos 0)
-     (timestamp (*current-sec*))
+     (timestamp (*current-m-sec*))
      (changed #f))
     
     
@@ -47,7 +47,7 @@
     
     ;;returns true if the bomb has gone off.
     (define/public (gone-off?)
-      (<= (+ timestamp delay) (*current-sec*)))
+      (<= (+ timestamp delay) (*current-m-sec*)))
     
     
     (define/public (collition? xpos ypos)
@@ -91,7 +91,7 @@
     
     (define/public (update-bitmap) 
       (cond  
-        ((< (- (+ timestamp delay) (*current-sec*)) 1)
+        ((< (- (+ timestamp delay) (*current-m-sec*)) 1000)
          (draw-flames 'flame-small))
         (else
          (draw-flames 'flame-big)))

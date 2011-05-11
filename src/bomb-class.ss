@@ -5,9 +5,11 @@
   (class object%
     (super-new)
     (init-field x-pos y-pos delay radius owner)
-    (field (height 30) (width 30) (type 'bomb))
-    
-    (define timestamp (*current-sec*))
+    (field
+     (height 30)
+     (width 30)
+     (type 'bomb)
+     (timestamp (*current-m-sec*)))
       
     (define/public (set-x! x)
       (set! x-pos x))
@@ -22,13 +24,13 @@
     
     ;;returns true if the bomb has gone off.
     (define/public (gone-off?)
-      (<= (+ timestamp delay) (*current-sec*)))
+      (<= (+ timestamp delay) (*current-m-sec*)))
     
 
     (define/public (collition? xpos ypos)
       (if(and (= xpos x-pos)
            (= ypos y-pos)
-           (< timestamp (*current-sec*)));dvs en sek att röra sig på
+           (< (+ timestamp 1000) (*current-m-sec*)));dvs en sek att röra sig på
            type;;return type if coll
            #f))
            
@@ -45,11 +47,11 @@
       (send bitmap clear)
       (send bitmap background-transp)
       (cond  
-        ((< (- (+ timestamp delay) (*current-sec*)) 2)
+        ((< (- (+ timestamp delay) (*current-m-sec*)) 2000)
          (send bitmap draw-bitmap-2 (send *image-store* get-image 'bomb-1) 0 0))
         (else
          (send bitmap draw-bitmap-2 (send *image-store* get-image 'bomb-2) 0 0)))
-      (send bitmap draw-text (number->string (- (+ timestamp delay) (*current-sec*))) 0 0)
+      (send bitmap draw-text (number->string (/ (- (+ timestamp delay) (*current-m-sec*)) 1000)) 0 0)
       )
     
     ;;sends the bitmap, called from the game-logic, to update screen.
