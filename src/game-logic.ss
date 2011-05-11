@@ -253,10 +253,24 @@
     (define/public (update-scene draw-class)
       (send game-board update-bitmap)
       (update-game-logic)
+      (update-game-status-bitmap)
       (send draw-class draw-bitmap-2 (send game-board get-bitmap) 0 0)
       (send draw-class draw-bitmap-2 (send game-board-bitmap get-bitmap) 0 0)
       (send draw-class draw-bitmap-2 (send game-status-bitmap get-bitmap) width-px 0)
       )
+    
+    (define/private (update-game-status-bitmap)
+      (send game-status-bitmap clear)
+       ;;all players
+      (define row-px 100)
+      (for-each  (lambda (player)
+                   (send game-status-bitmap draw-bitmap-2
+                         (send player get-status-bitmap)
+                         0
+                         row-px)
+                   (set! row-px (+ row-px 100))
+                   )
+                 (get-field inner-list players)))
     
     (define/private (update-game-logic)
       (send game-board-bitmap clear)

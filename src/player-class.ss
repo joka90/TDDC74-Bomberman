@@ -29,6 +29,7 @@
      (animation-stop 5);;where to stop
      (animation-duration 4);frames with same image
      (animation-duration-count 0);;frame counter
+     (name-font (make-object font% 10 'modern 'normal 'bold 'smoothed))
      )
     
     ;;returns true if the bomb has gone off.
@@ -89,12 +90,27 @@
       (set! direction dir))
     ;; r, l, u, d,
 
+    (define status-bitmap
+      (new make-draw%
+           [width 170];;canvas/bitmaps size
+           [height 100]))
+    
+    (define/public (update-status-bitmap)
+      (send status-bitmap clear)
+      (send status-bitmap draw-text 
+            name 10 10 name-font)
+      )
+  
+  (define/public (get-status-bitmap)
+    (update-status-bitmap)
+    (send status-bitmap get-bitmap))
     
      (define bitmap
       (new make-draw%
            [width 40];;canvas/bitmaps size
            [height 62]))
-  
+    
+     
     
     (define/private (update-animation-help)
       
@@ -130,9 +146,7 @@
     
     (define/public (get-bitmap)
       (update-bitmap)
-      ;(send *image-store* get-image color direction animation)
-      (send bitmap get-bitmap)
-      )
+      (send bitmap get-bitmap))
     ))
 
 
