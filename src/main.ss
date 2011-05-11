@@ -90,7 +90,7 @@
        [width 800];;f�nsterstorlek
        [height 630]
        [image-buffer *draw*];;bildbuffer, laddar bilden till canvas
-       [image-buffer-status *status-draw*];;image buffer, the image to load in to the canvas.
+       [image-buffer-status *status-draw*]
        [logic-class test-logic]));; logisk klass att s�nda tangentbords-nedtryckningar till.
 
 
@@ -150,7 +150,7 @@
 (send *draw* clear);; Rensar buffern som ritar
 (send *gui* show-gui);; startar gui
 (send *draw* background);; �ndrar bakgrund i ritningsbuffern.
-(send *gui* redraw);; updaterar canvas
+(send *gui* redraw);; uppdaterar canvas
 
 ;; ------------------------------------------------------------
 ;; Huvudloop
