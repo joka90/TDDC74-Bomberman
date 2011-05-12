@@ -11,8 +11,6 @@
      (spawn-x-pos x-pos)
      (spawn-y-pos y-pos)
      (type 'player)
-     (height 30)
-     (width 30)
      (points 0)
      (radius 1)
      (delay 5000);; bombdelay in ms
@@ -29,7 +27,8 @@
      (animation-stop 5);;where to stop
      (animation-duration 4);frames with same image
      (animation-duration-count 0);;frame counter
-     (name-font (make-object font% 10 'modern 'normal 'bold 'smoothed))
+     (name-font (make-object font% 15 'default 'normal 'bold))
+     (status-font (make-object font% 10 'default 'normal 'bold))
      )
     
     ;;returns true if the bomb has gone off.
@@ -97,8 +96,11 @@
     
     (define/public (update-status-bitmap)
       (send status-bitmap clear)
-      (send status-bitmap draw-text 
-            name 10 10 name-font)
+      (send status-bitmap draw-text name 10 0 name-font)
+      ;number-of-bombs radius lives
+      (send status-bitmap draw-text (number->string lives) 20 40 status-font)
+      (send status-bitmap draw-text (number->string bomb-count) 40 40 status-font)
+      (send status-bitmap draw-text (number->string radius) 60 40 status-font)
       )
   
   (define/public (get-status-bitmap)

@@ -1,5 +1,5 @@
 ;; ---------------------------------------------------------------------
-;; Klass för att rita
+;; Klass fï¿½r att rita
 ;; ---------------------------------------------------------------------
 (define make-draw%
   (class object%
@@ -8,7 +8,7 @@
     (define draw-buffer (make-object bitmap% width height #f #t))
     (define draw-dc (make-object bitmap-dc% draw-buffer))
     
-    ;;för att rita upp igen
+    ;;fï¿½r att rita upp igen
     (define/public (clear)
       (send draw-dc erase))
     
@@ -24,19 +24,19 @@
     (define/public (get-width)
       width)
     
-    ;;returnerar höjd
+    ;;returnerar hï¿½jd
     (define/public (get-height)
       height)
     
-    ; En procedur som sätter bakgrundsfärgen på GUI (på slumpartat vis)
+    ; En procedur som sï¿½tter bakgrundsfï¿½rgen pï¿½ GUI (pï¿½ slumpartat vis)
     (define/public (background)
       (send draw-dc set-background  (make-object color% (random 255) (random 255) (random 255))))
     
-    ; En procedur som sätter bakgrundsfärgen på GUI
+    ; En procedur som sï¿½tter bakgrundsfï¿½rgen pï¿½ GUI
     (define/public (set-background-color! r g b a)
       (send draw-dc set-background  (make-object color% r g b a)))
     
-    ;; En procedur som sätter bakgrundsfärgen på GUI till genomskinlig
+    ;; En procedur som sï¿½tter bakgrundsfï¿½rgen pï¿½ GUI till genomskinlig
     (define/public (background-transp)
       (send draw-dc set-background  (make-object color% 0 0 0 0)))
     
@@ -66,11 +66,7 @@
       (send draw-dc set-font font)
       (send draw-dc draw-text text x y))
     
-    ;; En procedur som ritar en bild från en fil
-    (define/public (draw-pic file x y)
-      (send draw-dc draw-bitmap (make-object bitmap% file 'unknown #f) x y))
-    
-    ;; En procedur som ritar en bild från en bitmap
+    ;; En procedur som ritar en bild frï¿½n en bitmap
     (define/public (draw-bitmap-2 bitmap x y)
       ;;send to main bitmap
       (send draw-dc draw-bitmap bitmap x y))

@@ -79,14 +79,10 @@
        [width 800];;canvas-/bitmapsstorlek
        [height 630])) 
 
-(define *status-draw*
-  (new make-draw%
-       [width 170];;canvas/bitmaps size
-       [height 600])) 
 
 (define *gui*
   (new make-gui%
-       [window-name "New gui!"]
+       [window-name "Bomberman"]
        [width 800];;f�nsterstorlek
        [height 650]
        [image-buffer *draw*];;bildbuffer, laddar bilden till canvas
