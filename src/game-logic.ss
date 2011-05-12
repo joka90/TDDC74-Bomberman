@@ -261,8 +261,9 @@
     
     (define/private (update-game-status-bitmap)
       (send game-status-bitmap clear)
+      (send game-status-bitmap draw-bitmap-2 (send *image-store* get-image 'bg-status) 0 0)
        ;;all players
-      (define row-px 100)
+      (define row-px 140)
       (for-each  (lambda (player)
                    (send game-status-bitmap draw-bitmap-2
                          (send player get-status-bitmap)
