@@ -99,21 +99,21 @@
 ;; ---------------------------------------------------------------------
 ;;(add-key-board-player new-name x y dxy number-of-lives color keybord-bindings)
 ;;spelare 1
-(send bomberman-logic add-key-board-player "jocke" 1 1 10 5 'blue-player 
+(send bomberman-logic add-key-board-player "Jocke" 1 1 10 5 'blue-player 
       '((#\w . u)
         (#\a . l)
         (#\s . d)
         (#\d . r)
         (#\q . drop)))
 ;;spelare 2
-(send bomberman-logic add-key-board-player "pocke" 19 19 10 5 'blue-player 
+(send bomberman-logic add-key-board-player "Pocke" 19 19 10 5 'blue-player 
       '((#\i . u)
         (#\j . l)
         (#\k . d)
         (#\l . r)
         (#\b . drop)))
 ;;spelare 3
-(send bomberman-logic add-key-board-player "tocke" 1 19 10 5 'red-player 
+(send bomberman-logic add-key-board-player "Tocke" 1 19 10 5 'red-player 
       '((up . u)
         (left . l)
         (down . d)
@@ -121,7 +121,7 @@
         (#\0 . drop)
         (numpad0 . drop)))
 ;;spelare 4
-(send bomberman-logic add-key-board-player "focke" 19 1 10 5 'red-player 
+(send bomberman-logic add-key-board-player "Focke" 19 1 10 5 'red-player 
       '((#\8 . u)
         (#\4 . l)
         (#\5 . d)

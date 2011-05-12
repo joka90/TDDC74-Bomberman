@@ -65,7 +65,8 @@
                  [color player-color])))
         
         (send players add-to-list! temp-player)
-        (send keyboard-players add-to-list! (cons temp-player keybord-bindings))))
+        (send keyboard-players add-to-list! 
+              (cons temp-player keybord-bindings))))
     
     ;;Function to check if it's possible to move and do so if.
     (define (move? player dir)
@@ -74,13 +75,17 @@
            (new-y (get-field y-pos player)))
         
         (cond
-          ((and (eq? 'd dir) (not (= 0 (remainder (send player get-x-pos-px) *blocksize*))))
+          ((and (eq? 'd dir) 
+                (not (= 0 (remainder (send player get-x-pos-px) *blocksize*))))
            (set! collition #t))
-          ((and (eq? 'r dir) (not (= 0 (remainder (send player get-y-pos-px) *blocksize*))))
+          ((and (eq? 'r dir) 
+                (not (= 0 (remainder (send player get-y-pos-px) *blocksize*))))
            (set! collition #t))
-          ((and (eq? 'u dir) (not (= 0 (remainder (send player get-x-pos-px) *blocksize*))))
+          ((and (eq? 'u dir) 
+                (not (= 0 (remainder (send player get-x-pos-px) *blocksize*))))
            (set! collition #t))
-          ((and (eq? 'l dir) (not (= 0 (remainder (send player get-y-pos-px) *blocksize*))))
+          ((and (eq? 'l dir) 
+                (not (= 0 (remainder (send player get-y-pos-px) *blocksize*))))
            (set! collition #t))
           ((eq? 'u dir)(set! new-y (-(get-field y-pos player) 1)))
           ((eq? 'd dir)(set! new-y (+(get-field y-pos player) 1)))
@@ -111,7 +116,9 @@
               ))
          (get-field inner-list bombs))
         
-        (if(and (send game-board collision? new-x new-y) (not collition))
+        (if(and 
+            (send game-board collision? new-x new-y) 
+            (not collition))
            (set! collition #t))
         
         (not collition)))
@@ -120,10 +127,18 @@
     (define/public (move-dir dir player)
       (if (move? player dir)
           (cond
-            ((eq? 'u dir)(send player set-y-pos-px! (-(send player get-y-pos-px) (get-field dxdy player))))
-            ((eq? 'd dir)(send player set-y-pos-px! (+(send player get-y-pos-px) (get-field dxdy player))))
-            ((eq? 'l dir)(send player set-x-pos-px! (-(send player get-x-pos-px) (get-field dxdy player))))
-            ((eq? 'r dir)(send player set-x-pos-px! (+(send player get-x-pos-px) (get-field dxdy player))))
+            ((eq? 'u dir)
+             (send player set-y-pos-px! 
+                   (-(send player get-y-pos-px) (get-field dxdy player))))
+            ((eq? 'd dir)
+             (send player set-y-pos-px! 
+                   (+(send player get-y-pos-px) (get-field dxdy player))))
+            ((eq? 'l dir)
+             (send player set-x-pos-px! 
+                   (-(send player get-x-pos-px) (get-field dxdy player))))
+            ((eq? 'r dir)
+             (send player set-x-pos-px! 
+                   (+(send player get-x-pos-px) (get-field dxdy player))))
             ((eq? 'drop dir)(add-bomb (get-field x-pos player) (get-field y-pos player) player)))
           (cond;;flytta om möjligt i rutan
             ((and (eq? 'u dir) 
@@ -186,7 +201,9 @@
                    
                    ;;blow all boms up
                    (for-each  (lambda (bomb-to-check)
-                                (if(send bomb-to-check collition? (car flame) (cadr flame))
+                                (if(send bomb-to-check collition? 
+                                         (car flame) 
+                                         (cadr flame))
                                    (on-bomb-explosion bomb-to-check); spräng
                                    )
                                 )
@@ -194,8 +211,11 @@
                    
                    ;;blow all powerups up
                    (for-each  (lambda (powerup-to-check)
-                                (if(send powerup-to-check collition? (car flame) (cadr flame))
-                                   (send powerups remove-from-list! powerup-to-check);;remove poverup from game
+                                (if(send powerup-to-check collition? 
+                                         (car flame) 
+                                         (cadr flame))
+                                   (send powerups remove-from-list!
+                                         powerup-to-check);;remove poverup from game
                                    ))
                               (get-field inner-list powerups)));;end lambda for-each flame
                  flames)
@@ -223,7 +243,7 @@
                               delete-object-from-board!
                               (car block);x
                               (cadr block));y
-                        (= 2 (random 6)));en på sex
+                        (= 2 (random 5)));en på sex
                        (send powerups add-to-list! 
                              (new powerup% 
                                   [x-pos (car block)] 
@@ -254,14 +274,18 @@
       (send game-board update-bitmap)
       (update-game-logic)
       (update-game-status-bitmap)
-      (send draw-class draw-bitmap-2 (send game-board get-bitmap) 0 0)
-      (send draw-class draw-bitmap-2 (send game-board-bitmap get-bitmap) 0 0)
-      (send draw-class draw-bitmap-2 (send game-status-bitmap get-bitmap) width-px 0)
+      (send draw-class draw-bitmap-2 
+            (send game-board get-bitmap) 0 0)
+      (send draw-class draw-bitmap-2 
+            (send game-board-bitmap get-bitmap) 0 0)
+      (send draw-class draw-bitmap-2 
+            (send game-status-bitmap get-bitmap) width-px 0)
       )
     
     (define/private (update-game-status-bitmap)
       (send game-status-bitmap clear)
-      (send game-status-bitmap draw-bitmap-2 (send *image-store* get-image 'bg-status) 0 0)
+      (send game-status-bitmap draw-bitmap-2 
+            (send *image-store* get-image 'bg-status) 0 0)
        ;;all players
       (define row-px 140)
       (for-each  (lambda (player)
