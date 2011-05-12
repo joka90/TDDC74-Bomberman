@@ -43,6 +43,10 @@
 (send *image-store* add-image 'bomb-1 "img/bomb1.png")
 (send *image-store* add-image 'bomb-2 "img/bomb2.png")
 
+(send *image-store* add-image 'max-panel "img/max-panel.png")
+(send *image-store* add-image 'power-panel "img/power-panel.png")
+(send *image-store* add-image 'heart-panel "img/heart-panel.png")
+
 (send *image-store* add-image 'flame-big '((x . "img/flame-big-h.png")
                                            (y . "img/flame-big-v.png")))
 

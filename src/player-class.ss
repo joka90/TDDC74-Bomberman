@@ -97,10 +97,13 @@
     (define/public (update-status-bitmap)
       (send status-bitmap clear)
       (send status-bitmap draw-text name 10 0 name-font)
+      (send status-bitmap draw-bitmap-2 (send *image-store* get-image 'max-panel) 40 40)
+      (send status-bitmap draw-bitmap-2 (send *image-store* get-image 'heart-panel) 0 40)
+      (send status-bitmap draw-bitmap-2 (send *image-store* get-image 'power-panel) 80 40)
       ;number-of-bombs radius lives
       (send status-bitmap draw-text (number->string lives) 20 40 status-font)
-      (send status-bitmap draw-text (number->string bomb-count) 40 40 status-font)
-      (send status-bitmap draw-text (number->string radius) 60 40 status-font)
+      (send status-bitmap draw-text (number->string bomb-count) 60 40 status-font)
+      (send status-bitmap draw-text (number->string radius) 100 40 status-font)
       )
   
   (define/public (get-status-bitmap)
