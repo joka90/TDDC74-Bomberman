@@ -48,13 +48,24 @@
        ))
     
     (define/public (remv-bomb)
-      (set! number-of-bombs (- number-of-bombs 1)))
+      (if(< 0 number-of-bombs)
+         (set! number-of-bombs (- number-of-bombs 1))))
     
     (define/public (add-bomb)
       (set! number-of-bombs (+ number-of-bombs 1))
       (set! last-bomb-timestamp (*current-m-sec*))
-      (set! last-bomb-place (cons x-pos y-pos))
-      )
+      (set! last-bomb-place (cons x-pos y-pos)))
+    
+    (define/public (die)
+      (set! lives (- lives 1))
+      (set! number-of-bombs 0)
+      (set! bomb-count 1)
+      (set! dxdy 10)
+      (set! radius 1)
+      (set-x! spawn-x-pos)
+      (set-y! spawn-y-pos)
+      (set! timestamp-invincible (*current-m-sec*))
+      (set! direction 'd))
     
     ;;set px pos and logical pos
     (define/public (set-x-pos-px! x)

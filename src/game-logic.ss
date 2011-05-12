@@ -252,21 +252,12 @@
     
     (define/private(on-die player flame)
       (if (send player possible-to-die?)
-          (begin
-            (set-field! lives player (- (get-field lives player) 1))
-            (set-field! bomb-count player 1)
-            (set-field! dxdy player 10)
-            (set-field! radius player 1)
-            (send player set-x! (get-field spawn-x-pos player))
-            (send player set-y! (get-field spawn-y-pos player))
-            (set-field! timestamp-invincible player (*current-m-sec*))
-            (set-field! direction player 'd)))
+          (send player die))
       
       (if (= (get-field lives player) 0)
           (begin
             (send player set-x! 10000)
-            (send player set-y! 10000))
-          ))
+            (send player set-y! 10000))))
     
     ;; skickar in alla trackade objects bitmaps i en viss positon.
     ;;track all players
