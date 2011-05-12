@@ -59,6 +59,7 @@
 (send *image-store* add-image 'non-dest-block "img/non-dest-block.png")
 (send *image-store* add-image 'dest-block "img/dest-block.png")
 (send *image-store* add-image 'bg "img/bg.png")
+(send *image-store* add-image 'bg-status "img/bg-status.png")
 
 ;; ---------------------------------------------------------------------
 ;; Spellogik
