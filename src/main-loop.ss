@@ -14,7 +14,9 @@
         (set! should-run #t)
         (if(not (= 0 paustime-timestamp-stop))
            (begin
-             (set! paustime-tot (+ paustime-tot (- (current-inexact-milliseconds) paustime-timestamp-stop)))
+             (set! paustime-tot 
+                   (+ paustime-tot (- (current-inexact-milliseconds)
+                                      paustime-timestamp-stop)))
              (set! paustime-timestamp-stop 0)))
       (thread loop)))
     

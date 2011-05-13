@@ -30,7 +30,8 @@
     
     ; En procedur som s�tter bakgrundsf�rgen p� GUI (p� slumpartat vis)
     (define/public (background)
-      (send draw-dc set-background  (make-object color% (random 255) (random 255) (random 255))))
+      (send draw-dc set-background
+            (make-object color% (random 255) (random 255) (random 255))))
     
     ; En procedur som s�tter bakgrundsf�rgen p� GUI
     (define/public (set-background-color! r g b a)
@@ -68,7 +69,4 @@
     
     ;; En procedur som ritar en bild fr�n en bitmap
     (define/public (draw-bitmap-2 bitmap x y)
-      ;;send to main bitmap
-      (send draw-dc draw-bitmap bitmap x y))
-    
-    ))
+      (send draw-dc draw-bitmap bitmap x y))))

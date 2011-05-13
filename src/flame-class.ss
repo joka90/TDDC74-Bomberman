@@ -83,6 +83,7 @@
                    (* *blocksize* x-upper)
                    (* *blocksize* from))
              (draw-y (+ 1 from) to))))
+      
       (draw-x 0 (+ 1 x-upper x-lower))
       (draw-y 0 (+ 1 y-upper y-lower)))
     
@@ -98,7 +99,5 @@
     (define/public (get-bitmap)
       (send bitmap clear)
       (update-bitmap) 
-      (send bitmap get-bitmap))
-    
-    ))
+      (send bitmap get-bitmap))))
 

@@ -7,7 +7,8 @@
      (gamevector (make-vector  (* (+ 1 height) (+ 1 width))))
      (changed #f))
  
-    ;;lägger till ett objekt på en given position och sätter att ändrat till sant.
+    ;;lägger till ett objekt på en given position
+    ;; och sätter att ändrat till sant.
     (define/public (add-object-to-board! x y type) 
       (vector-set! gamevector (get-pos x y) type)
       (set! changed #t))
@@ -34,7 +35,8 @@
     (define/public (get-object-at-pos x y)
       (vector-ref gamevector (get-pos x y)))
     
-    ;;funktion för att ta bort block i spelplanen utifrån position och sprängradie, kollar i de olika riktningar som finns.
+    ;;funktion för att ta bort block i spelplanen utifrån position 
+    ;; och sprängradie, kollar i de olika riktningar som finns.
     (define/public (delete-destruct-from-board-radius! x y radius)
       (let ((x1-run? #t)
             (y1-run? #t)
@@ -116,22 +118,16 @@
                            (cons 'r (- x1-temp x 1))
                            (cons 'd (- y1-temp y 1))
                            (cons 'l (- x x2-temp 1))
-                           (cons 'u (- y y2-temp 1)))))
-          
-            
-            ))
+                           (cons 'u (- y y2-temp 1)))))))
         
-        
-        (list
-         emptyspaces
-         delete-block
-         limits);;returnerar lista av objekt att ta bort, för att lägga till flammor
-        ))
+                ;;returnerar lista av objekt att ta bort, för att lägga till flammor
+        (list emptyspaces delete-block limits)))
       
     
     
     
-    ;; #f innebär tomt, annars returneras vilken typ av objekt som ligger på positionen. 
+    ;; #f innebär tomt, annars returneras 
+    ;; vilken typ av objekt som ligger på positionen. 
     (define/public (collision? x y)
       (if(and (<= 0 x) (<= 0 y) (< x width) (<= y height))
          (let((object (get-object-at-pos x y)))
@@ -141,7 +137,8 @@
          #f))
     
     
-    ;;hjälpfunktion för att kolla om man ska lägga till en sten på en position utanför startplatserna för spelaren
+    ;;hjälpfunktion för att kolla om man ska lägga 
+    ;;till en sten på en position utanför startplatserna för spelaren
     (define/private (add-destruct-stone? x y)
       (and
        (not (or 
@@ -152,7 +149,8 @@
              ))
        (= 0 (random 2))))
     
-    ;;funktion för att placera ut stenarna på spelplanen, både oförstörbara och förstörbara
+    ;;funktion för att placera ut stenarna på spelplanen,
+    ;; både oförstörbara och förstörbara
     (define/public (randomize-stones)
       (define (x-led x)
         (if (< x width)
@@ -174,7 +172,7 @@
               (y-led (+ y 1) x))))
       
       (x-led 0);;starta
-      (make-bg);;sätt bakgrund
+
       )
     
     
@@ -190,7 +188,7 @@
            [height height-px]))
     
     ;;Fixar rutmönstret på spelplanen
-    (define (make-bg)
+    (define/public (set-bg!)
       (define (x-led x)
         (if (< x width)
             (begin

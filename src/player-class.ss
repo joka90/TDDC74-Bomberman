@@ -33,14 +33,16 @@
     
     ;;returns true if the bomb has gone off.
     (define/public (possible-to-die?)
-      (<= (+ timestamp-invincible invincible-in-m-sec) (*current-m-sec*)))
+      (<= (+ timestamp-invincible invincible-in-m-sec)
+          (*current-m-sec*)))
       
     
     (define/public (can-bomb?)
       (and
        (< number-of-bombs bomb-count)
        (or
-        (< (+ last-bomb-timestamp 1000) (*current-m-sec*)); en sek delay eller 
+        (< (+ last-bomb-timestamp 1000)
+           (*current-m-sec*)); en sek delay eller 
         (not (and 
               (eq? x-pos (car last-bomb-place))
               (eq? y-pos (cdr last-bomb-place))));; inte samma ställe
@@ -70,12 +72,16 @@
     ;;set px pos and logical pos
     (define/public (set-x-pos-px! x)
       (set! x-pos-px x)
-      (set! x-pos (quotient (+ x (/ *blocksize* 2))*blocksize*)))
+      (set! x-pos (quotient
+                   (+ x (/ *blocksize* 2))
+                   *blocksize*)))
     
     ;;set px pos and logical pos
     (define/public (set-y-pos-px! y)
       (set! y-pos-px y)
-      (set! y-pos (quotient (+ y (/ *blocksize* 2)) *blocksize*)))
+      (set! y-pos (quotient 
+                   (+ y (/ *blocksize* 2))
+                   *blocksize*)))
     
     ;;set logical and px pos
     (define/public (set-x! x)
@@ -98,7 +104,7 @@
     (define/public (set-dir! dir)
       (set! moving #t)
       (set! direction dir))
-    ;; r, l, u, d,
+
 
     (define status-bitmap
       (new make-draw%
@@ -107,15 +113,21 @@
     
     (define/public (update-status-bitmap)
       (send status-bitmap clear)
+      (send status-bitmap set-background-color! 255 255 255 1)
       (send status-bitmap draw-text name 10 0 name-font)
-      (send status-bitmap draw-bitmap-2 (send *image-store* get-image 'max-panel) 60 40)
-      (send status-bitmap draw-bitmap-2 (send *image-store* get-image 'heart-panel) 20 40)
-      (send status-bitmap draw-bitmap-2 (send *image-store* get-image 'power-panel) 100 40)
-      ;number-of-bombs radius lives
-      (send status-bitmap draw-text (number->string lives) 40 40 status-font)
-      (send status-bitmap draw-text (number->string bomb-count) 80 40 status-font)
-      (send status-bitmap draw-text (number->string radius) 120 40 status-font)
-      )
+      (send status-bitmap draw-bitmap-2 
+            (send *image-store* get-image 'max-panel) 60 40)
+      (send status-bitmap draw-bitmap-2 
+            (send *image-store* get-image 'heart-panel) 20 40)
+      (send status-bitmap draw-bitmap-2 
+            (send *image-store* get-image 'power-panel) 100 40)
+
+      (send status-bitmap draw-text 
+            (number->string lives) 40 40 status-font)
+      (send status-bitmap draw-text 
+            (number->string bomb-count) 80 40 status-font)
+      (send status-bitmap draw-text 
+            (number->string radius) 120 40 status-font))
   
   (define/public (get-status-bitmap)
     (update-status-bitmap)
@@ -129,7 +141,6 @@
      
     
     (define/private (update-animation-help)
-      
       (if moving
        (if(< animation-duration-count animation-duration)
          (set! animation-duration-count (+ animation-duration-count 1))
@@ -137,33 +148,23 @@
            (set! animation-duration-count 0)
            (if(< animation animation-stop)
               (set! animation (+ animation 1))
-              (begin
-                (set! animation animation-start)
-                
-                ))
-           ))
-       (begin
-         (set! animation 0))
-         )
-       
-       )
+                (set! animation animation-start))))
+         (set! animation 0)))
     
     (define/public (update-bitmap)
       (send bitmap clear)
-      ;(send bitmap background-transp)
-      
+
       (update-animation-help)
       (set! moving #f)
-      (send bitmap draw-bitmap-2 (send *image-store* get-image color direction animation) 0 0)
+      (send bitmap draw-bitmap-2 
+            (send *image-store* get-image color direction animation) 0 0)
       (if(not (possible-to-die?))
-         (send bitmap draw-bitmap-2 (send *image-store* get-image 'invincible) 0 0))
-      ;(send bitmap set-alpha! 0.5)
-    )
+         (send bitmap draw-bitmap-2
+               (send *image-store* get-image 'invincible) 0 0)))
     
     (define/public (get-bitmap)
       (update-bitmap)
-      (send bitmap get-bitmap))
-    ))
+      (send bitmap get-bitmap))))
 
 
 

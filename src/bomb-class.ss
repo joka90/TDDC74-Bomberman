@@ -47,9 +47,11 @@
       (send bitmap background-transp)
       (cond  
         ((< (- (+ timestamp delay) (*current-m-sec*)) 2000)
-         (send bitmap draw-bitmap-2 (send *image-store* get-image 'bomb-1) 0 0))
+         (send bitmap draw-bitmap-2
+               (send *image-store* get-image 'bomb-1) 0 0))
         (else
-         (send bitmap draw-bitmap-2 (send *image-store* get-image 'bomb-2) 0 0)))
+         (send bitmap draw-bitmap-2
+               (send *image-store* get-image 'bomb-2) 0 0)))
       (send bitmap draw-text 
             (number->string (/ (- (+ timestamp delay) (*current-m-sec*)) 1000))
             0 0 bomb-font))
@@ -57,8 +59,7 @@
     ;;Skickar bitmapen, anropas från spellogiken för att uppdatera skärmen
     (define/public (get-bitmap)
       (update-bitmap)
-      (send bitmap get-bitmap))  
-      ))
+      (send bitmap get-bitmap))))
 
 
 

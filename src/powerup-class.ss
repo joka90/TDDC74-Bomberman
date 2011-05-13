@@ -5,6 +5,7 @@
   (class object%
     (super-new)
     (init-field x-pos y-pos)
+    ;;sätt en random type vid skapande av object
     (field (type (cdr (assq (random 3)
                             '((0 . powerup-speed)
                               (1 . powerup-multi-bomb)
@@ -27,14 +28,13 @@
       (cond
         ((eq? type 'powerup-speed)(add-speed player))
         ((eq? type 'powerup-multi-bomb)(add-multi-bomb player))
-        ((eq? type 'powerup-stronger-bomb)(add-stronger-bomb player))
-        ))
+        ((eq? type 'powerup-stronger-bomb)(add-stronger-bomb player))))
     
     (define/private (add-speed player)
        (if (< (get-field dxdy player) 15)
-           (begin
+           (begin;;fast fix for out of sync in collition detection
              (set-field! dxdy player (+ (get-field dxdy player) 5))
-             (send player set-x! (get-field x-pos player));;fast fix for out of sync in collition detection
+             (send player set-x! (get-field x-pos player))
              (send player set-y! (get-field y-pos player)))))
     
     (define/private (add-multi-bomb player)

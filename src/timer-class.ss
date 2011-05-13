@@ -14,8 +14,5 @@
       (<= (+ timestamp delay) (*current-m-sec*)))
     
     (define/public (run-proc)
-      (apply proc args)
-      )
-    
-      ))
+      (apply proc args))))
 

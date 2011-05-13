@@ -6,18 +6,21 @@
     (define anim 1)
     
     ;;add-rot-image name(symbol), load-list list ex:
-    ;    '(('r . "img/r.bmp")('l . "img/l.bmp")('d . "img/d.bmp")('u . "img/u.bmp"))
+   ;;'(('r . "img/r.bmp")('l . "img/l.bmp")('d . "img/d.bmp")('u . "img/u.bmp"))
     (define/private (add-rot-image name load-list)
       (define temp-list '())
       
       (map  (lambda (image)
               (if(string? (cdr image))
-                 (set! temp-list (cons
-                                  (cons (car image) (make-object bitmap% (cdr image) 'png/alpha))
-                                  temp-list))
-              (set! temp-list (cons
-                                  (cons (car image) (add-anim-image (cdr image)))
-                                  temp-list))
+                 (set! temp-list 
+                       (cons
+                        (cons (car image)
+                              (make-object bitmap% (cdr image) 'png/alpha))
+                        temp-list))
+                 (set! temp-list 
+                       (cons
+                        (cons (car image) (add-anim-image (cdr image)))
+                        temp-list))
               ))
               load-list)
       ;;add to image list as (NAME .  '(('r . IMAGEDATA) ... ('u . IMAGEDATA)))
@@ -36,15 +39,16 @@
       (define (loop i)
         (if(<= i (caddr load-data))
            (begin
-             (set! temp-list (cons
-                                (cons i (make-object bitmap% 
-                                          (string-append 
-                                           prefix
-                                           (number->string i) 
-                                           file-ending) 'png/alpha))
-                                temp-list))
-     
+             (set! temp-list 
+                   (cons
+                    (cons i (make-object bitmap% 
+                              (string-append 
+                               prefix
+                               (number->string i) 
+                               file-ending) 'png/alpha))
+                    temp-list))
              (loop (+ 1 i)))))
+      
       (loop 0);;to load from 0
       temp-list)
       
@@ -56,8 +60,7 @@
         (else
          (set! image-list (cons
                            (cons name (make-object bitmap% image 'png/alpha))
-                           image-list)))
-        ))
+                           image-list)))))
     
     
     
@@ -72,8 +75,7 @@
            (get-image-rot (car args) (cdr temp-cons) (cdr args)));; anropar sig själv med flera bild listan.
           ((list? (cdr temp-cons))(error "You need a argument to select image"))
           (else
-           (cdr temp-cons)))
-      ))
+           (cdr temp-cons)))))
     
      ;;detect if load one or more images. And load a single image
     (define/private (get-image-rot name image-list-2 . args)
@@ -85,8 +87,7 @@
             (not (null? args))); och args inte tom
            (get-image-anim (car args) (cdr temp-cons)))
           (else
-           (cdr temp-cons)))
-      ))
+           (cdr temp-cons)))))
     
     ;;detect if load one or more images. And load a single image
     (define/private (get-image-anim name image-list-2)
@@ -94,18 +95,5 @@
         (cond
           ((not temp-cons)(error "error, wrong name 3" name))
           (else
-           (cdr temp-cons)))
-      ))
-    
-    ))
+           (cdr temp-cons)))))))
 
-;(string-append* "a" (number->string num) '("c" "d"))
-
-;(define *image-store*
-;  (new make-image-store%))
-
-;(send *image-store* add-image 'player '((r . "img/r.bmp")(l . "img/l.bmp")(d . "img/d.bmp")(u . "img/u.bmp")))
-;(send *image-store* get-image 'player 'r)
-;(assq 'u (list (list 'r "img/r.bmp")(list 'l "img/l.bmp")(list 'd "img/d.bmp")(list 'u "img/u.bmp")))
-;(list? (cadr (list (list 'r "img/r.bmp")(list 'l "img/l.bmp")(list 'd "img/d.bmp")(list 'u "img/u.bmp"))))
-;(send *image-store* add-image 'bomb-1 "img/bomb1.png")

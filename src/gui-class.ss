@@ -43,20 +43,20 @@
       (send gui-canvas send-key-events))
     
     ;;the panel where the two collums is placed
-    (define contentpanel (new horizontal-panel% 
+    (define top-panel (new vertical-panel% 
                                 [parent gui-frame]
-                                [alignment '(right center)]))
-    
-    ;;a colleciton of buttons
-    (define canvas-panel (new horizontal-panel% 
-                                [parent contentpanel]
-                                [alignment '(right top)]
+                                [alignment '(center center)]
                                 [min-height (get-field height image-buffer)]
                                 [min-width (get-field width image-buffer)]))
     
+    ;;a colleciton of buttons
+    (define bottom-panel (new vertical-panel% 
+                                [parent gui-frame]
+                                [alignment '(right top)]))
+    
     (define gui-canvas
       (new user-interact-canvas% 
-           [parent canvas-panel]
+           [parent top-panel]
            [paint-callback draw-canvas]
            [on-key-event-callback (lambda(key)(send logic-class handle-key-event key))];; flyttar lite seda
            [min-height (get-field height image-buffer)]
@@ -66,8 +66,8 @@
     
     ;;a colleciton of buttons
     (define controllpanel (new horizontal-panel% 
-                                [parent contentpanel]
-                                [alignment '(right bottom)]))
+                                [parent bottom-panel]
+                                [alignment '(right center)]))
     
     ;;the start / paus button
     (define startbutton (new button% [parent controllpanel]

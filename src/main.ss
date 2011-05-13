@@ -27,15 +27,17 @@
 (define *image-store*
   (new make-image-store%))
 ;;http://www.spriters-resource.com/snes/S.html
-(send *image-store* add-image 'red-player '((r . ("img/red-player/r-" ".png" 5))
-                                            (l . ("img/red-player/l-" ".png" 5))
-                                            (u . ("img/red-player/u-" ".png" 5))
-                                            (d . ("img/red-player/d-" ".png" 5))))
+(send *image-store* add-image 'red-player 
+      '((r . ("img/red-player/r-" ".png" 5))
+        (l . ("img/red-player/l-" ".png" 5))
+        (u . ("img/red-player/u-" ".png" 5))
+        (d . ("img/red-player/d-" ".png" 5))))
 
-(send *image-store* add-image 'blue-player '((r . ("img/blue-player/r-" ".png" 5))
-                                             (l . ("img/blue-player/l-" ".png" 5))
-                                             (u . ("img/blue-player/u-" ".png" 5))
-                                             (d . ("img/blue-player/d-" ".png" 5))))
+(send *image-store* add-image 'blue-player 
+      '((r . ("img/blue-player/r-" ".png" 5))
+        (l . ("img/blue-player/l-" ".png" 5))
+        (u . ("img/blue-player/u-" ".png" 5))
+        (d . ("img/blue-player/d-" ".png" 5))))
 
 (send *image-store* add-image 'invincible "img/invincible.png")
 
@@ -47,11 +49,13 @@
 (send *image-store* add-image 'power-panel "img/power-panel.png")
 (send *image-store* add-image 'heart-panel "img/heart-panel.png")
 
-(send *image-store* add-image 'flame-big '((x . "img/flame-big-h.png")
-                                           (y . "img/flame-big-v.png")))
+(send *image-store* add-image 'flame-big 
+      '((x . "img/flame-big-h.png")
+        (y . "img/flame-big-v.png")))
 
-(send *image-store* add-image 'flame-small '((x . "img/flame-small-h.png")
-                                             (y . "img/flame-small-v.png")))
+(send *image-store* add-image 'flame-small 
+      '((x . "img/flame-small-h.png")
+        (y . "img/flame-small-v.png")))
 
 (send *image-store* add-image 'powerup-multi-bomb "img/max-image.png")
 (send *image-store* add-image 'powerup-speed "img/speed-powerup.png")
@@ -150,7 +154,7 @@
 (send *draw* clear);; Rensar buffern som ritar
 (send *gui* show-gui);; startar gui
 (send *gui* redraw);; uppdaterar canvas
-
+(send bomberman-logic init-gameboard)
 ;; ------------------------------------------------------------
 ;; Huvudloop
 ;; ------------------------------------------------------------

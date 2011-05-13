@@ -8,9 +8,12 @@
     (super-new)
     (init-field height width height-px width-px)
     (field
-     (bombs (new list-object%));; List of all active bombs stored as objects in list-object%
-     (players (new list-object%));; List of all active players, stored as
-     (keyboard-players (new list-object%));; List of all keyboard-players, stored as (object . keyboard-bindings)
+     ;; List of all active bombs stored as objects in list-object%
+     (bombs (new list-object%))
+     ;; List of all active players, stored as
+     (players (new list-object%))
+     ;; List of all keyboard-players, stored as (object . keyboard-bindings)
+     (keyboard-players (new list-object%))
      (powerups (new list-object%))
      (to-do-list (new list-object%))
      (bomb-flames (new list-object%)))
@@ -32,7 +35,9 @@
            [height-px height-px]
            [width-px width-px]))
     
-    (send game-board randomize-stones)
+    (define/public (init-gameboard)
+      (send game-board randomize-stones)
+      (send game-board set-bg!))
     
     
     
@@ -139,22 +144,32 @@
             ((eq? 'r dir)
              (send player set-x-pos-px! 
                    (+(send player get-x-pos-px) (get-field dxdy player))))
-            ((eq? 'drop dir)(add-bomb (get-field x-pos player) (get-field y-pos player) player)))
+            ((eq? 'drop dir)
+             (add-bomb 
+              (get-field x-pos player) (get-field y-pos player) player)))
           (cond;;flytta om möjligt i rutan
             ((and (eq? 'u dir) 
-                  (<= (get-field dxdy player)  (remainder (send player get-y-pos-px) *blocksize*)))
-             (send player set-y-pos-px! (-(send player get-y-pos-px) (get-field dxdy player))))
+                  (<= (get-field dxdy player)  
+                      (remainder (send player get-y-pos-px) *blocksize*)))
+             (send player set-y-pos-px! 
+                   (-(send player get-y-pos-px) (get-field dxdy player))))
             ((and (eq? 'd dir) 
-                  (<= (get-field dxdy player)  (remainder (send player get-y-pos-px) *blocksize*)))
-             (send player set-y-pos-px! (+(send player get-y-pos-px) (get-field dxdy player))))
+                  (<= (get-field dxdy player)  
+                      (remainder (send player get-y-pos-px) *blocksize*)))
+             (send player set-y-pos-px! 
+                   (+(send player get-y-pos-px) (get-field dxdy player))))
             ((and
               (eq? 'l dir)
-              (<= (get-field dxdy player)  (remainder (send player get-x-pos-px) *blocksize*)))
-             (send player set-x-pos-px! (-(send player get-x-pos-px) (get-field dxdy player))))
+              (<= (get-field dxdy player)  
+                  (remainder (send player get-x-pos-px) *blocksize*)))
+             (send player set-x-pos-px! 
+                   (-(send player get-x-pos-px) (get-field dxdy player))))
             ((and
               (eq? 'r dir)
-              (<= (get-field dxdy player)  (remainder (send player get-x-pos-px) *blocksize*)))
-             (send player set-x-pos-px! (+(send player get-x-pos-px) (get-field dxdy player))))))
+              (<= (get-field dxdy player)  
+                  (remainder (send player get-x-pos-px) *blocksize*)))
+             (send player set-x-pos-px! 
+                   (+(send player get-x-pos-px) (get-field dxdy player))))))
       
       (if(not (eq? 'drop dir))
          (send player set-dir! dir)))
@@ -204,8 +219,7 @@
                                 (if(send bomb-to-check collition? 
                                          (car flame) 
                                          (cadr flame))
-                                   (on-bomb-explosion bomb-to-check); spräng
-                                   )
+                                   (on-bomb-explosion bomb-to-check));;spräg
                                 )
                               (get-field inner-list bombs))
                    
@@ -215,9 +229,8 @@
                                          (car flame) 
                                          (cadr flame))
                                    (send powerups remove-from-list!
-                                         powerup-to-check);;remove poverup from game
-                                   ))
-                              (get-field inner-list powerups)));;end lambda for-each flame
+                                         powerup-to-check)));;remove poverup from game
+                              (get-field inner-list powerups)))
                  flames)
 	
       ;;make a new flamegroupe and add to flame list
@@ -270,8 +283,7 @@
       (send draw-class draw-bitmap-2 
             (send game-board-bitmap get-bitmap) 0 0)
       (send draw-class draw-bitmap-2 
-            (send game-status-bitmap get-bitmap) width-px 0)
-      )
+            (send game-status-bitmap get-bitmap) width-px 0))
     
     (define/private (update-game-status-bitmap)
       (send game-status-bitmap clear)
@@ -284,8 +296,7 @@
                          (send player get-status-bitmap)
                          0
                          row-px)
-                   (set! row-px (+ row-px 100))
-                   )
+                   (set! row-px (+ row-px 100)))
                  (get-field inner-list players)))
     
     (define/private (update-game-logic)
@@ -326,8 +337,7 @@
                    (if(send to-do gone-off?)
                       (begin
                         (send to-do run-proc)
-                        (send to-do-list remove-from-list! to-do)));;run proc
-                   )
+                        (send to-do-list remove-from-list! to-do))));;run proc
                  (get-field inner-list to-do-list))
       
       
@@ -345,8 +355,5 @@
                          (send player get-bitmap)
                          (- (send player get-x-pos-px) 5)
                          (- (send player get-y-pos-px) 35)))
-                 (get-field inner-list players))
-      )
-    
-    ))
+                 (get-field inner-list players)))))
 
