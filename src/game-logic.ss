@@ -45,7 +45,7 @@
     
     
     
-    ;;method som tar emot key events från gui-delen
+    ;;metod som tar emot key events från gui-delen
     ;; key - lista med knappar nedtryckta
     ;; Key events skickas hit från gui-klassen en gång per loop
     (define/public (handle-key-event key)
@@ -59,11 +59,11 @@
 
     ;;Metod som lägger till keyboard-players
     ;;new-name - sträng
-    ;;x y - start kordinater
+    ;;x y - start koordinater
     ;; number-of-lives - int
     ;;keybord-bindings - lista med tangenter och korisponderande händelse-
     ;;'((#\w . u)(#\a . l)(#\s . d)(#\d . r)(#\space . drop)
-    ;; u = upp, l = vänster, d = ner, r = höger, drop = anropar drop bomb metoden.
+    ;; u=upp, l = vänster, d = ner, r = höger, drop = anropar drop-bomb-metoden.
     (define/public (add-key-board-player new-name
                                          x y dxy 
                                          number-of-lives 
@@ -82,9 +82,9 @@
         (send keyboard-players add-to-list! 
               (cons temp-player keybord-bindings))))
     
-    ;;Function to check if it's possible to move and do so if.
     ;;metod för att kolla om möjligt att förflytta sig
-    ;; samt hanterar kollitoner med object. Retunerar #t om möjligt att förflytta sig. 
+    ;; samt hanterar kollisioner med objekt. 
+    ;;Retunerar #t om möjligt att förflytta sig. 
     (define (move? player dir)
       (let((collition #f)
            (new-x (get-field x-pos player))
@@ -112,7 +112,7 @@
          (lambda (powerup)
            (if(and 
                (send powerup collition? new-x new-y) 
-               (not collition);; F = ingen kolltion
+               (not collition);; F = ingen kollision
                )
               (begin
                 (send powerup use-power-up player)
@@ -180,7 +180,7 @@
       (if(not (eq? 'drop dir))
          (send player set-dir! dir)))
     
-    ;;Method to add bombs to a positon and giv it an owner.
+    ;;Metod  för att lägga till bomber till en position och ge bomben en ägare
     (define/private (add-bomb x y owner)
       (if(send owner can-bomb?)
          (begin
@@ -192,14 +192,13 @@
             (new bomb%
                  [x-pos x]
                  [y-pos y]
-                 [delay (get-field delay own)];;get from proc
+                 [delay (get-field delay own)]
                  [radius (get-field radius own)]
                  [owner own])))
         (send bombs add-to-list! temp-bomb)))
     
-    ;; change here to give the explosion some logic
+  
     (define/private (on-bomb-explosion bomb)
-      ;;game-board returns (emptyspaces delete-block)
       (define result 
         (send game-board 
               delete-destruct-from-board-radius! 
@@ -211,25 +210,25 @@
       (define to-blow-up (cadr result))
       (define flame-limits (caddr result))
       
-      ;;set number of bombs out on player
+      ;;sätt antal bomber ute på spelaren
       (send (get-field owner bomb) remv-bomb)
       
-      ;; remov the bomb from bombs
+      ;; ta bort bomben från bomberna
       (send bombs remove-from-list! bomb)
       
-      ;;kolla mot olika powerups och bomber för kjedjesprängning
+      ;;kolla mot olika powerups och bomber för kedjesprängning
       (for-each  (lambda (flame)
                    
-                   ;;blow all boms up
+                   ;;spräng alla bomber
                    (for-each  (lambda (bomb-to-check)
                                 (if(send bomb-to-check collition? 
                                          (car flame) 
                                          (cadr flame))
-                                   (on-bomb-explosion bomb-to-check));;spräg
+                                   (on-bomb-explosion bomb-to-check));;spräng
                                 )
                               (get-field inner-list bombs))
                    
-                   ;;blow all powerups up
+                   ;;spräng alla powerups
                    (for-each  (lambda (powerup-to-check)
                                 (if(send powerup-to-check collition? 
                                          (car flame) 
@@ -239,7 +238,7 @@
                               (get-field inner-list powerups)))
                  flames)
 	
-      ;;make a new flamegroupe and add to flame list
+      ;;Gör en ny flammgrupp och lägg till den i flammlistan
       (send bomb-flames add-to-list! 
             (new flame% 
                  [center-x-pos (get-field x-pos bomb)]
@@ -248,7 +247,7 @@
                  [owner (get-field owner bomb)]
                  [limits flame-limits]))
      
-      ;;add to todo list, to remove next loop.
+      ;;lägg till att-göra-listan, för att ta bort nästa loop
       (send to-do-list add-to-list!
             (new make-timer% 
                  [delay 0];;spräng så fort som möjligt
@@ -258,11 +257,11 @@
     (define/private (remove-blocks block-list)
       (for-each  (lambda (block)
                    (if (and  
-                        (send game-board;;check if delete succeded and delete
+                        (send game-board;;kolla om borttagning lyckades och ta bort
                               delete-object-from-board!
                               (car block);x
                               (cadr block));y
-                        (= 2 (random 5)));en på sex
+                        (= 2 (random 5)));en på fem
                        (send powerups add-to-list! 
                              (new powerup% 
                                   [x-pos (car block)] 
@@ -278,7 +277,7 @@
             (send player set-x! 10000)
             (send player set-y! 10000))))
     
-    ;; skickar in alla trackade objects bitmaps i en viss positon.
+    ;; skickar in alla trackade objekt bitmaps i en viss positon.
     (define/public (update-scene draw-class)
       (send game-board update-bitmap)
       (update-game-logic)
@@ -306,12 +305,12 @@
                    (set! row-px (+ row-px 100)))
                  (get-field inner-list players)))
     
-    ;;updatera spelplanen och allas objects position i olika bitmaps.
+    ;;updatera spelplanen och allas objektposition i olika bitmaps.
     ;; Samt kollar om spelaren kolliderar med flammorna
     (define/private (update-game-logic)
       (send game-board-bitmap clear)
       
-      ;;track all bombs in the bomb list
+      ;;håll koll på alla bomberna i bomblistan
       (for-each  (lambda (bomb)
                    (send game-board-bitmap draw-bitmap-on-bitmap
                          (send bomb get-bitmap)
@@ -321,17 +320,15 @@
                       (on-bomb-explosion bomb)))
                  (get-field inner-list bombs))
       
-      ;;track all bombs in the flames list and
-      ;; check collisons between player and flames.
+      ;;håll koll på alla bomberna i flammlistan och
+      ;;kolla kollisioner mellan spelare och flammor
       (for-each  (lambda (flame)
-                   ;tarck all timers
-                   ;;TODO: to we need to check this every time?
                    (map  (lambda (player)
-                           (if(eq? 'flame ;; if we want flames that dont kill
+                           (if(eq? 'flame ;;
                                    (send flame collition?
                                          (get-field x-pos player)
                                          (get-field y-pos player)))
-                              (on-die player flame)));;on die
+                              (on-die player flame)))
                          (get-field inner-list players))
                    (send game-board-bitmap draw-bitmap-on-bitmap
                          (send flame get-bitmap)
@@ -341,7 +338,7 @@
                       (send bomb-flames remove-from-list! flame)))
                  (get-field inner-list bomb-flames))
       
-      ;;tarck all timers
+      ;;håll koll på timers
       (for-each  (lambda (to-do)
                    (if(send to-do gone-off?)
                       (begin
@@ -350,7 +347,7 @@
                  (get-field inner-list to-do-list))
       
       
-      ;;track all powerups
+      ;;håll koll på powerups
       (for-each  (lambda (powerup)
                    (send game-board-bitmap draw-bitmap-on-bitmap
                          (send powerup get-bitmap)
@@ -358,7 +355,7 @@
                          (* *blocksize* (get-field y-pos powerup))))
                  (get-field inner-list powerups))
       
-      ;;all players
+      ;;alla spelare
       (for-each  (lambda (player)
                    (send game-board-bitmap draw-bitmap-on-bitmap
                          (send player get-bitmap)

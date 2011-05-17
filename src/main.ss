@@ -167,7 +167,7 @@
 (define *game-loop*
   (new loop-this-proc%
        [function-to-loop draw]
-       [fps 100]));; anropar draw spec i update-graphic
+       [fps 24]));; anropar draw spec i update-graphic
 
 
 (send *game-loop* start-loop);; startar loopen

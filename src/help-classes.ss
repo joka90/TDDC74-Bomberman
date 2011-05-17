@@ -1,6 +1,6 @@
 ;; ==== help-classes.ss 
 ;; ---------------------------------------------------------------------
-;; class list-object% för att lägga till och tabort enkelt från listor
+;; class list-object% för att lägga till och ta bort enkelt från listor
 ;; ---------------------------------------------------------------------
 
 (define list-object%
@@ -16,6 +16,6 @@
              wath-to-add
              inner-list)))
     
-    ;;tabort från listan
+    ;;ta bort från listan
     (define/public (remove-from-list! wath-to-rem)
       (set! inner-list (remv wath-to-rem inner-list)))))
