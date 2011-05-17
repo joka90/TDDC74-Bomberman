@@ -83,7 +83,7 @@
           (else
            (cdr temp-cons)))))
     
-    ;;detect if load one or more images. And load a single image
+    ;;detektera om ladda en eller flera bilder. Och ladda en bild
     (define/private (get-image-rot name image-list-2 . args)
       (let ((temp-cons (assq name image-list-2)))
         (cond
@@ -95,7 +95,7 @@
           (else
            (cdr temp-cons)))))
     
-    ;;detect if load one or more images. And load a single image
+    ;;detektera om ladda en eller flera bilder. Och ladda en bild
     (define/private (get-image-anim name image-list-2)
       (let ((temp-cons (assq (car name) image-list-2)))
         (cond

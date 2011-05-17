@@ -13,10 +13,10 @@
     
    	 
     
-    ;; visa gui och fucusera keyboard på canvas
+    ;; visa gui och fokusera tangentbord på canvas
     (define/public (show-gui)
       (send gui-frame show #t)
-      (send gui-canvas focus));; move focus to canvas, to get key events
+      (send gui-canvas focus));; flytta fokus till canvas, för att ta key events
     
     ;; göm gui och stoppar *game-loop*
     (define/public (hide-gui)
@@ -37,7 +37,7 @@
     
 
     ;;Hämta en ny bitmap från den globala bitmappen
-    ;; som sattse via image-buffer argumentet när objectet skapades. 
+    ;; som sattes via image-buffer-argumentet när objektet skapades. 
     (define (draw-canvas canvas dc)
       (send image-buffer get-image canvas dc))
     
@@ -48,14 +48,14 @@
     (define/public (update-keys-down)
       (send gui-canvas send-key-events))
     
-    ;;the panel where the two collums is placed
+    ;;panelen där canvas är placerad
     (define top-panel (new vertical-panel% 
                                 [parent gui-frame]
                                 [alignment '(center center)]
                                 [min-height (get-field height image-buffer)]
                                 [min-width (get-field width image-buffer)]))
     
-    ;;a colleciton of buttons
+    ;;en samling av knappar
     (define bottom-panel (new vertical-panel% 
                                 [parent gui-frame]
                                 [alignment '(right top)]))
@@ -71,12 +71,12 @@
            [stretchable-width #f]
            [stretchable-height #f]))
     
-    ;;a colleciton of buttons
+    ;;en samling av knappar
     (define controllpanel (new horizontal-panel% 
                                 [parent bottom-panel]
                                 [alignment '(right center)]))
     
-    ;;the start / paus button
+    ;;start-/pausknapp
     (define startbutton (new button% [parent controllpanel]
                              [label "Paus"]
                              [callback (lambda (button event)
@@ -89,7 +89,7 @@
                                               (send startbutton set-label "Paus"))))]))
 
    
-    ;;Quit button, stops *game-loop*, to save cpu.
+    ;;Stängknapp, stoppar *game-loop* för att spara cpu
     (new button%
          [parent controllpanel]
          [label "Quit"]
