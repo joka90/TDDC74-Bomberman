@@ -20,13 +20,13 @@
     
     ;;bitmap för statuspanelen
     (define game-status-bitmap
-      (new make-draw%
+      (new drawing%
            [width 170];;canvas-/bitmapsstorlek
            [height height-px])) 
     
     ;;bitmap för spelet
     (define game-board-bitmap
-      (new make-draw%
+      (new drawing%
            [width width-px];;canvas-/bitmapsstorlek
            [height height-px])) 
     
@@ -283,23 +283,23 @@
       (send game-board update-bitmap)
       (update-game-logic)
       (update-game-status-bitmap)
-      (send draw-class draw-bitmap-2 
+      (send draw-class draw-bitmap-on-bitmap 
             (send game-board get-bitmap) 0 0)
-      (send draw-class draw-bitmap-2 
+      (send draw-class draw-bitmap-on-bitmap 
             (send game-board-bitmap get-bitmap) 0 0)
-      (send draw-class draw-bitmap-2 
+      (send draw-class draw-bitmap-on-bitmap 
             (send game-status-bitmap get-bitmap) width-px 0))
     
     ;;uppdatera statuspanelens bitmap
     (define/private (update-game-status-bitmap)
       (send game-status-bitmap clear)
-      (send game-status-bitmap draw-bitmap-2 
+      (send game-status-bitmap draw-bitmap-on-bitmap 
             (send *image-store* get-image 'bg-status) 0 0)
 
       (define row-px 140)
       
       (for-each  (lambda (player)
-                   (send game-status-bitmap draw-bitmap-2
+                   (send game-status-bitmap draw-bitmap-on-bitmap
                          (send player get-status-bitmap)
                          0
                          row-px)
@@ -313,7 +313,7 @@
       
       ;;track all bombs in the bomb list
       (for-each  (lambda (bomb)
-                   (send game-board-bitmap draw-bitmap-2
+                   (send game-board-bitmap draw-bitmap-on-bitmap
                          (send bomb get-bitmap)
                          (* *blocksize* (get-field x-pos bomb))
                          (* *blocksize* (get-field y-pos bomb)))
@@ -333,7 +333,7 @@
                                          (get-field y-pos player)))
                               (on-die player flame)));;on die
                          (get-field inner-list players))
-                   (send game-board-bitmap draw-bitmap-2
+                   (send game-board-bitmap draw-bitmap-on-bitmap
                          (send flame get-bitmap)
                          (* *blocksize* (send flame get-x-pos))
                          (* *blocksize* (send flame get-y-pos)))
@@ -352,7 +352,7 @@
       
       ;;track all powerups
       (for-each  (lambda (powerup)
-                   (send game-board-bitmap draw-bitmap-2
+                   (send game-board-bitmap draw-bitmap-on-bitmap
                          (send powerup get-bitmap)
                          (* *blocksize* (get-field x-pos powerup))
                          (* *blocksize* (get-field y-pos powerup))))
@@ -360,7 +360,7 @@
       
       ;;all players
       (for-each  (lambda (player)
-                   (send game-board-bitmap draw-bitmap-2
+                   (send game-board-bitmap draw-bitmap-on-bitmap
                          (send player get-bitmap)
                          (- (send player get-x-pos-px) 5)
                          (- (send player get-y-pos-px) 35)))

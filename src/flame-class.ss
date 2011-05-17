@@ -60,7 +60,7 @@
          #f))
     
     (define bitmap
-      (new make-draw%
+      (new drawing%
            [width (* *blocksize* calc-width)];;canvas-/bitmapsstorlek
            [height (* *blocksize* calc-height)]))
     
@@ -69,7 +69,7 @@
       (define (draw-x from to)
         (if(<= from to)
            (begin
-             (send bitmap draw-bitmap-2
+             (send bitmap draw-bitmap-on-bitmap
                    (send *image-store* get-image type 'x)
                    (* *blocksize* from)
                    (* *blocksize* y-upper))
@@ -78,7 +78,7 @@
       (define (draw-y from to)
         (if(<= from to)
            (begin
-             (send bitmap draw-bitmap-2
+             (send bitmap draw-bitmap-on-bitmap
                    (send *image-store* get-image type 'y)
                    (* *blocksize* x-upper)
                    (* *blocksize* from))

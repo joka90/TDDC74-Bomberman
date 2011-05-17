@@ -39,7 +39,7 @@
            
     ;;bitmap som används för att rita bomb m.m
     (define bitmap
-      (new make-draw%
+      (new drawing%
            [width *blocksize*];;canvas-/bitmapsstorlek
            [height *blocksize*]))
 
@@ -49,10 +49,10 @@
       (send bitmap background-transp)
       (cond  
         ((< (- (+ timestamp delay) (*current-m-sec*)) 2000)
-         (send bitmap draw-bitmap-2
+         (send bitmap draw-bitmap-on-bitmap
                (send *image-store* get-image 'bomb-1) 0 0))
         (else
-         (send bitmap draw-bitmap-2
+         (send bitmap draw-bitmap-on-bitmap
                (send *image-store* get-image 'bomb-2) 0 0)))
       (send bitmap draw-text 
             (number->string (/ (- (+ timestamp delay) (*current-m-sec*)) 1000))

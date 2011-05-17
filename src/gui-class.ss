@@ -2,7 +2,7 @@
 ;; ---------------------------------------------------------------------
 ;; GUI, skapa gui för spelet.
 ;; ---------------------------------------------------------------------
-(define make-gui%
+(define game-gui%
   (class object%
     (super-new)
     (init-field window-name width height image-buffer logic-class)
@@ -18,10 +18,10 @@
       (send gui-frame show #t)
       (send gui-canvas focus));; move focus to canvas, to get key events
     
-    ;; göm gui och stoppar main-loop
+    ;; göm gui och stoppar *game-loop*
     (define/public (hide-gui)
       (send gui-frame show #f)
-      (send main-loop stop-loop))
+      (send *game-loop* stop-loop))
     
     ;; uppdatera guit för att ladda om nya bitmaps
     (define/public (redraw)
@@ -80,16 +80,16 @@
     (define startbutton (new button% [parent controllpanel]
                              [label "Paus"]
                              [callback (lambda (button event)
-                                         (if(send main-loop running?)
+                                         (if(send *game-loop* running?)
                                             (begin
-                                              (send main-loop stop-loop)
+                                              (send *game-loop* stop-loop)
                                               (send startbutton set-label "Start"))
                                             (begin
-                                              (send main-loop start-loop)
+                                              (send *game-loop* start-loop)
                                               (send startbutton set-label "Paus"))))]))
 
    
-    ;;Quit button, stops main-loop, to save cpu.
+    ;;Quit button, stops *game-loop*, to save cpu.
     (new button%
          [parent controllpanel]
          [label "Quit"]

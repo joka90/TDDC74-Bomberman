@@ -2,7 +2,7 @@
 ;; ---------------------------------------------------------------------
 ;; klass för enkelt ladda in bilder, samt retunera utifrån sök kriterier
 ;; ---------------------------------------------------------------------
-(define make-image-store%
+(define image-store%
   (class object%
     (super-new)
     

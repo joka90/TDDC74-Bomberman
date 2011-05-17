@@ -2,7 +2,7 @@
 ;; ---------------------------------------------------------------------
 ;; Klass f�r att rita objekt i en bitmap
 ;; ---------------------------------------------------------------------
-(define make-draw%
+(define drawing%
   (class object%
     (super-new)
     (init-field width height)
@@ -71,5 +71,5 @@
       (send draw-dc draw-text text x y))
     
     ;; En procedur som ritar en bild fr�n en bitmap
-    (define/public (draw-bitmap-2 bitmap x y)
+    (define/public (draw-bitmap-on-bitmap bitmap x y)
       (send draw-dc draw-bitmap bitmap x y))))

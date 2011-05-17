@@ -182,13 +182,13 @@
     
     ;;huvudbitmap
     (define bitmap
-      (new make-draw%
+      (new drawing%
            [width width-px];;canvas-/bitmapsstorlek
            [height height-px]))
     
     ;;bitmap för att generera bakgrund i
     (define background
-      (new make-draw%
+      (new drawing%
            [width width-px];;canvas-/bitmapsstorlek
            [height height-px]))
     
@@ -203,7 +203,7 @@
       (define (y-led y x)
         (if (< y height)
             (begin
-              (send background draw-bitmap-2 
+              (send background draw-bitmap-on-bitmap 
                     (send *image-store* get-image 'bg)  
                     (* *blocksize* y) (* *blocksize* x))
               (y-led (+ y 2) x))))
@@ -226,19 +226,19 @@
       (if changed
           (begin
             (send bitmap clear)
-            (send bitmap draw-bitmap-2
+            (send bitmap draw-bitmap-on-bitmap
                   (send background get-bitmap) 0 0)
             (loop 0))))
     
     (define/private (update-bitmap-help type pos)    
       (cond  
         ((eq? type 'indestructeble-stone)
-         (send bitmap draw-bitmap-2
+         (send bitmap draw-bitmap-on-bitmap
                (send *image-store* get-image 'non-dest-block) 
                (* *blocksize* (car pos))
                (* *blocksize* (cdr pos))))
         ((eq? type 'destructeble-stone)
-         (send bitmap draw-bitmap-2
+         (send bitmap draw-bitmap-on-bitmap
                (send *image-store* get-image 'dest-block) 
                (* *blocksize* (car pos))
                (* *blocksize* (cdr pos))))))

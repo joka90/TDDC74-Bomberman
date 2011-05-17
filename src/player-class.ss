@@ -114,7 +114,7 @@
     
     
     (define status-bitmap
-      (new make-draw%
+      (new drawing%
            [width 170];;canvas-/bitmapsstorlek
            [height 100]))
     
@@ -125,11 +125,11 @@
       (send status-bitmap clear)
       (send status-bitmap set-background-color! 255 255 255 1)
       (send status-bitmap draw-text name 10 0 name-font)
-      (send status-bitmap draw-bitmap-2 
+      (send status-bitmap draw-bitmap-on-bitmap 
             (send *image-store* get-image 'max-panel) 60 40)
-      (send status-bitmap draw-bitmap-2 
+      (send status-bitmap draw-bitmap-on-bitmap 
             (send *image-store* get-image 'heart-panel) 20 40)
-      (send status-bitmap draw-bitmap-2 
+      (send status-bitmap draw-bitmap-on-bitmap 
             (send *image-store* get-image 'power-panel) 100 40)
       
       (send status-bitmap draw-text 
@@ -145,7 +145,7 @@
       (send status-bitmap get-bitmap))
     
     (define bitmap
-      (new make-draw%
+      (new drawing%
            [width 40];;canvas-/bitmapsstorlek
            [height 62]))
     
@@ -168,10 +168,10 @@
       
       (update-animation-help)
       (set! moving #f)
-      (send bitmap draw-bitmap-2 
+      (send bitmap draw-bitmap-on-bitmap 
             (send *image-store* get-image color direction animation) 0 0)
       (if(not (possible-to-die?))
-         (send bitmap draw-bitmap-2
+         (send bitmap draw-bitmap-on-bitmap
                (send *image-store* get-image 'invincible) 0 0)))
     
     ;;uppdatera och returnera bitmap
