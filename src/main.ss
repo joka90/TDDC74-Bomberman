@@ -139,14 +139,16 @@
 
 ;; Procedurerna som ritar om br�dan fr�n huvudtr�den. 
 (define (draw)
-  (send *gui* update-keys-down);Skicka tangenter till spellogiken en g�ng per loop-varv 
+  ;Skicka tangenter till spellogiken en g�ng per loop-varv 
+  (send *gui* update-keys-down)
   (send *draw* clear);; rensa bitmap
-  (send bomberman-logic update-scene *draw*);;uppdatera bitmap och skicka till main bitmappen
+  ;;uppdatera bitmap och skicka till main bitmappen
+  (send bomberman-logic update-scene *draw*)
   ;(send *draw* background)
   (send *gui* redraw));; Rita om gui f�r att se nya bitmapen
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; END DEFINE ;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 ;; ------------------------------------------------------------
 ;; G�rs alltid innan start

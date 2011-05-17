@@ -1,5 +1,6 @@
 ;; ---------------------------------------------------------------------
-;; class player%, make the player object. 
+;;====player-class.ss 
+;;klass player%, skapar spelarobjektet 
 ;; ---------------------------------------------------------------------
 (define player%
   (class object%
@@ -13,51 +14,56 @@
      (type 'player)
      (points 0)
      (radius 1)
-     (delay 5000);; bombdelay in ms
+     (delay 5000);; bombfördröjning i ms
      (bomb-count 1)
-     (number-of-bombs 0);; how many bombs on board
+     (number-of-bombs 0);; hur många bomber på spelplanen
      (last-bomb-timestamp 0)
      (invincible-in-m-sec 10000)
      (timestamp-invincible 0)
      (last-bomb-place '());; (x . y)
-     (direction 'd);;player dir
-     (moving #f);; if player is moving or not.
-     (animation 1);;current frame in animation
-     (animation-start 1);;where to start from
-     (animation-stop 5);;where to stop
-     (animation-duration 4);frames with same image
-     (animation-duration-count 0);;frame counter
+     (direction 'd);;spelarens riktning
+     (moving #f);;om spelaren rör sig eller inte
+     (animation 1);;nuvarande frame i animationen
+     (animation-start 1);;var den startar
+     (animation-stop 5);;var den stannar
+     (animation-duration 4);frames med samma bild
+     (animation-duration-count 0);;frameräknare
      (name-font (make-object font% 15 'default 'normal 'bold))
      (status-font (make-object font% 10 'default 'normal 'bold))
      )
     
-    ;;returns true if the bomb has gone off.
+    ;;returnerar sant om tiden för odödlighet har gått ut
     (define/public (possible-to-die?)
       (<= (+ timestamp-invincible invincible-in-m-sec)
           (*current-m-sec*)))
-      
     
+    ;;funktion för att se om det går att lägga bomber just då, 
+    ;;kollar med hur många man har på spelplanen 
+    ;;och hur många man har möjlighet att lägga
     (define/public (can-bomb?)
       (and
        (< number-of-bombs bomb-count)
        (or
         (< (+ last-bomb-timestamp 1000)
-           (*current-m-sec*)); en sek delay eller 
+           (*current-m-sec*)); en sek fördröjning eller 
         (not (and 
               (eq? x-pos (car last-bomb-place))
-              (eq? y-pos (cdr last-bomb-place))));; inte samma ställe
-        )
-       ))
+              (eq? y-pos (cdr last-bomb-place)))))));; inte samma ställe
     
+    
+    ;;funktion för att återfå bomber att lägga ut när de har sprängts
     (define/public (remv-bomb)
       (if(< 0 number-of-bombs)
          (set! number-of-bombs (- number-of-bombs 1))))
     
+    
+    ;;lägga ut bomb, sätter timer och sparar platsen.
     (define/public (add-bomb)
       (set! number-of-bombs (+ number-of-bombs 1))
       (set! last-bomb-timestamp (*current-m-sec*))
       (set! last-bomb-place (cons x-pos y-pos)))
     
+    ;;dö-funktion som återsätter bomber mm till startvärde och minskar liv med 1
     (define/public (die)
       (set! lives (- lives 1))
       (set! number-of-bombs 0)
@@ -69,48 +75,52 @@
       (set! timestamp-invincible (*current-m-sec*))
       (set! direction 'd))
     
-    ;;set px pos and logical pos
+    ;;sätt px pos och logisk pos
     (define/public (set-x-pos-px! x)
       (set! x-pos-px x)
       (set! x-pos (quotient
                    (+ x (/ *blocksize* 2))
                    *blocksize*)))
     
-    ;;set px pos and logical pos
+    ;;sätt px pos och logisk pos
     (define/public (set-y-pos-px! y)
       (set! y-pos-px y)
       (set! y-pos (quotient 
                    (+ y (/ *blocksize* 2))
                    *blocksize*)))
     
-    ;;set logical and px pos
+    ;;sätt px pos och logisk pos
     (define/public (set-x! x)
       (set! x-pos x)
       (set! x-pos-px (* x *blocksize*)))
     
-    ;;set logical and px pos
+    ;;sätt px pos och logisk pos
     (define/public (set-y! y)
       (set! y-pos y)
       (set! y-pos-px (* y *blocksize*)))
     
-    ;;get px pos
+    ;;hämta px pos
     (define/public (get-y-pos-px)
       y-pos-px)
     
-    ;;get px pos
+    ;;hämta px pos
     (define/public (get-x-pos-px)
       x-pos-px)
     
+    ;; när man förflyttar sig
     (define/public (set-dir! dir)
       (set! moving #t)
       (set! direction dir))
-
-
+    
+    
     (define status-bitmap
       (new make-draw%
-           [width 170];;canvas/bitmaps size
+           [width 170];;canvas-/bitmapsstorlek
            [height 100]))
     
+    
+    ;;Metod för att olika värden i status-bitmapen, 
+    ;;som ligger till höger när spelet körs
     (define/public (update-status-bitmap)
       (send status-bitmap clear)
       (send status-bitmap set-background-color! 255 255 255 1)
@@ -121,39 +131,41 @@
             (send *image-store* get-image 'heart-panel) 20 40)
       (send status-bitmap draw-bitmap-2 
             (send *image-store* get-image 'power-panel) 100 40)
-
+      
       (send status-bitmap draw-text 
             (number->string lives) 40 40 status-font)
       (send status-bitmap draw-text 
             (number->string bomb-count) 80 40 status-font)
       (send status-bitmap draw-text 
             (number->string radius) 120 40 status-font))
-  
-  (define/public (get-status-bitmap)
-    (update-status-bitmap)
-    (send status-bitmap get-bitmap))
     
-     (define bitmap
+    ;;Metod för att uppdatera status-bitmapen samt returnera den
+    (define/public (get-status-bitmap)
+      (update-status-bitmap)
+      (send status-bitmap get-bitmap))
+    
+    (define bitmap
       (new make-draw%
-           [width 40];;canvas/bitmaps size
+           [width 40];;canvas-/bitmapsstorlek
            [height 62]))
     
-     
+    
     
     (define/private (update-animation-help)
       (if moving
-       (if(< animation-duration-count animation-duration)
-         (set! animation-duration-count (+ animation-duration-count 1))
-         (begin
-           (set! animation-duration-count 0)
-           (if(< animation animation-stop)
-              (set! animation (+ animation 1))
-                (set! animation animation-start))))
-         (set! animation 0)))
+          (if(< animation-duration-count animation-duration)
+             (set! animation-duration-count (+ animation-duration-count 1))
+             (begin
+               (set! animation-duration-count 0)
+               (if(< animation animation-stop)
+                  (set! animation (+ animation 1))
+                  (set! animation animation-start))))
+          (set! animation 0)))
     
+    ;;uppdatera bitmap, lägger ev. till ödödlighetsbubbla om ej möjligt att dö
     (define/public (update-bitmap)
       (send bitmap clear)
-
+      
       (update-animation-help)
       (set! moving #f)
       (send bitmap draw-bitmap-2 
@@ -162,6 +174,7 @@
          (send bitmap draw-bitmap-2
                (send *image-store* get-image 'invincible) 0 0)))
     
+    ;;uppdatera och returnera bitmap
     (define/public (get-bitmap)
       (update-bitmap)
       (send bitmap get-bitmap))))

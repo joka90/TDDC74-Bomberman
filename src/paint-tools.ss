@@ -1,10 +1,11 @@
 ;; ---------------------------------------------------------------------
-;; class make-paint-tools%
+;;====paint-tools.ss 
+;;klass make-paint-tools%
 ;; ---------------------------------------------------------------------
 (define make-paint-tools%
   (class object%
     (super-new)
-    ;; The colors to draw with:
+    ;; Färgerna att rita med:
     (define/public red-pen 
       (send the-pen-list find-or-create-pen "red" 4 'solid))
     (define/public green-pen 
