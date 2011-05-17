@@ -1,5 +1,6 @@
+;; ==== draw-class.ss 
 ;; ---------------------------------------------------------------------
-;; Klass f�r att rita
+;; Klass f�r att rita objekt i en bitmap
 ;; ---------------------------------------------------------------------
 (define make-draw%
   (class object%
@@ -12,11 +13,12 @@
     (define/public (clear)
       (send draw-dc erase))
     
-  
+    ;;En metod som gör det möjlig att skicka in bitmapen från
+    ;; objectet in i en dc på en canvas
     (define/public (get-image canvas dc)
       (send dc draw-bitmap draw-buffer 0 0))
     
-    
+    ;;skickar nuvarande bitmap
     (define/public (get-bitmap)
       draw-buffer)
     
@@ -41,6 +43,7 @@
     (define/public (background-transp)
       (send draw-dc set-background  (make-object color% 0 0 0 0)))
     
+    ;;Sätt alphakanalen på bitmappen
     (define/public (set-alpha! a)
       (send draw-dc set-alpha a))
     

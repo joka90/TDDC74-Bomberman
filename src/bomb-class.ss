@@ -1,5 +1,7 @@
+;; ==== bomb-class.ss 
 ;; ---------------------------------------------------------------------
-;; klass make bomb, timestamp and delay för att räkna ut när det ska explodera. Radius för att räkna ut vad som skall tas bort
+;; klass bomb, timestamp och delay för att räkna ut när det ska explodera.
+;; Radius för att räkna ut vad som skall tas bort
 ;;---------------------------------------------------------------------
 (define bomb%
   (class object%
@@ -9,7 +11,8 @@
      (type 'bomb)
      (timestamp (*current-m-sec*))
      (bomb-font (make-object font% 10 'modern 'normal 'bold 'smoothed)))
-      
+     
+    
     (define/public (set-x! x)
       (set! x-pos x))
     
@@ -25,7 +28,8 @@
     (define/public (gone-off?)
       (<= (+ timestamp delay) (*current-m-sec*)))
     
-    ;; skickas in (x,y) och och returnerar vilken typ som bomben kolliderar med, annars returneras falskt. 
+    ;; skickas in (x,y) och och returnerar vilken typ som 
+    ;; bomben kolliderar med, annars returneras falskt. 
     (define/public (collition? xpos ypos)
       (if(and (= xpos x-pos)
            (= ypos y-pos)
@@ -33,9 +37,7 @@
            type
            #f))
            
-    
-    
-    
+    ;;bitmap som används för att rita bomb m.m
     (define bitmap
       (new make-draw%
            [width *blocksize*];;canvas-/bitmapsstorlek
@@ -61,7 +63,3 @@
       (update-bitmap)
       (send bitmap get-bitmap))))
 
-
-
-
-;(send bomb get-timestamp)

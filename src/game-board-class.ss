@@ -1,4 +1,8 @@
-;; definera en spelplan med en viss längd och bredd
+;; ==== game-board-class.ss 
+;; ---------------------------------------------------------------------
+;; board% definera en spelplan med en viss längd och bredd
+;; ---------------------------------------------------------------------
+
 (define board%
   (class object%
     (super-new)
@@ -6,7 +10,7 @@
     (field
      (gamevector (make-vector  (* (+ 1 height) (+ 1 width))))
      (changed #f))
- 
+    
     ;;lägger till ett objekt på en given position
     ;; och sätter att ändrat till sant.
     (define/public (add-object-to-board! x y type) 
@@ -48,9 +52,8 @@
         (let loop ((x1-temp x) ;; den som ökar
                    (y1-temp y) ;; den som ökar
                    (x2-temp x) ;;den som minskar
-                   (y2-temp y);; den som minskar
-                   )
-          
+                   (y2-temp y));; den som minskar
+                   
           (cond
             ((and (<= x1-temp (+ x radius)) x1-run?)
              (cond
@@ -64,7 +67,7 @@
                 (loop x1-temp y1-temp x2-temp y2-temp));;hoppa ur denna loop
                (else
                 (set! emptyspaces (cons (list x1-temp y 'r) emptyspaces))
-                (loop (+ x1-temp 1) y1-temp x2-temp y2-temp))));;fortsätt denna loop
+                (loop (+ x1-temp 1) y1-temp x2-temp y2-temp))))
             
             ((and (>= x2-temp (- x radius)) x2-run?)
              (cond
@@ -120,9 +123,9 @@
                            (cons 'l (- x x2-temp 1))
                            (cons 'u (- y y2-temp 1)))))))
         
-                ;;returnerar lista av objekt att ta bort, för att lägga till flammor
+        ;;returnerar lista av objekt att ta bort, för att lägga till flammor
         (list emptyspaces delete-block limits)))
-      
+    
     
     
     
@@ -164,24 +167,26 @@
               (cond
                 ((= x 0)(add-object-to-board! x y 'indestructeble-stone))
                 ((= y 0)(add-object-to-board! x y 'indestructeble-stone))
-                ((= x (- width 1))(add-object-to-board! x y 'indestructeble-stone))
-                ((= y (- height 1))(add-object-to-board! x y 'indestructeble-stone))
-                ((and (even? y) (even? x))(add-object-to-board! x y 'indestructeble-stone))
-                ((add-destruct-stone? x y)(add-object-to-board! x y 'destructeble-stone))
-                )
+                ((= x (- width 1))
+                 (add-object-to-board! x y 'indestructeble-stone))
+                ((= y (- height 1))
+                 (add-object-to-board! x y 'indestructeble-stone))
+                ((and (even? y) (even? x))
+                 (add-object-to-board! x y 'indestructeble-stone))
+                ((add-destruct-stone? x y)
+                 (add-object-to-board! x y 'destructeble-stone)))
               (y-led (+ y 1) x))))
-      
-      (x-led 0);;starta
-
-      )
+      ;;starta
+      (x-led 0))
     
     
-    
+    ;;huvudbitmap
     (define bitmap
       (new make-draw%
            [width width-px];;canvas-/bitmapsstorlek
            [height height-px]))
     
+    ;;bitmap för att generera bakgrund i
     (define background
       (new make-draw%
            [width width-px];;canvas-/bitmapsstorlek
@@ -198,21 +203,26 @@
       (define (y-led y x)
         (if (< y height)
             (begin
-              (send background draw-bitmap-2 (send *image-store* get-image 'bg)  (* *blocksize* y) (* *blocksize* x))
-              
+              (send background draw-bitmap-2 
+                    (send *image-store* get-image 'bg)  
+                    (* *blocksize* y) (* *blocksize* x))
               (y-led (+ y 2) x))))
+      
       (send background clear)
-      (x-led 0);;starta
-      )
+      (x-led 0));;starta
+      
     
-    
+    ;;Metod för att uppdatera spelplanens bitmap om den har ändrats
     (define/public (update-bitmap)
       (define (loop index)
         (if (< index (vector-length gamevector))
             (begin
               (if (vector-ref gamevector index);;finns det något där eller inte?
-                  (update-bitmap-help (vector-ref gamevector index) (get-pos-invers index)))
+                  (update-bitmap-help 
+                   (vector-ref gamevector index) 
+                   (get-pos-invers index)))
               (loop (+ 1 index)))))
+      
       (if changed
           (begin
             (send bitmap clear)
@@ -223,7 +233,6 @@
     (define/private (update-bitmap-help type pos)    
       (cond  
         ((eq? type 'indestructeble-stone)
-         
          (send bitmap draw-bitmap-2
                (send *image-store* get-image 'non-dest-block) 
                (* *blocksize* (car pos))
@@ -234,9 +243,8 @@
                (* *blocksize* (car pos))
                (* *blocksize* (cdr pos))))))
     
+    ;;retunerar spelplanens bitmap
     (define/public (get-bitmap)
-      (send bitmap get-bitmap))
-    
-    ))
+      (send bitmap get-bitmap))))
 
 

@@ -1,3 +1,7 @@
+;; ==== image-store.ss 
+;; ---------------------------------------------------------------------
+;; klass för enkelt ladda in bilder, samt retunera utifrån sök kriterier
+;; ---------------------------------------------------------------------
 (define make-image-store%
   (class object%
     (super-new)
@@ -6,7 +10,8 @@
     (define anim 1)
     
     ;;add-rot-image name(symbol), load-list list ex:
-   ;;'(('r . "img/r.bmp")('l . "img/l.bmp")('d . "img/d.bmp")('u . "img/u.bmp"))
+    ;;'(('r . "img/r.bmp")('l . "img/l.bmp")
+    ;;('d . "img/d.bmp")('u . "img/u.bmp"))
     (define/private (add-rot-image name load-list)
       (define temp-list '())
       
@@ -21,16 +26,15 @@
                        (cons
                         (cons (car image) (add-anim-image (cdr image)))
                         temp-list))
-              ))
-              load-list)
+                 ))
+            load-list)
       ;;add to image list as (NAME .  '(('r . IMAGEDATA) ... ('u . IMAGEDATA)))
       (set! image-list (cons
                         (cons name temp-list)
-                        image-list))
-      )
+                        image-list)))
     
     ;load data: ("img/red-player/r-" ".png" 5)
-    ;returns '((0 . IMAGEDATA) ... (5 . IMAGEDATA)))
+    ;returnerar '((0 . IMAGEDATA) ... (5 . IMAGEDATA)))
     (define/private (add-anim-image load-data)
       (define temp-list '())
       (define prefix (car load-data))
@@ -51,8 +55,9 @@
       
       (loop 0);;to load from 0
       temp-list)
-      
-    ;;detect if load one or more images. And load a single image
+    
+    ;;detektera om ladda flera eller en bild
+    ;;samt lägger till dessa i listor för senare bruk.
     (define/public (add-image name image)
       (cond
         ((list? image)
@@ -64,7 +69,8 @@
     
     
     
-    ;;detect if load one or more images. And load a single image
+    ;;retunera en bitmap av en bild från listorna i klassen.
+    ;; Söks fram med hjälp av assq
     (define/public (get-image name . args)
       (let ((temp-cons (assq name image-list)))
         (cond
@@ -77,7 +83,7 @@
           (else
            (cdr temp-cons)))))
     
-     ;;detect if load one or more images. And load a single image
+    ;;detect if load one or more images. And load a single image
     (define/private (get-image-rot name image-list-2 . args)
       (let ((temp-cons (assq name image-list-2)))
         (cond

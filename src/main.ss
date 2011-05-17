@@ -1,4 +1,7 @@
-;(load "paint-tools.ss")
+;; ==== main.ss 
+;; ---------------------------------------------------------------------
+;; huvudfilen
+;; ---------------------------------------------------------------------
 (require scheme/date);; tid f�r bomber och liknande.
 (require racket/string);; f�r att ladda in bilder
 (load "help-classes.ss");; sm� hj�lpklasser f�r listor mm.
@@ -26,7 +29,7 @@
 ;;Bildinladdningsfunktion s� att det inte ska lagga n�r senare.
 (define *image-store*
   (new make-image-store%))
-;;http://www.spriters-resource.com/snes/S.html
+
 (send *image-store* add-image 'red-player 
       '((r . ("img/red-player/r-" ".png" 5))
         (l . ("img/red-player/l-" ".png" 5))
@@ -68,6 +71,8 @@
 ;; ---------------------------------------------------------------------
 ;; Spellogik
 ;; ---------------------------------------------------------------------
+
+;;Global klocka som kan pausas
 (define (*current-m-sec*)
   (send main-loop get-current-m-sec))
 
@@ -80,22 +85,21 @@
        [height-px 630]
        [width-px 630]))
 
-;; ---------------------------------------------------------------------
-;; Globala bitmapsvariabler
-;; ---------------------------------------------------------------------
+;;Globala bitmapen som laddas in via gui varenda loop.
 (define *draw*
   (new make-draw%
        [width 800];;canvas-/bitmapsstorlek
        [height 630])) 
 
-
+;;spelets fönser
 (define *gui*
   (new make-gui%
        [window-name "Bomberman"]
        [width 800];;f�nsterstorlek
        [height 650]
        [image-buffer *draw*];;bildbuffer, laddar bilden till canvas
-       [logic-class bomberman-logic]));; logisk klass att s�nda tangentbords-nedtryckningar till.
+       [logic-class bomberman-logic]))
+;; logic-class -logisk klass att s�nda tangentbords-nedtryckningar till.
 
 
 ;; ---------------------------------------------------------------------
@@ -139,10 +143,11 @@
 
 ;; Procedurerna som ritar om br�dan fr�n huvudtr�den. 
 (define (draw)
-  (send *gui* update-keys-down);Skicka tangenter till spellogiken en g�ng per loop-varv 
+  ;Skicka tangenter till spellogiken en g�ng per loop-varv 
+  (send *gui* update-keys-down)
   (send *draw* clear);; rensa bitmap
-  (send bomberman-logic update-scene *draw*);;uppdatera bitmap och skicka till main bitmappen
-  ;(send *draw* background)
+  ;;uppdatera bitmap och skicka till main bitmappen
+  (send bomberman-logic update-scene *draw*)
   (send *gui* redraw));; Rita om gui f�r att se nya bitmapen
 
 
@@ -155,6 +160,7 @@
 (send *gui* show-gui);; startar gui
 (send *gui* redraw);; uppdaterar canvas
 (send bomberman-logic init-gameboard)
+
 ;; ------------------------------------------------------------
 ;; Huvudloop
 ;; ------------------------------------------------------------
