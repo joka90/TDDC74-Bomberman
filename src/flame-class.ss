@@ -1,3 +1,4 @@
+;; ==== flame-class.ss 
 ;; ---------------------------------------------------------------------
 ;; klass flame
 ;; ---------------------------------------------------------------------
@@ -12,8 +13,6 @@
      limits)
     (field
      (type 'flame)
-     (x-pos 0)
-     (y-pos 0)
      (timestamp (*current-m-sec*))
      (changed #f))
     
@@ -22,11 +21,12 @@
     (define x-lower (cdr (assq 'r limits)))
     (define y-upper (cdr (assq 'u limits)))
     (define y-lower (cdr (assq 'd limits)))
+    
     ;;göra om den relativa positionen till position i planen
     (define calc-x-pos (- center-x-pos x-upper))
     (define calc-y-pos (- center-y-pos y-upper))
     
-    
+    ;;Värden för höjd och bredd
     (define calc-height (+ 1 y-upper y-lower))
     (define calc-width (+ 1 x-upper x-lower))
     

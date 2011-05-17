@@ -1,5 +1,6 @@
+;; ==== gui-class.ss 
 ;; ---------------------------------------------------------------------
-;; GUI
+;; GUI, skapa gui för spelet.
 ;; ---------------------------------------------------------------------
 (define make-gui%
   (class object%
@@ -12,33 +13,38 @@
     
    	 
     
-    ;; show gui
+    ;; visa gui och fucusera keyboard på canvas
     (define/public (show-gui)
       (send gui-frame show #t)
       (send gui-canvas focus));; move focus to canvas, to get key events
     
-    ;; hide gui and stops main-loop
+    ;; göm gui och stoppar main-loop
     (define/public (hide-gui)
       (send gui-frame show #f)
       (send main-loop stop-loop))
     
-    ;; update canvas to see changes in draw buffer
+    ;; uppdatera guit för att ladda om nya bitmaps
     (define/public (redraw)
       (send gui-canvas on-paint))
     
+    ;;retunera bredd
     (define/public (get-width)
       (send gui-canvas get-width))
     
+    ;;retunera höjd
     (define/public (get-height)
       (send gui-canvas get-height))
     
-    ;; get new canvas from global draw class on redraw
+
+    ;;Hämta en ny bitmap från den globala bitmappen
+    ;; som sattse via image-buffer argumentet när objectet skapades. 
     (define (draw-canvas canvas dc)
       (send image-buffer get-image canvas dc))
     
 
     
-    ;;Anropas utifrån för att skicka vidare key-events från canvasen i denna klass.
+    ;;Anropas utifrån för att skicka vidare 
+    ;;key-events från canvasen i denna klass.
     (define/public (update-keys-down)
       (send gui-canvas send-key-events))
     
@@ -58,7 +64,8 @@
       (new user-interact-canvas% 
            [parent top-panel]
            [paint-callback draw-canvas]
-           [on-key-event-callback (lambda(key)(send logic-class handle-key-event key))];; flyttar lite seda
+           [on-key-event-callback 
+            (lambda(key)(send logic-class handle-key-event key))]
            [min-height (get-field height image-buffer)]
            [min-width (get-field width image-buffer)]
            [stretchable-width #f]
@@ -97,10 +104,6 @@
         ("Menu" gui-menu-bar)))
     
     (instantiate menu-item%
-      ("Quit" gui-menu (lambda (a b) (hide-gui))))
-
-    
-    
-    ))
+      ("Quit" gui-menu (lambda (a b) (hide-gui))))))
 
 

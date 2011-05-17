@@ -1,33 +1,36 @@
+;; ==== game-board-class.ss 
 ;; ---------------------------------------------------------------------
-;; class game-logic%
+;; class game-logic%, huvudlogiken samt 
+;; hanterar utritning av bitmaps av alla object
 ;; ---------------------------------------------------------------------
-
-
 (define game-logic%
   (class object%
     (super-new)
     (init-field height width height-px width-px)
     (field
-     ;; List of all active bombs stored as objects in list-object%
+     ;; lista med alla aktiva bomber sparade som list-object%
      (bombs (new list-object%))
-     ;; List of all active players, stored as
+     ;;  lista med alla aktiva players sparade som list-object%
      (players (new list-object%))
-     ;; List of all keyboard-players, stored as (object . keyboard-bindings)
+     ;;  lista med alla aktiva keyboard-players sparade som list-object%
      (keyboard-players (new list-object%))
      (powerups (new list-object%))
      (to-do-list (new list-object%))
      (bomb-flames (new list-object%)))
     
+    ;;bitmap för statuspanelen
     (define game-status-bitmap
       (new make-draw%
            [width 170];;canvas-/bitmapsstorlek
            [height height-px])) 
     
+    ;;bitmap för spelet
     (define game-board-bitmap
       (new make-draw%
            [width width-px];;canvas-/bitmapsstorlek
            [height height-px])) 
     
+    ;;själva spelplanen
     (define game-board
       (new board%
            [height height]
@@ -35,15 +38,16 @@
            [height-px height-px]
            [width-px width-px]))
     
+    ;;initiera spelplanen, sätt bg och randomisera stenar
     (define/public (init-gameboard)
       (send game-board randomize-stones)
       (send game-board set-bg!))
     
     
     
-    ;;method to redistubute the keydown's list from the userinteract function.
-    ;; key - list of keys down. 
-    ;; this is called from the gui class via the main-loop every 1/24 sec.
+    ;;method som tar emot key events från gui-delen
+    ;; key - lista med knappar nedtryckta
+    ;; Key events skickas hit från gui-klassen en gång per loop
     (define/public (handle-key-event key)
       (for-each
        (lambda (proc)
@@ -52,14 +56,19 @@
                (move-dir (cdr action) (car proc)))))
        (get-field inner-list keyboard-players)))
     
-    ;;method to add a keboard player. 
-    ;; new-name - string
-    ;; x y - cords
-    ;;number-of-lives - int
-    ;;keybord-bindings - list of keys and the corrisponding action, ex 
+
+    ;;Metod som lägger till keyboard-players
+    ;;new-name - sträng
+    ;;x y - start kordinater
+    ;; number-of-lives - int
+    ;;keybord-bindings - lista med tangenter och korisponderande händelse-
     ;;'((#\w . u)(#\a . l)(#\s . d)(#\d . r)(#\space . drop)
-    ;; u = up, l = left, d = down, r = right, drop = key calling the the drop bomb method.
-    (define/public (add-key-board-player new-name x y dxy number-of-lives player-color keybord-bindings)
+    ;; u = upp, l = vänster, d = ner, r = höger, drop = anropar drop bomb metoden.
+    (define/public (add-key-board-player new-name
+                                         x y dxy 
+                                         number-of-lives 
+                                         player-color 
+                                         keybord-bindings)
       (let((temp-player 
             (new player%
                  [x-pos x]
@@ -74,6 +83,8 @@
               (cons temp-player keybord-bindings))))
     
     ;;Function to check if it's possible to move and do so if.
+    ;;metod för att kolla om möjligt att förflytta sig
+    ;; samt hanterar kollitoner med object. Retunerar #t om möjligt att förflytta sig. 
     (define (move? player dir)
       (let((collition #f)
            (new-x (get-field x-pos player))
@@ -104,21 +115,16 @@
                (not collition);; F = ingen kolltion
                )
               (begin
-                (send powerup use-power-up player);; add powerup to player
-                (send powerups remove-from-list! powerup);;remove poverup from game                   
-                )
-              ))
+                (send powerup use-power-up player)
+                (send powerups remove-from-list! powerup))))              
          (get-field inner-list powerups))
         
         (for-each
          (lambda (bomb)
            (if(and 
                (send bomb collition? new-x new-y) 
-               (not collition);; F = ingen kolltion
-               ;(not (eq? (get-field owner object-to-check) player))
-               )
-                (set! collition #t)
-              ))
+               (not collition))
+                (set! collition #t)))
          (get-field inner-list bombs))
         
         (if(and 
@@ -128,8 +134,8 @@
         
         (not collition)))
     
-    
-    (define/public (move-dir dir player)
+    ;;Flytta spelaren
+    (define/private (move-dir dir player)
       (if (move? player dir)
           (cond
             ((eq? 'u dir)
@@ -229,7 +235,7 @@
                                          (car flame) 
                                          (cadr flame))
                                    (send powerups remove-from-list!
-                                         powerup-to-check)));;remove poverup from game
+                                         powerup-to-check)))
                               (get-field inner-list powerups)))
                  flames)
 	
@@ -263,7 +269,7 @@
                                   [y-pos (cadr block)]))))
                  block-list))
     
-    (define/private(on-die player flame)
+    (define/private (on-die player flame)
       (if (send player possible-to-die?)
           (send player die))
       
@@ -273,7 +279,6 @@
             (send player set-y! 10000))))
     
     ;; skickar in alla trackade objects bitmaps i en viss positon.
-    ;;track all players
     (define/public (update-scene draw-class)
       (send game-board update-bitmap)
       (update-game-logic)
@@ -285,12 +290,14 @@
       (send draw-class draw-bitmap-2 
             (send game-status-bitmap get-bitmap) width-px 0))
     
+    ;;uppdatera statuspanelens bitmap
     (define/private (update-game-status-bitmap)
       (send game-status-bitmap clear)
       (send game-status-bitmap draw-bitmap-2 
             (send *image-store* get-image 'bg-status) 0 0)
-       ;;all players
+
       (define row-px 140)
+      
       (for-each  (lambda (player)
                    (send game-status-bitmap draw-bitmap-2
                          (send player get-status-bitmap)
@@ -299,6 +306,8 @@
                    (set! row-px (+ row-px 100)))
                  (get-field inner-list players)))
     
+    ;;updatera spelplanen och allas objects position i olika bitmaps.
+    ;; Samt kollar om spelaren kolliderar med flammorna
     (define/private (update-game-logic)
       (send game-board-bitmap clear)
       
@@ -312,7 +321,8 @@
                       (on-bomb-explosion bomb)))
                  (get-field inner-list bombs))
       
-      ;;track all bombs in the flames list and check collisons between player and flames.
+      ;;track all bombs in the flames list and
+      ;; check collisons between player and flames.
       (for-each  (lambda (flame)
                    ;tarck all timers
                    ;;TODO: to we need to check this every time?
@@ -321,8 +331,7 @@
                                    (send flame collition?
                                          (get-field x-pos player)
                                          (get-field y-pos player)))
-                              (on-die player flame));;on die
-                           )
+                              (on-die player flame)));;on die
                          (get-field inner-list players))
                    (send game-board-bitmap draw-bitmap-2
                          (send flame get-bitmap)
