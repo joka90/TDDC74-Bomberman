@@ -48,14 +48,14 @@
     (define/public (update-keys-down)
       (send gui-canvas send-key-events))
     
-    ;;the panel where the two collums is placed
+
     (define top-panel (new vertical-panel% 
                                 [parent gui-frame]
                                 [alignment '(center center)]
                                 [min-height (get-field height image-buffer)]
                                 [min-width (get-field width image-buffer)]))
     
-    ;;a colleciton of buttons
+
     (define bottom-panel (new vertical-panel% 
                                 [parent gui-frame]
                                 [alignment '(right top)]))
@@ -71,12 +71,12 @@
            [stretchable-width #f]
            [stretchable-height #f]))
     
-    ;;a colleciton of buttons
+    ;;kontrollpanel
     (define controllpanel (new horizontal-panel% 
                                 [parent bottom-panel]
                                 [alignment '(right center)]))
     
-    ;;the start / paus button
+    ;; start / paus knapp
     (define startbutton (new button% [parent controllpanel]
                              [label "Paus"]
                              [callback (lambda (button event)

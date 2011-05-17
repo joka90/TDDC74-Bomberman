@@ -1,7 +1,7 @@
 ;;====user-interact.ss
-
+;; --------------------------------------------------------------------
 ;;Klass för att interagera med canvas via tangentbordet
-
+;; --------------------------------------------------------------------
 (define user-interact-canvas% 
   (class canvas%
     (override on-char)

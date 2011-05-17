@@ -47,7 +47,8 @@
     (define/public (gone-off?)
       (<= (+ timestamp delay) (*current-m-sec*)))
     
-    ;;tar en punkt (x,y) och kollar om en kollision sker, och i sådana fall med vad. Annars returneras falskt.
+    ;;tar en punkt (x,y) och kollar om en kollision sker,
+    ;; och i sådana fall med vad. Annars returneras falskt.
     (define/public (collition? xpos ypos)
       (if(or
           (and (= xpos center-x-pos)
